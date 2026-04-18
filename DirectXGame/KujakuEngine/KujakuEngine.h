@@ -8,6 +8,7 @@
 #include "base/WinApp.h"
 
 #include "2d/ImGuiManager.h"
+#include "2d/Sprite.h"
 
 #include "3d/GraphicsPipeline.h"
 #include "3d/Model.h"
