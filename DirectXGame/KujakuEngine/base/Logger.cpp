@@ -5,6 +5,8 @@
 
 namespace KujakuEngine {
 
+std::ofstream Logger::logStream_;
+
 void Logger::Initialize() {
 	// ログのディレクトリを用意
 	std::filesystem::create_directory("logs");

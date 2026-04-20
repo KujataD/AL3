@@ -16,12 +16,10 @@ void Initialize(const std::wstring& title, bool enableDebugLayer) {
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 	dxCommon->Initialize(winApp, WinApp::kWindowWidth, WinApp::kWindowHeight, enableDebugLayer);
 
-#ifdef _DEBUG
-
+#ifdef USE_IMGUI
 	// ImGui の初期化
 	ImGuiManager::GetInstance()->Initialize();
-
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	// グラフィックスパイプラインの初期化
 	GraphicsPipeline::GetInstance()->Initialize();
@@ -47,10 +45,10 @@ void PreDraw() {
 
 void PostDraw() {
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	// ImGuiの描画コマンドを積む（描画処理の最後に呼ぶ）
 	ImGuiManager::GetInstance()->End();
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	// プレゼント・フェンス待機・コマンドリストリセット
 	DirectXCommon::GetInstance()->PostDraw();

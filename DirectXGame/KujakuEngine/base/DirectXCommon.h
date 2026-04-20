@@ -57,7 +57,7 @@ public:
 	/// </summary>
 	bool IsInitialized() const { return initialized_; }
 
-	// --- ゲッター ---
+	// --- get ---
 	ID3D12Device* GetDevice() const { return device_.Get(); }
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList_.Get(); }
 	ID3D12DescriptorHeap* GetSrvDescriptorHeap() const { return srvDescriptorHeap_.Get(); }
@@ -73,16 +73,45 @@ private:
 	const DirectXCommon& operator=(const DirectXCommon&) = delete;
 
 	// --- 初期化フロー ---
+
+	/// <summary>
+	/// DXGIDeviceの初期化 (
+	///  デバッグレイヤー
+	/// / DXGIFactoryの生成
+	/// / 使用するアダプタ（GPU）の決定
+	/// / D3D12Deviceの生成
+	/// / DX12のエラーチェック
+	/// )
+	/// </summary>
+	/// <param name="enableDebugLayer">デバッグレイヤーの有効化</param>
 	void InitializeDXGIDevice(bool enableDebugLayer);
+
+	/// <summary>
+	/// 各コマンドの初期化 (
+	///  コマンドキュー
+	/// / コマンドアロケータ 
+	/// / コマンドリスト 
+	/// )
+	/// </summary>
 	void InitializeCommand();
+
+	/// <summary>
+	/// ディスクリプタサイズ初期化
+	/// </summary>
+	void InitializeDescriptorSize();
+
+	/// <summary>
+	/// スワップチェーン生成
+	/// </summary>
 	void CreateSwapChain();
+
+	/// <summary>
+	/// 
+	/// </summary>
 	void CreateFinalRenderTargets();
 	void CreateDepthBuffer();
 	void CreateFence();
 
-	// --- ユーティリティ ---
-	void Log(const std::string& message) { OutputDebugStringA(message.c_str()); }
-	std::wstring ConvertString(const std::string& str);
 
 private:
 	WinApp* winApp_ = nullptr;
@@ -109,6 +138,10 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence_;
 	uint64_t fenceValue_ = 0;
 	HANDLE fenceEvent_ = nullptr;
+
+	uint32_t descriptorSizeSRV_;
+	uint32_t descriptorSizeRTV_;
+	uint32_t descriptorSizeDSV_;
 
 	uint32_t backBufferIndex_ = 0;
 	int32_t backBufferWidth_ = 0;

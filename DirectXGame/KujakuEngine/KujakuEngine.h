@@ -6,6 +6,8 @@
 // エンジン内部モジュール
 #include "base/DirectXCommon.h"
 #include "base/WinApp.h"
+#include "base/Logger.h"
+#include "base/StringUtil.h"
 
 #include "2d/ImGuiManager.h"
 #include "2d/Sprite.h"

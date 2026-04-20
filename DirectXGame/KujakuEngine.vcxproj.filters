@@ -111,6 +111,9 @@
     <ClCompile Include="KujakuEngine\base\Logger.cpp">
       <Filter>KujakuEngine\base</Filter>
     </ClCompile>
+    <ClCompile Include="KujakuEngine\base\StringUtil.cpp">
+      <Filter>KujakuEngine\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -186,6 +189,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="KujakuEngine\base\Logger.h">
+      <Filter>KujakuEngine\base</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\base\StringUtil.h">
       <Filter>KujakuEngine\base</Filter>
     </ClInclude>
   </ItemGroup>

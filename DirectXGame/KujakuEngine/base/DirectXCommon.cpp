@@ -1,4 +1,6 @@
 #include "DirectXCommon.h"
+#include "Logger.h"
+#include "StringUtil.h"
 #include <cassert>
 #include <format>
 
@@ -20,6 +22,7 @@ void DirectXCommon::Initialize(WinApp* winApp, int32_t backBufferWidth, int32_t 
 	backBufferHeight_ = backBufferHeight;
 
 	InitializeDXGIDevice(enableDebugLayer);
+	InitializeDescriptorSize();
 	InitializeCommand();
 	CreateSwapChain();
 	CreateFinalRenderTargets();
@@ -30,6 +33,7 @@ void DirectXCommon::Initialize(WinApp* winApp, int32_t backBufferWidth, int32_t 
 }
 
 void DirectXCommon::InitializeDXGIDevice(bool enableDebugLayer) {
+#pragma region デバッグレイヤー
 #ifdef _DEBUG
 	if (enableDebugLayer) {
 		Microsoft::WRL::ComPtr<ID3D12Debug1> debugController;
@@ -41,31 +45,39 @@ void DirectXCommon::InitializeDXGIDevice(bool enableDebugLayer) {
 		}
 	}
 #endif
+#pragma endregion
 
-	// DXGIファクトリーの生成
+#pragma region DXGIFactoryの生成
+	// HRESULTはWindows系のエラーコードであり、関数が成功したかどうかをSUCCEEDEDマクロで判定できる
 	HRESULT hr = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory_));
+	// 初期化の根本的な部分でエラーが出た場合はプログラムが間違っているか、どうにもできない場合が多いのでassertにしておく
 	assert(SUCCEEDED(hr));
+#pragma endregion
+
+#pragma region 使用するアダプタ（GPU）を決定する
 
 	// 使用するアダプタ用の変数。最初にnullptrを入れておく
-	Microsoft::WRL::ComPtr<IDXGIAdapter4> useAdapter;
+	Microsoft::WRL::ComPtr<IDXGIAdapter4> useAdapter = nullptr;
 	// 良い順にアダプタを頼む
 	for (UINT i = 0; dxgiFactory_->EnumAdapterByGpuPreference(i, DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE, IID_PPV_ARGS(&useAdapter)) != DXGI_ERROR_NOT_FOUND; ++i) {
 		// アダプターの情報を取得する
 		DXGI_ADAPTER_DESC3 adapterDesc{};
 		hr = useAdapter->GetDesc3(&adapterDesc);
 		assert(SUCCEEDED(hr)); // 取得できないのは一大事
-		// ソフトウェアアダプタでなければ採用!
+		// ソフトウェアアダプタでなければ採用
 		if (!(adapterDesc.Flags & DXGI_ADAPTER_FLAG3_SOFTWARE)) {
 			// 採用したアダプタの情報をログに出力。wstringの方なので注意
-			OutputDebugStringW(std::format(L"Use Adapter: {}\n", adapterDesc.Description).c_str());
+			Logger::Log(StringUtil::ToString(std::format(L"Use Adapter: {}\n", adapterDesc.Description)));
 			break;
 		}
-		// ソフトウェアアダプタだった場合は見送りして次へ
-		useAdapter.Reset();
+		useAdapter = nullptr; // ソフトウェアアダプタの場合は見なかったことにする
 	}
-	// ここでチェックする（ループの外）
+	// 適切なアダプタが見つからなかったので起動できない
 	assert(useAdapter != nullptr);
 
+#pragma endregion
+
+#pragma region D3D12Deviceの生成
 	// 機能レベルとログ出力用の文字列
 	D3D_FEATURE_LEVEL featureLevels[] = {D3D_FEATURE_LEVEL_12_2, D3D_FEATURE_LEVEL_12_1, D3D_FEATURE_LEVEL_12_0};
 	const char* featureLevelStrings[] = {"12.2", "12.1", "12.0"};
@@ -76,13 +88,16 @@ void DirectXCommon::InitializeDXGIDevice(bool enableDebugLayer) {
 		// 指定した機能レベルでデバイスが生成できたかを確認
 		if (SUCCEEDED(hr)) {
 			// 生成できたのでログ出力を行ってループを抜ける
-			Log(std::format("FeatureLevel : {}\n", featureLevelStrings[i]));
+			Logger::Log(std::format("FeatureLevel : {}\n", featureLevelStrings[i]));
 			break;
 		}
 	}
 	assert(device_ != nullptr);
-	Log("Complete create D3D12Device!!!\n");
+	Logger::Log("Complete create D3D12Device!!!\n");
 
+#pragma endregion
+
+#pragma region DX12のエラーチェック
 #ifdef _DEBUG
 	if (enableDebugLayer) {
 		Microsoft::WRL::ComPtr<ID3D12InfoQueue> infoQueue;
@@ -91,13 +106,11 @@ void DirectXCommon::InitializeDXGIDevice(bool enableDebugLayer) {
 			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
 			// エラー時に止まる
 			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
-			// 警告時に止まる（開放忘れ調査の際はコメントを外す）
-			// infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
 
 			// 抑制するメッセージのID
 			D3D12_MESSAGE_ID denyIds[] = {// Windows11でのDXGIデバッグレイヤーとDX12デバッグレイヤーの相互作用バグによるエラーメッセージ
 			                              // https://stackoverflow.com/questions/69805245/directx-12-application-is-crashing-in-windows-11
-			                              D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE};
+			                              D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE}; // 抑制するレベル
 			// 抑制するレベル
 			D3D12_MESSAGE_SEVERITY severities[] = {D3D12_MESSAGE_SEVERITY_INFO};
 			D3D12_INFO_QUEUE_FILTER filter{};
@@ -110,6 +123,7 @@ void DirectXCommon::InitializeDXGIDevice(bool enableDebugLayer) {
 		}
 	}
 #endif
+#pragma endregion
 }
 
 void DirectXCommon::InitializeCommand() {
@@ -130,6 +144,12 @@ void DirectXCommon::InitializeCommand() {
 	hr = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_.Get(), nullptr, IID_PPV_ARGS(&commandList_));
 	// コマンドリストの生成がうまくいかなかったので起動できない
 	assert(SUCCEEDED(hr));
+}
+
+void DirectXCommon::InitializeDescriptorSize() {
+	descriptorSizeSRV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	descriptorSizeRTV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	descriptorSizeDSV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 }
 
 void DirectXCommon::CreateSwapChain() {
@@ -243,8 +263,6 @@ void DirectXCommon::CreateFence() {
 	assert(fenceEvent_ != nullptr);
 }
 
-// ---------- 描画処理 ----------
-
 void DirectXCommon::PreDraw() {
 	// これから書き込むバックバッファのインデックスを取得
 	backBufferIndex_ = swapChain_->GetCurrentBackBufferIndex();
@@ -333,15 +351,4 @@ void DirectXCommon::PostDraw() {
 	hr = commandList_->Reset(commandAllocator_.Get(), nullptr);
 	assert(SUCCEEDED(hr));
 }
-
-std::wstring DirectXCommon::ConvertString(const std::string& str) {
-	if (str.empty()) {
-		return {};
-	}
-	int size = MultiByteToWideChar(CP_UTF8, 0, str.data(), static_cast<int>(str.size()), nullptr, 0);
-	std::wstring result(size, 0);
-	MultiByteToWideChar(CP_UTF8, 0, str.data(), static_cast<int>(str.size()), result.data(), size);
-	return result;
-}
-
 } // namespace KujakuEngine
