@@ -4,7 +4,8 @@
 namespace KujakuEngine {
 
 void Initialize(const std::wstring& title, bool enableDebugLayer) {
-	// COMの初期化
+	// COM(Component Object Model)を使うための初期化を行う。
+	// ※ゲーム終了時にUnInitializeが必要。
 	CoInitializeEx(0, COINIT_MULTITHREADED);
 
 	// ウィンドウの生成

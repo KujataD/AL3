@@ -10,7 +10,7 @@ namespace KujakuEngine {
 /// </summary>
 class WinApp {
 public: // 静的メンバ変数
-	// ウィンドウデフォルトサイズ
+	// クライアント領域のサイズ
 	static const int32_t kWindowWidth = 1280;
 	static const int32_t kWindowHeight = 720;
 
