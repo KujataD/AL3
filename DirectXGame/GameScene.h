@@ -16,5 +16,8 @@ public:
 	void Draw();
 
 private:
-	 KujakuEngine::Sprite* sprite_ = nullptr;
+	KujakuEngine::Sprite* sprite_ = nullptr;
+	KujakuEngine::Model* model_ = nullptr;
+	KujakuEngine::WorldTransform modelWorldTransform_;
+	KujakuEngine::Camera camera_;
 };

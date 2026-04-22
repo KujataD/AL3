@@ -68,8 +68,8 @@ void Model::Draw(const WorldTransform& worldTransform, const Camera& camera) {
 	// WVP・WorldCBuffer（RootParameter[1]: VertexShader, b0）
 	commandList->SetGraphicsRootConstantBufferView(1, worldTransform.GetConstBuffer()->GetGPUVirtualAddress());
 
-	// テクスチャSRV（RootParameter[2]: DescriptorTable）
 	commandList->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU_);
+	// テクスチャSRV（RootParameter[2]: DescriptorTable）
 
 	// 描画
 	commandList->DrawInstanced(vertexCount_, 1, 0, 0);
@@ -127,10 +127,11 @@ ModelRawData Model::LoadObjFile(const std::string& directoryPath, const std::str
 			normal.x *= -1.0f;
 			normals.push_back(normal);
 		} else if (identifier == "f") {
-			VertexData triangle[3];
-			for (int32_t faceVertex = 0; faceVertex < 3; ++faceVertex) {
-				std::string vertexDefinition;
-				s >> vertexDefinition;
+			// 頂点数を動的に取得する
+			std::vector<VertexData> faceVertices;
+			std::string vertexDefinition;
+
+			while (s >> vertexDefinition) {
 				std::istringstream v(vertexDefinition);
 				uint32_t elementIndices[3];
 				for (int32_t element = 0; element < 3; ++element) {
@@ -138,12 +139,15 @@ ModelRawData Model::LoadObjFile(const std::string& directoryPath, const std::str
 					std::getline(v, index, '/');
 					elementIndices[element] = std::stoi(index);
 				}
-				triangle[faceVertex] = {positions[elementIndices[0] - 1], texcoords[elementIndices[1] - 1], normals[elementIndices[2] - 1]};
+				faceVertices.push_back({positions[elementIndices[0] - 1], texcoords[elementIndices[1] - 1], normals[elementIndices[2] - 1]});
 			}
-			// 巻き順を逆に（左手→右手座標系）
-			modelData.vertices.push_back(triangle[2]);
-			modelData.vertices.push_back(triangle[1]);
-			modelData.vertices.push_back(triangle[0]);
+
+			// 三角形に分割
+			for (size_t i = 1; i + 1 < faceVertices.size(); ++i) {
+				modelData.vertices.push_back(faceVertices[0]);
+				modelData.vertices.push_back(faceVertices[i + 1]);
+				modelData.vertices.push_back(faceVertices[i]);
+			}
 		} else if (identifier == "mtllib") {
 			std::string materialFilename;
 			s >> materialFilename;
@@ -242,14 +246,17 @@ void Model::LoadTexture(const std::string& filePath) {
 		assert(SUCCEEDED(hr));
 	}
 
-	// SRV生成（index=1 からテクスチャ用として割り当て）
-	ID3D12DescriptorHeap* srvHeap = DirectXCommon::GetInstance()->GetSrvDescriptorHeap();
-	const UINT descriptorSizeSRV = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	// SRV生成
+    ID3D12DescriptorHeap* srvHeap = DirectXCommon::GetInstance()->GetSrvDescriptorHeap();
+    const UINT descriptorSizeSRV = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-	textureSrvHandleCPU_ = srvHeap->GetCPUDescriptorHandleForHeapStart();
-	textureSrvHandleCPU_.ptr += descriptorSizeSRV * 1;
-	textureSrvHandleGPU_ = srvHeap->GetGPUDescriptorHandleForHeapStart();
-	textureSrvHandleGPU_.ptr += descriptorSizeSRV * 1;
+    // テクスチャの数に応じて、場所を変える
+    UINT srvIndex = DirectXCommon::GetInstance()->AllocateSrvIndex();
+
+    textureSrvHandleCPU_ = srvHeap->GetCPUDescriptorHandleForHeapStart();
+    textureSrvHandleCPU_.ptr += descriptorSizeSRV * srvIndex;
+    textureSrvHandleGPU_ = srvHeap->GetGPUDescriptorHandleForHeapStart();
+    textureSrvHandleGPU_.ptr += descriptorSizeSRV * srvIndex;
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = metadata.format;

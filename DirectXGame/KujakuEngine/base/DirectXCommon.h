@@ -57,6 +57,8 @@ public:
 	/// </summary>
 	bool IsInitialized() const { return initialized_; }
 
+	uint32_t AllocateSrvIndex() { return srvIndexCounter_++; }
+
 	// --- get ---
 	ID3D12Device* GetDevice() const { return device_.Get(); }
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList_.Get(); }
@@ -92,8 +94,8 @@ private:
 	/// <summary>
 	/// 各コマンドの初期化 (
 	///  コマンドキュー
-	/// / コマンドアロケータ 
-	/// / コマンドリスト 
+	/// / コマンドアロケータ
+	/// / コマンドリスト
 	/// )
 	/// </summary>
 	void InitializeCommand();
@@ -109,13 +111,12 @@ private:
 	void CreateSwapChain();
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	void CreateFinalRenderTargets();
 
 	void CreateDepthBuffer();
 	void CreateFence();
-
 
 private:
 	WinApp* winApp_ = nullptr;
@@ -150,6 +151,9 @@ private:
 	uint32_t backBufferIndex_ = 0;
 	int32_t backBufferWidth_ = 0;
 	int32_t backBufferHeight_ = 0;
+
+	// テクスチャのインデックス管理カウンター
+	uint32_t srvIndexCounter_ = 1;
 };
 
 } // namespace KujakuEngine

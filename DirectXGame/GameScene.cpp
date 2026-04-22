@@ -10,11 +10,24 @@ void GameScene::Init() {
 
 	sprite_->SetPosition({0.0f, 0.0f});
 	sprite_->SetUVScale({1.0f, 1.0f});
+
+	model_ = Model::CreateFromOBJ("resources/enemy", "enemy.obj");
+	modelWorldTransform_.Initialize();
+
+	camera_.Initialize();
+	camera_.translation_ = {0.0f, 0.0f, -15.0f};
+	camera_.UpdateMatrix();
 }
 
-void GameScene::Update() {}
+void GameScene::Update() {
+	modelWorldTransform_.rotation_.y += 0.01f;
+	modelWorldTransform_.UpdateMatrix(camera_);
+}
+
 
 void GameScene::Draw() {
 	Sprite::PreDraw();
 	sprite_->Draw();
+	Model::PreDraw();
+	model_->Draw(modelWorldTransform_, camera_);
 }

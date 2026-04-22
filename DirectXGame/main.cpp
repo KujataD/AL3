@@ -1,4 +1,4 @@
-﻿#include "GameScene.h"
+#include "GameScene.h"
 #include "KujakuEngine/KujakuEngine.h"
 #include "externals/DirectXTex/DirectXTex.h"
 #include "externals/imgui/imgui.h"
@@ -26,6 +26,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓↓↓ 更新処理ここから ↓↓↓
 		///
 
+		gameScene->Update();
+
+
 		///
 		/// ↑↑↑ 更新処理ここまで ↑↑↑
 		///
@@ -37,7 +40,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		gameScene->Draw();
-
 		///
 		/// ↑↑↑ 描画処理ここまで ↑↑↑
 		///

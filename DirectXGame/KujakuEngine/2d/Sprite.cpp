@@ -253,13 +253,16 @@ void Sprite::LoadTexture(const std::string& filePath) {
 	}
 
 	// SRV生成
-	ID3D12DescriptorHeap* srvHeap = DirectXCommon::GetInstance()->GetSrvDescriptorHeap();
-	const UINT descriptorSizeSRV = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+    ID3D12DescriptorHeap* srvHeap = DirectXCommon::GetInstance()->GetSrvDescriptorHeap();
+    const UINT descriptorSizeSRV = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-	textureSrvHandleCPU_ = srvHeap->GetCPUDescriptorHandleForHeapStart();
-	textureSrvHandleCPU_.ptr += descriptorSizeSRV * 1;
-	textureSrvHandleGPU_ = srvHeap->GetGPUDescriptorHandleForHeapStart();
-	textureSrvHandleGPU_.ptr += descriptorSizeSRV * 1;
+    // テクスチャの数に応じて、場所を変える
+    UINT srvIndex = DirectXCommon::GetInstance()->AllocateSrvIndex();
+
+    textureSrvHandleCPU_ = srvHeap->GetCPUDescriptorHandleForHeapStart();
+    textureSrvHandleCPU_.ptr += descriptorSizeSRV * srvIndex;
+    textureSrvHandleGPU_ = srvHeap->GetGPUDescriptorHandleForHeapStart();
+    textureSrvHandleGPU_.ptr += descriptorSizeSRV * srvIndex;
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = metadata.format;
