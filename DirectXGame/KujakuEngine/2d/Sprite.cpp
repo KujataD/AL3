@@ -22,7 +22,6 @@ Sprite* Sprite::Create(const std::string& textureFilePath, const Vector2& positi
 	sprite->materialMap_->color = color;
 
 	return sprite;
-	return sprite;
 }
 
 void Sprite::PreDraw() {

@@ -12,7 +12,7 @@ using namespace KujakuEngine;
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// エンジン初期化
-	Initialize(L"KujakuEngine", true);
+	Initialize(L"LC2B_04_オオツカ_ダイチ_AL3", true);
 
 	GameScene* gameScene = new GameScene;
 	gameScene->Init();
