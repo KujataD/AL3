@@ -63,6 +63,9 @@ public:
 	ID3D12DescriptorHeap* GetSrvDescriptorHeap() const { return srvDescriptorHeap_.Get(); }
 	ID3D12DescriptorHeap* GetRtvDescriptorHeap() const { return rtvDescriptorHeap_.Get(); }
 	ID3D12DescriptorHeap* GetDsvDescriptorHeap() const { return dsvDescriptorHeap_.Get(); }
+	uint32_t GetDescriptorSizeRTV() const { return descriptorSizeRTV_; }
+	uint32_t GetDescriptorSizeSRV() const { return descriptorSizeSRV_; }
+	uint32_t GetDescriptorSizeDSV() const { return descriptorSizeDSV_; }
 	int32_t GetBackBufferWidth() const { return backBufferWidth_; }
 	int32_t GetBackBufferHeight() const { return backBufferHeight_; }
 
@@ -109,6 +112,7 @@ private:
 	/// 
 	/// </summary>
 	void CreateFinalRenderTargets();
+
 	void CreateDepthBuffer();
 	void CreateFence();
 

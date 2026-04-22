@@ -59,11 +59,8 @@ public:
 	const Vector2& GetSize() const { return size_; }
 	float GetRotation() const { return rotation_; }
 
-	~Sprite() = default;
 private:
 	Sprite() = default;
-	Sprite(const Sprite&) = delete;
-	Sprite& operator=(const Sprite&) = delete;
 
 	/// <summary>
 	/// 行列を更新してGPUに転送する
@@ -84,6 +81,7 @@ private:
 	void CreateMaterialBuffer();
 	void LoadTexture(const std::string& filePath);
 
+private:
 	// 頂点バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
