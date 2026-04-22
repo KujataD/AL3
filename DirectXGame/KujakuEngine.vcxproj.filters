@@ -40,6 +40,12 @@
     <Filter Include="KujakuEngine\input">
       <UniqueIdentifier>{bba9aba5-b068-4ac9-9b46-d796a5ec1803}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameObject">
+      <UniqueIdentifier>{ebbac2a2-863a-40d1-bc25-cfbf51048c52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObject\Player">
+      <UniqueIdentifier>{1f8aa0e3-2c91-4efb-aed1-fcdae701d030}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -122,6 +128,9 @@
     </ClCompile>
     <ClCompile Include="KujakuEngine\input\Input.cpp">
       <Filter>KujakuEngine\input</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\GameObject\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -208,6 +217,9 @@
     </ClInclude>
     <ClInclude Include="KujakuEngine\input\Input.h">
       <Filter>KujakuEngine\input</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ソース ファイル\GameObject\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,6 @@
 #pragma once
 #include "KujakuEngine/KujakuEngine.h"
+#include "Player.h"
 
 class GameScene {
 public:
@@ -16,11 +17,14 @@ public:
 	void Draw();
 
 private:
-	KujakuEngine::Sprite* sprite_ = nullptr;
+	// モデル
 	KujakuEngine::Model* model_ = nullptr;
-	KujakuEngine::Model* modelPlayer_ = nullptr;
-	KujakuEngine::WorldTransform modelWorldTransform_;
-	KujakuEngine::WorldTransform playerWorldTransform_;
-	KujakuEngine::Camera camera_;
+	
+	// --- カメラ ---
+	KujakuEngine::Camera camera_ ;
 	KujakuEngine::DebugCamera debugCamera_;
+
+	// プレイヤー
+	Player* player_ = nullptr;
+
 };

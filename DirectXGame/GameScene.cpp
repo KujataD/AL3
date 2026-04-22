@@ -3,26 +3,27 @@ using namespace KujakuEngine;
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() { delete sprite_; }
+GameScene::~GameScene() {  }
 
 void GameScene::Init() {
-	// --- モデル初期化 ---
-	model_ = Model::Create("resources/uvChecker.png");
-	modelWorldTransform_.Initialize();
 
 	// --- カメラ初期化 ---
 	camera_.Initialize();
 	camera_.translation_ = {0.0f, 0.0f, -5.0f};
 
 	debugCamera_.Initialize(camera_.rotation_, camera_.translation_);
+	
+	// --- プレイヤー初期化 ---
+	model_ = Model::Create("resources/uvChecker.png");
+	player_ = new Player();
+	player_->Init(model_, &camera_);
 }
 
 void GameScene::Update() {
-
-	// モデル回転
-	modelWorldTransform_.rotation_.y += 0.01f;
-	modelWorldTransform_.UpdateMatrix(camera_);
 	
+	// プレイヤー更新
+	player_->Update();
+
 	// カメラ更新
 	debugCamera_.Update();
 	debugCamera_.UpdateViewMatrix();
@@ -32,7 +33,8 @@ void GameScene::Update() {
 }
 
 void GameScene::Draw() {
-
 	Model::PreDraw();
-	model_->Draw(modelWorldTransform_, camera_);
+
+	// プレイヤー描画
+	player_->Draw(); 
 }
