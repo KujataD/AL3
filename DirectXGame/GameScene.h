@@ -18,6 +18,8 @@ public:
 private:
 	KujakuEngine::Sprite* sprite_ = nullptr;
 	KujakuEngine::Model* model_ = nullptr;
+	KujakuEngine::Model* modelPlayer_ = nullptr;
 	KujakuEngine::WorldTransform modelWorldTransform_;
+	KujakuEngine::WorldTransform playerWorldTransform_;
 	KujakuEngine::Camera camera_;
 };
