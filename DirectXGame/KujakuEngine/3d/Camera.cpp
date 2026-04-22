@@ -35,12 +35,7 @@ void Camera::Initialize() {
 void Camera::UpdateMatrix() {
 	UpdateViewMatrix();
 	UpdateProjectionMatrix();
-
-	// 定数バッファへ転送
-	constMap_->view = matView;
-	constMap_->projection = matProjection;
-	constMap_->cameraPos = translation_;
-	constMap_->pad = 0.0f;
+	TransferConstBuffer();
 }
 
 void Camera::UpdateViewMatrix() {
@@ -50,8 +45,14 @@ void Camera::UpdateViewMatrix() {
 	matView = Matrix4x4::Inverse(cameraMatrix);
 }
 
-void Camera::UpdateProjectionMatrix() {
-	matProjection = Matrix4x4::MakePerspectiveFovMatrix(fovAngleY, aspectRatio, nearZ, farZ);
+void Camera::UpdateProjectionMatrix() { matProjection = Matrix4x4::MakePerspectiveFovMatrix(fovAngleY, aspectRatio, nearZ, farZ); }
+
+void Camera::TransferConstBuffer() {
+	// 定数バッファへ転送
+	constMap_->view = matView;
+	constMap_->projection = matProjection;
+	constMap_->cameraPos = translation_;
+	constMap_->pad = 0.0f;
 }
 
 } // namespace KujakuEngine

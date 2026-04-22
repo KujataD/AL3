@@ -17,12 +17,15 @@
 #include "3d/WorldTransform.h"
 #include "3d/DIrectionalLight.h"
 #include "3d/Camera.h"
+#include "3d/DebugCamera.h"
 
 #include "math/Vector2.h"
 #include "math/Vector3.h"
 #include "math/Vector4.h"
 #include "math/Matrix3x3.h"
 #include "math/Matrix4x4.h"
+
+#include "input/Input.h"
 
 namespace KujakuEngine {
 

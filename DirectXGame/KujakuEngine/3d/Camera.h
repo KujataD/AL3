@@ -57,6 +57,14 @@ public:
 	/// </summary>
 	const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return constBuffer_; }
 
+	/// <summary>
+	/// 射影行列を更新する
+	/// </summary>
+	void UpdateProjectionMatrix();
+
+
+	void TransferConstBuffer();
+
 private:
 	// 定数バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuffer_;
@@ -71,11 +79,6 @@ private:
 	/// ビュー行列を更新する
 	/// </summary>
 	void UpdateViewMatrix();
-
-	/// <summary>
-	/// 射影行列を更新する
-	/// </summary>
-	void UpdateProjectionMatrix();
 };
 
 } // namespace KujakuEngine

@@ -34,7 +34,6 @@ void WorldTransform::Initialize() {
 
 void WorldTransform::UpdateMatrix(const Camera& camera) {
 	// ワールド行列の生成
-	// main.cpp: worldMatrix = MakeAffineMatrix(scale, rotate, translate)
 	matWorld_ = Matrix4x4::MakeAffineMatrix(scale_, rotation_, translation_);
 
 	// 親がいれば親のワールド行列を掛ける（階層構造）
@@ -43,11 +42,9 @@ void WorldTransform::UpdateMatrix(const Camera& camera) {
 	}
 
 	// WVP行列の生成
-	// main.cpp: worldViewProjectionMatrix = worldMatrix * viewMatrix * projectionMatrix
 	Matrix4x4 matWVP = matWorld_ * camera.matView * camera.matProjection;
 
 	// 定数バッファへ転送
-	// main.cpp の TransformationMatrixに対応
 	constMap_->WVP = matWVP;
 	constMap_->World = matWorld_;
 }

@@ -22,4 +22,5 @@ private:
 	KujakuEngine::WorldTransform modelWorldTransform_;
 	KujakuEngine::WorldTransform playerWorldTransform_;
 	KujakuEngine::Camera camera_;
+	KujakuEngine::DebugCamera debugCamera_;
 };

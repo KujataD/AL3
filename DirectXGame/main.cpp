@@ -19,6 +19,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ゲームループ
 	while (Update()) {
+		Input::Update();
 
 		///
 		ImGuiManager::GetInstance()->Begin();

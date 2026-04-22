@@ -10,7 +10,6 @@ namespace KujakuEngine {
 
 /// <summary>
 /// 定数バッファ用データ構造体（ワールド変換）
-/// main.cppの TransformationMatrix 構造体に対応
 /// </summary>
 struct ConstBufferDataWorldTransform {
 	Matrix4x4 WVP;   // ワールド・ビュー・プロジェクション合成行列
