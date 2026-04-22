@@ -10,15 +10,18 @@ void GameScene::Init() {
 
 	sprite_->SetPosition({0.0f, 0.0f});
 	sprite_->SetUVScale({1.0f, 1.0f});
+	sprite_->SetSize({0.5f, 0.5f});
 
-	model_ = Model::CreateFromOBJ("resources/enemy", "enemy.obj");
+	model_ = Model::Create("resources/uvChecker.png");
 	modelPlayer_ = Model::CreateFromOBJ("resources/player", "player.obj");
 	modelWorldTransform_.Initialize();
 	playerWorldTransform_.Initialize();
-	playerWorldTransform_.translation_ = {2.0f, 1.0f, 0.0f};
+	playerWorldTransform_.translation_ = {0.0f, -0.2f, 0.0f};
+	modelWorldTransform_.translation_ = {2.0f, 1.0f, 0.0f};
+	modelWorldTransform_.rotation_ = {-0.01f, 0.0f, 0.0f};
 
 	camera_.Initialize();
-	camera_.translation_ = {0.0f, 0.0f, -15.0f};
+	camera_.translation_ = {0.0f, 0.0f, -5.0f};
 	camera_.UpdateMatrix();
 }
 
@@ -33,6 +36,7 @@ void GameScene::Update() {
 void GameScene::Draw() {
 	Sprite::PreDraw();
 	sprite_->Draw();
+
 	Model::PreDraw();
 	model_->Draw(modelWorldTransform_, camera_);
 	modelPlayer_->Draw(playerWorldTransform_, camera_);

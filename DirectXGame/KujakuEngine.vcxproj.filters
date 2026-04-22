@@ -114,6 +114,9 @@
     <ClCompile Include="KujakuEngine\base\StringUtil.cpp">
       <Filter>KujakuEngine\base</Filter>
     </ClCompile>
+    <ClCompile Include="KujakuEngine\3d\DirectionalLight.cpp">
+      <Filter>KujakuEngine\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">

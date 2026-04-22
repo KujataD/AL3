@@ -46,7 +46,10 @@ public:
 	/// <summary>
 	/// OBJファイルからモデルを生成する
 	/// </summary>
-	static Model* CreateFromOBJ(const std::string& directoryPath, const std::string& filename);
+	static Model* CreateFromOBJ(const std::string& directoryPath, const std::string& filename, bool enableLighting = false);
+
+	static Model* Create(const std::string& textureFilePath, bool enableLighting = false);
+
 
 	/// <summary>
 	/// 描画前処理（全モデル共通・フレームに1回）
@@ -65,7 +68,9 @@ public:
 	/// </summary>
 	void Draw(const WorldTransform& worldTransform, const Camera& camera);
 
+	// --- set ---
 private:
+
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 	uint32_t vertexCount_ = 0;

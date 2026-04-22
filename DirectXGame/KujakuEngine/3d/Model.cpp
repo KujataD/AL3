@@ -1,6 +1,7 @@
 #include "Model.h"
 #include "../base/DirectXCommon.h"
 #include "../base/WinApp.h"
+#include "DirectionalLight.h"
 #include "GraphicsPipeline.h"
 #include <cassert>
 #include <fstream>
@@ -8,9 +9,10 @@
 
 namespace KujakuEngine {
 
-Model* Model::CreateFromOBJ(const std::string& directoryPath, const std::string& filename) {
+Model* Model::CreateFromOBJ(const std::string& directoryPath, const std::string& filename, bool enableLighting) {
 	Model* model = new Model();
 	ModelRawData rawData = LoadObjFile(directoryPath, filename);
+	rawData.material.enableLighting = enableLighting;
 	model->CreateVertexBuffer(rawData.vertices);
 	model->CreateMaterialBuffer(rawData.material);
 	if (!rawData.material.textureFilePath.empty()) {
@@ -18,7 +20,70 @@ Model* Model::CreateFromOBJ(const std::string& directoryPath, const std::string&
 	}
 	return model;
 }
+Model* Model::Create(const std::string& textureFilePath, bool enableLighting ) {
+	Model* model = new Model();
 
+	std::vector<VertexData> vertices = {
+	    // 前面 (Z+)
+	    {{-0.5f, 0.5f, 0.5f, 1.0f},   {1.0f, 0.0f}, {0.0f, 0.0f, 1.0f} },
+	    {{-0.5f, -0.5f, 0.5f, 1.0f},  {1.0f, 1.0f}, {0.0f, 0.0f, 1.0f} },
+	    {{0.5f, -0.5f, 0.5f, 1.0f},   {0.0f, 1.0f}, {0.0f, 0.0f, 1.0f} },
+	    {{-0.5f, 0.5f, 0.5f, 1.0f},   {1.0f, 0.0f}, {0.0f, 0.0f, 1.0f} },
+	    {{0.5f, -0.5f, 0.5f, 1.0f},   {0.0f, 1.0f}, {0.0f, 0.0f, 1.0f} },
+	    {{0.5f, 0.5f, 0.5f, 1.0f},    {0.0f, 0.0f}, {0.0f, 0.0f, 1.0f} },
+
+	    // 背面 (Z-)
+	    {{0.5f, 0.5f, -0.5f, 1.0f},   {1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
+	    {{0.5f, -0.5f, -0.5f, 1.0f},  {1.0f, 1.0f}, {0.0f, 0.0f, -1.0f}},
+	    {{-0.5f, -0.5f, -0.5f, 1.0f}, {0.0f, 1.0f}, {0.0f, 0.0f, -1.0f}},
+	    {{0.5f, 0.5f, -0.5f, 1.0f},   {1.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
+	    {{-0.5f, -0.5f, -0.5f, 1.0f}, {0.0f, 1.0f}, {0.0f, 0.0f, -1.0f}},
+	    {{-0.5f, 0.5f, -0.5f, 1.0f},  {0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}},
+
+	    // 上面 (Y+)
+	    {{-0.5f, 0.5f, -0.5f, 1.0f},  {1.0f, 0.0f}, {0.0f, 1.0f, 0.0f} },
+	    {{-0.5f, 0.5f, 0.5f, 1.0f},   {1.0f, 1.0f}, {0.0f, 1.0f, 0.0f} },
+	    {{0.5f, 0.5f, 0.5f, 1.0f},    {0.0f, 1.0f}, {0.0f, 1.0f, 0.0f} },
+	    {{-0.5f, 0.5f, -0.5f, 1.0f},  {1.0f, 0.0f}, {0.0f, 1.0f, 0.0f} },
+	    {{0.5f, 0.5f, 0.5f, 1.0f},    {0.0f, 1.0f}, {0.0f, 1.0f, 0.0f} },
+	    {{0.5f, 0.5f, -0.5f, 1.0f},   {0.0f, 0.0f}, {0.0f, 1.0f, 0.0f} },
+
+	    // 下面 (Y-)
+	    {{-0.5f, -0.5f, 0.5f, 1.0f},  {1.0f, 0.0f}, {0.0f, -1.0f, 0.0f}},
+	    {{-0.5f, -0.5f, -0.5f, 1.0f}, {1.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
+	    {{0.5f, -0.5f, -0.5f, 1.0f},  {0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
+	    {{-0.5f, -0.5f, 0.5f, 1.0f},  {1.0f, 0.0f}, {0.0f, -1.0f, 0.0f}},
+	    {{0.5f, -0.5f, -0.5f, 1.0f},  {0.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
+	    {{0.5f, -0.5f, 0.5f, 1.0f},   {0.0f, 0.0f}, {0.0f, -1.0f, 0.0f}},
+
+	    // 右面 (X+)
+	    {{0.5f, 0.5f, 0.5f, 1.0f},    {1.0f, 0.0f}, {1.0f, 0.0f, 0.0f} },
+	    {{0.5f, -0.5f, 0.5f, 1.0f},   {1.0f, 1.0f}, {1.0f, 0.0f, 0.0f} },
+	    {{0.5f, -0.5f, -0.5f, 1.0f},  {0.0f, 1.0f}, {1.0f, 0.0f, 0.0f} },
+	    {{0.5f, 0.5f, 0.5f, 1.0f},    {1.0f, 0.0f}, {1.0f, 0.0f, 0.0f} },
+	    {{0.5f, -0.5f, -0.5f, 1.0f},  {0.0f, 1.0f}, {1.0f, 0.0f, 0.0f} },
+	    {{0.5f, 0.5f, -0.5f, 1.0f},   {0.0f, 0.0f}, {1.0f, 0.0f, 0.0f} },
+
+	    // 左面 (X-)
+	    {{-0.5f, 0.5f, -0.5f, 1.0f},  {1.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}},
+	    {{-0.5f, -0.5f, -0.5f, 1.0f}, {1.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
+	    {{-0.5f, -0.5f, 0.5f, 1.0f},  {0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
+	    {{-0.5f, 0.5f, -0.5f, 1.0f},  {1.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}},
+	    {{-0.5f, -0.5f, 0.5f, 1.0f},  {0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
+	    {{-0.5f, 0.5f, 0.5f, 1.0f},   {0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}},
+	};
+
+	model->CreateVertexBuffer(vertices);
+
+	// MaterialData
+	MaterialData defaultMaterial{};
+	defaultMaterial.enableLighting = enableLighting;
+	model->CreateMaterialBuffer(defaultMaterial);
+
+	model->LoadTexture(textureFilePath);
+
+	return model;
+}
 void Model::PreDraw() {
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 	ID3D12GraphicsCommandList* commandList = dxCommon->GetCommandList();
@@ -70,7 +135,7 @@ void Model::Draw(const WorldTransform& worldTransform, const Camera& camera) {
 
 	commandList->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU_);
 	// テクスチャSRV（RootParameter[2]: DescriptorTable）
-
+	commandList->SetGraphicsRootConstantBufferView(3, DirectionalLight::GetInstance()->GetResource()->GetGPUVirtualAddress());
 	// 描画
 	commandList->DrawInstanced(vertexCount_, 1, 0, 0);
 }
@@ -247,16 +312,16 @@ void Model::LoadTexture(const std::string& filePath) {
 	}
 
 	// SRV生成
-    ID3D12DescriptorHeap* srvHeap = DirectXCommon::GetInstance()->GetSrvDescriptorHeap();
-    const UINT descriptorSizeSRV = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	ID3D12DescriptorHeap* srvHeap = DirectXCommon::GetInstance()->GetSrvDescriptorHeap();
+	const UINT descriptorSizeSRV = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-    // テクスチャの数に応じて、場所を変える
-    UINT srvIndex = DirectXCommon::GetInstance()->AllocateSrvIndex();
+	// テクスチャの数に応じて、場所を変える
+	UINT srvIndex = DirectXCommon::GetInstance()->AllocateSrvIndex();
 
-    textureSrvHandleCPU_ = srvHeap->GetCPUDescriptorHandleForHeapStart();
-    textureSrvHandleCPU_.ptr += descriptorSizeSRV * srvIndex;
-    textureSrvHandleGPU_ = srvHeap->GetGPUDescriptorHandleForHeapStart();
-    textureSrvHandleGPU_.ptr += descriptorSizeSRV * srvIndex;
+	textureSrvHandleCPU_ = srvHeap->GetCPUDescriptorHandleForHeapStart();
+	textureSrvHandleCPU_.ptr += descriptorSizeSRV * srvIndex;
+	textureSrvHandleGPU_ = srvHeap->GetGPUDescriptorHandleForHeapStart();
+	textureSrvHandleGPU_.ptr += descriptorSizeSRV * srvIndex;
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = metadata.format;

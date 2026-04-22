@@ -23,6 +23,9 @@ void Initialize(const std::wstring& title, bool enableDebugLayer) {
 
 	// グラフィックスパイプラインの初期化
 	GraphicsPipeline::GetInstance()->Initialize();
+
+	// Light初期化
+	DirectionalLight::GetInstance()->Initialize();
 }
 
 void Finalize() { WinApp::GetInstance()->TerminateGameWindow(); }
