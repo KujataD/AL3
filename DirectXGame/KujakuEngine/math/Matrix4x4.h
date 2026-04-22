@@ -1,9 +1,10 @@
-﻿#pragma once
+#pragma once
 #include <assert.h>
 #include <cmath>
 #include <algorithm>
 #include "Vector3.h"
 
+namespace KujakuEngine{
 class Matrix4x4 {
 public:
 	float m[4][4];
@@ -34,3 +35,4 @@ public:
 	// ビューポート変換行列
 	static Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);
 };
+}

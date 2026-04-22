@@ -1,6 +1,8 @@
-﻿#include "Matrix3x3.h"
+#include "Matrix3x3.h"
 #include <cassert>
 #include <cmath>
+
+namespace KujakuEngine {
 
 Matrix3x3::Matrix3x3() {
 	for (int i = 0; i < 3; i++) {
@@ -108,3 +110,4 @@ Matrix3x3 Matrix3x3::Inverse(const Matrix3x3& m) {
 }
 
 Matrix3x3 Matrix3x3::Transpose(const Matrix3x3& m) { return {m.m[0][0], m.m[1][0], m.m[2][0], m.m[0][1], m.m[1][1], m.m[2][1], m.m[0][2], m.m[1][2], m.m[2][2]}; }
+} // namespace KujakuEngine

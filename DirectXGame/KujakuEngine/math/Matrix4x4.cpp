@@ -1,5 +1,6 @@
-﻿#include "Matrix4x4.h"
+#include "Matrix4x4.h"
 
+namespace KujakuEngine{
 Matrix4x4 Matrix4x4::operator+(const Matrix4x4& other) const {
 	return {
 	    {
@@ -280,4 +281,5 @@ Matrix4x4 Matrix4x4::MakeViewportMatrix(float left, float top, float width, floa
 			{left + (width / 2.0f), top + (height / 2.0f), minDepth, 1.0f}
 		}
 	};
+}
 }

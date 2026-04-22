@@ -1,6 +1,8 @@
-﻿#pragma once
+#pragma once
 #include <cmath>
 #include <math.h>
+
+namespace KujakuEngine{
 
 class Matrix3x3;
 
@@ -55,3 +57,5 @@ public:
 	// 行列変換
 	Vector2 Transform(const Matrix3x3& m) const;
 };
+
+}

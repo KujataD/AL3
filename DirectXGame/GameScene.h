@@ -1,6 +1,8 @@
 #pragma once
 #include "KujakuEngine/KujakuEngine.h"
 #include "Player.h"
+#include "MapchipField.h"
+#include "Skydome.h"
 
 class GameScene {
 public:
@@ -16,15 +18,27 @@ public:
 	// 描画
 	void Draw();
 
+	void GenerateBlocks();
+
 private:
-	// モデル
-	KujakuEngine::Model* model_ = nullptr;
-	
 	// --- カメラ ---
-	KujakuEngine::Camera camera_ ;
+	KujakuEngine::Camera camera_;
 	KujakuEngine::DebugCamera debugCamera_;
 
-	// プレイヤー
+	// デバッグカメラ有効
+	bool isDebugCameraActive_ = false;
+
+	// --- プレイヤー ---
 	Player* player_ = nullptr;
+	KujakuEngine::Model* playerModel_ = nullptr;
+
+	// --- ブロック ---
+	MapChipField* mapChipField_ = nullptr;
+	KujakuEngine::Model* blockModel_ = nullptr;
+	std::vector<std::vector<KujakuEngine::WorldTransform*>> worldTransformBlocks_;
+
+	// --- スカイドーム ---
+	Skydome* skydome_ = nullptr;
+	KujakuEngine::Model* modelSkydome_ = nullptr;
 
 };

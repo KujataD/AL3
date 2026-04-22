@@ -2,6 +2,8 @@
 #include <assert.h>
 #include <cmath>
 
+namespace KujakuEngine{
+
 class Matrix4x4;
 
 class Vector3 {
@@ -49,3 +51,5 @@ public:
 	//static Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
 	static Vector3 Perpendicular(const Vector3& vector);
 };
+
+}

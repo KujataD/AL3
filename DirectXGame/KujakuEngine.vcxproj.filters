@@ -46,6 +46,9 @@
     <Filter Include="ソース ファイル\GameObject\Player">
       <UniqueIdentifier>{1f8aa0e3-2c91-4efb-aed1-fcdae701d030}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameObject\World">
+      <UniqueIdentifier>{8d88fa72-578a-4fa1-8ca9-6aefe950f26a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -131,6 +134,12 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル\GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="MapChipField.cpp">
+      <Filter>ソース ファイル\GameObject\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Skydome.cpp">
+      <Filter>ソース ファイル\GameObject\World</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +229,12 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>ソース ファイル\GameObject\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="MapChipField.h">
+      <Filter>ソース ファイル\GameObject\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Skydome.h">
+      <Filter>ソース ファイル\GameObject\World</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

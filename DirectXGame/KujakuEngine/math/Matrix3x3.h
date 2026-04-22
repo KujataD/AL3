@@ -1,5 +1,8 @@
-﻿#pragma once
+#pragma once
 #include "Vector2.h"
+
+
+namespace KujakuEngine{
 
 class Matrix3x3 {
 public:
@@ -27,3 +30,4 @@ public:
 	static Matrix3x3 Inverse(const Matrix3x3& m);
 	static Matrix3x3 Transpose(const Matrix3x3& m);
 };
+}

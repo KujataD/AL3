@@ -1,6 +1,7 @@
-﻿#include "Vector2.h"
+#include "Vector2.h"
 #include "Matrix3x3.h"
 #include <cassert>
+namespace KujakuEngine{
 
 Vector2::Vector2() : x(0.0f), y(0.0f) {}
 Vector2::Vector2(float x, float y) : x(x), y(y) {}
@@ -100,4 +101,5 @@ Vector2 Vector2::Transform(const Matrix3x3& m) const {
 	result.x /= w;
 	result.y /= w;
 	return result;
+}
 }

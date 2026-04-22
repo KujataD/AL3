@@ -2,6 +2,7 @@
 #include "Matrix4x4.h"
 
 
+namespace KujakuEngine{
 Vector3 Vector3::Lerp(const Vector3& v1, const Vector3 v2, float t) {
 	return {
 	    v1.x + (v2.x - v1.x) * t,
@@ -52,4 +53,5 @@ Vector3 Vector3::Perpendicular(const Vector3& vector) {
 		return {-vector.y, vector.x, 0.0f};
 	}
 	return {0.0f, -vector.z, vector.y};
+}
 }
