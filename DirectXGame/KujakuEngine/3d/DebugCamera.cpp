@@ -13,7 +13,7 @@ void DebugCamera::Update() {
 	prevMousePos_ = mousePos_;
 	mousePos_ = Input::GetMousePos();
 
-	if (Input::GetMouse(1)) {
+	if (Input::GetClick(1)) {
 		Vector2 dPos = mousePos_ - prevMousePos_;
 
 		rotation_.y += dPos.x * kRotateSpeed;

@@ -25,7 +25,7 @@ public:
 	float GetBlockWidth() { return kBlockWidth; }
 	float GetBlockHeight() { return kBlockHeight; }
 
-	uint32_t GetNumBlockVirtical() { return kNumBlockVirtical; }
+	uint32_t GetNumBlockVertical() { return kNumBlockVirtical; }
 	uint32_t GetNumBlockHorizontal() { return kNumBlockHorizontal; }
 
 private:

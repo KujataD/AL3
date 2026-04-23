@@ -19,9 +19,14 @@ public:
 
 	static bool GetKey(char keycode) { return key_[keycode]; }
 	static bool GetPreKey(char keycode) { return preKey_[keycode]; }
+	static bool GetKeyTrigger(char keycode) { return key_[keycode] && !preKey_[keycode]; }
+	static bool GetKeyRelease(char keycode) { return !key_[keycode] && preKey_[keycode]; }
 
-	static bool GetMouse(int num) { return mouseState_.rgbButtons[num]; }
-	static bool GetPreMouse(int num) { return preMouseState_.rgbButtons[num]; }
+	static bool GetClick(int num) { return mouseState_.rgbButtons[num]; }
+	static bool GetPreClick(int num) { return preMouseState_.rgbButtons[num]; }
+	static bool GetClickTrigger(int num) { return mouseState_.rgbButtons[num] && !preMouseState_.rgbButtons[num]; }
+	static bool GetClickRelease(int num) { return !mouseState_.rgbButtons[num] && preMouseState_.rgbButtons[num]; }
+
 
 	static Vector2 GetMousePos();
 
