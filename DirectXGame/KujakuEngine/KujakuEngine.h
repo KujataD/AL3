@@ -25,6 +25,8 @@
 #include "math/Matrix3x3.h"
 #include "math/Matrix4x4.h"
 
+#include "shapes/Rect.h"
+
 #include "input/Input.h"
 
 namespace KujakuEngine {

@@ -27,9 +27,6 @@ void Camera::Initialize() {
 	// マッピング
 	hr = constBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&constMap_));
 	assert(SUCCEEDED(hr));
-
-	// 初期行列を書き込む
-	UpdateMatrix();
 }
 
 void Camera::UpdateMatrix() {

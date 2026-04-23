@@ -49,6 +49,12 @@
     <Filter Include="ソース ファイル\GameObject\World">
       <UniqueIdentifier>{8d88fa72-578a-4fa1-8ca9-6aefe950f26a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameObject\CameraController">
+      <UniqueIdentifier>{d31ee70b-3122-4106-8d2f-07e251f1b191}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KujakuEngine\shapes">
+      <UniqueIdentifier>{4ce3014d-950b-41ee-9a0a-c94ca6731cb0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -140,6 +146,12 @@
     </ClCompile>
     <ClCompile Include="Skydome.cpp">
       <Filter>ソース ファイル\GameObject\World</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraController.cpp">
+      <Filter>ソース ファイル\GameObject\CameraController</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\shapes\Rect.cpp">
+      <Filter>KujakuEngine\shapes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -235,6 +247,12 @@
     </ClInclude>
     <ClInclude Include="Skydome.h">
       <Filter>ソース ファイル\GameObject\World</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraController.h">
+      <Filter>ソース ファイル\GameObject\CameraController</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\shapes\Rect.h">
+      <Filter>KujakuEngine\shapes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

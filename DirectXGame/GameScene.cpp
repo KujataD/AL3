@@ -7,25 +7,41 @@ GameScene::~GameScene() {}
 
 void GameScene::Init() {
 
-	// --- カメラ初期化 ---
-	camera_.Initialize();
-	camera_.translation_ = {15.0f, 9.0f, -40.0f};
-
-	debugCamera_.Initialize(camera_.rotation_, camera_.translation_);
-
-	// --- プレイヤー初期化 ---
-	playerModel_ = Model::CreateFromOBJ("resources/player", "player.obj");
-	player_ = new Player();
-	player_->Init(playerModel_, &camera_);
-
-	// --- マップチップ ---
+	// マップチップ
+	// ------------------------------------------
 	blockModel_ = Model::CreateFromOBJ("resources/block", "block.obj");
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 
 	GenerateBlocks();
 
-	// --- スカイドーム ---
+	// プレイヤー初期化
+	// ------------------------------------------
+	playerModel_ = Model::CreateFromOBJ("resources/player", "player.obj");
+
+	// 座標をマップチップ番号で指定
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 18);
+
+	player_ = new Player();
+	player_->Init(playerModel_, &camera_, playerPosition);
+	player_->SetMapChipField(mapChipField_);
+	
+
+	// カメラ初期化
+	// ------------------------------------------
+	camera_.Initialize();
+	camera_.translation_ = {15.0f, 9.0f, -40.0f};
+
+	debugCamera_.Initialize(camera_.rotation_, camera_.translation_);
+	
+	// カメラコントローラーの初期化
+	cameraController_ = new CameraController;
+	cameraController_->Init(&camera_);
+	cameraController_->SetTarget(player_);
+	cameraController_->Reset();
+
+	// スカイドーム
+	// ------------------------------------------
 	modelSkydome_ = Model::CreateFromOBJ("resources/sky_sphere", "sky_sphere.obj");
 	skydome_ = new Skydome();
 	skydome_->Init(modelSkydome_, &camera_);
@@ -56,12 +72,17 @@ void GameScene::Update() {
 	}
 
 #ifdef _DEBUG
-	if (Input::GetKey(DIK_P)) {
+	if (Input::GetKeyTrigger(DIK_P)) {
 		isDebugCameraActive_ = !isDebugCameraActive_;
 	}
 #endif // _DEBUG
 	
 	// カメラの処理
+	// ------------------------------------------
+	
+	// カメラコントローラーの処理
+	cameraController_->Update();
+
 	if (isDebugCameraActive_) {
 		debugCamera_.Update();
 		debugCamera_.UpdateViewMatrix();

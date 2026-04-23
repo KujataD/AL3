@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "MapchipField.h"
 #include "Skydome.h"
+#include "CameraController.h"
 
 class GameScene {
 public:
@@ -24,9 +25,11 @@ private:
 	// --- カメラ ---
 	KujakuEngine::Camera camera_;
 	KujakuEngine::DebugCamera debugCamera_;
+	CameraController* cameraController_ = nullptr;
 
 	// デバッグカメラ有効
 	bool isDebugCameraActive_ = false;
+
 
 	// --- プレイヤー ---
 	Player* player_ = nullptr;

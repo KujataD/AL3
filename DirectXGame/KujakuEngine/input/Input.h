@@ -12,27 +12,25 @@ namespace KujakuEngine {
 
 class Input {
 public:
-
 	static void Initialize();
 
 	static void Update();
 
-	static bool GetKey(char keycode) { return key_[keycode]; }
-	static bool GetPreKey(char keycode) { return preKey_[keycode]; }
-	static bool GetKeyTrigger(char keycode) { return key_[keycode] && !preKey_[keycode]; }
-	static bool GetKeyRelease(char keycode) { return !key_[keycode] && preKey_[keycode]; }
+	static bool GetKey(unsigned char keycode) { return key_[keycode]; }
+	static bool GetPreKey(unsigned char keycode) { return preKey_[keycode]; }
+	static bool GetKeyTrigger(unsigned char keycode) { return key_[keycode] && !preKey_[keycode]; }
+	static bool GetKeyRelease(unsigned char keycode) { return !key_[keycode] && preKey_[keycode]; }
 
 	static bool GetClick(int num) { return mouseState_.rgbButtons[num]; }
 	static bool GetPreClick(int num) { return preMouseState_.rgbButtons[num]; }
 	static bool GetClickTrigger(int num) { return mouseState_.rgbButtons[num] && !preMouseState_.rgbButtons[num]; }
 	static bool GetClickRelease(int num) { return !mouseState_.rgbButtons[num] && preMouseState_.rgbButtons[num]; }
 
-
 	static Vector2 GetMousePos();
 
 private:
- 	static HWND hwnd_;
-	
+	static HWND hwnd_;
+
 	static IDirectInput8* directInput_;
 	static IDirectInputDevice8* keyboard_;
 	static IDirectInputDevice8* mouse_;
@@ -46,5 +44,4 @@ private:
 	static DIMOUSESTATE2 preMouseState_;
 };
 
-}; // namespace Kujaku
-
+}; // namespace KujakuEngine
