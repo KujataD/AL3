@@ -137,6 +137,11 @@ private:
 	/// </summary>
 	void UpdateMatrix();
 
+	/// <summary>
+	/// カメラ内のクランプ
+	/// </summary>
+	void ClampInCameraVisible();
+
 private:
 	// 定数
 	// ------------------------------------------
@@ -154,13 +159,13 @@ private:
 	static inline const float kTimeTurn = 0.3f;
 
 	// 重力加速度(下方向)
-	static inline const float kGravityAcceleration = 0.05f;
+	static inline const float kGravityAcceleration = 0.01f;
 
 	// 最大落下速度(下方向)
-	static inline const float kLimitFallSpeed = 0.5f;
+	static inline const float kLimitFallSpeed = 0.2f;
 
 	// ジャンプ初速(上方向)
-	static inline const float kJumpAcceleration = 0.5f;
+	static inline const float kJumpAcceleration = 0.2f;
 
 	// キャラクターの当たり判定サイズ
 	static inline const float kWidth = 0.8f;

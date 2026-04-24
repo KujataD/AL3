@@ -71,6 +71,8 @@ void Player::Update() {
 
 	TurnControl();
 
+	ClampInCameraVisible();
+
 	worldTransform_.UpdateMatrix(*camera_);
 }
 
@@ -247,3 +249,12 @@ void Player::TurnControl() {
 }
 
 void Player::UpdateMatrix() {}
+
+void Player::ClampInCameraVisible() {
+
+	Rect cameraVisible = camera_->GetVisibleRect(worldTransform_.translation_.z);
+
+	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, cameraVisible.left, cameraVisible.right);
+	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, cameraVisible.bottom, cameraVisible.top);
+}
+

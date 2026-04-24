@@ -32,6 +32,13 @@ public:
 	Mode GetMode() const { return mode_; }
 
 private:
+	void Follow();
+
+	void ForcedScroll();
+
+	void ClampMovableArea();
+
+private:
 	// 定数
 	// ------------------------------------------
 
@@ -43,6 +50,8 @@ private:
 
 	// 追従対象の各方向へのカメラ移動範囲
 	static inline const KujakuEngine::Rect kMarginArea = {-10.0f, 10.0f, -5.0f, 5.0f};
+
+	static inline const float kScrollSpeed = 0.5f;
 
 	// 変数
 	// ------------------------------------------
@@ -59,7 +68,7 @@ private:
 	KujakuEngine::Vector3 targetOffset_ = {0.0f, 0.0f, -40.0f};
 
 	// カメラ移動範囲
-	KujakuEngine::Rect movableArea_ = {15.5f, 130.0f, 9.0f, 100.0f};
+	KujakuEngine::Rect movableArea_ = {15.5f, 83.3f, 9.0f, 100.0f};
 
 	// カメラの目標座標
 	KujakuEngine::Vector3 goalPosition_;
