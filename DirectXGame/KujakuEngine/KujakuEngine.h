@@ -24,6 +24,8 @@
 #include "math/Vector4.h"
 #include "math/Matrix3x3.h"
 #include "math/Matrix4x4.h"
+#include "math/Easing.h"
+#include "math/Random.h"
 
 #include "shapes/Rect.h"
 

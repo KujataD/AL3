@@ -96,7 +96,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseEnemy.cpp" />
     <ClCompile Include="CameraController.cpp" />
+    <ClCompile Include="DeathParticles.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyBehaviorDead.cpp" />
+    <ClCompile Include="EnemyBehaviorRoot.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
     <ClCompile Include="externals\imgui\imgui_demo.cpp" />
     <ClCompile Include="externals\imgui\imgui_draw.cpp" />
@@ -104,7 +109,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="externals\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="externals\imgui\imgui_tables.cpp" />
     <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Fade.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="GuardEffect.cpp" />
+    <ClCompile Include="HitEffect.cpp" />
+    <ClCompile Include="IPlayerBehavior.cpp" />
     <ClCompile Include="KujakuEngine\2d\ImGuiManager.cpp" />
     <ClCompile Include="KujakuEngine\2d\Sprite.cpp" />
     <ClCompile Include="KujakuEngine\3d\Camera.cpp" />
@@ -119,18 +128,33 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="KujakuEngine\base\WinApp.cpp" />
     <ClCompile Include="KujakuEngine\input\Input.cpp" />
     <ClCompile Include="KujakuEngine\KujakuEngine.cpp" />
+    <ClCompile Include="KujakuEngine\math\Easing.cpp" />
     <ClCompile Include="KujakuEngine\math\Matrix3x3.cpp" />
     <ClCompile Include="KujakuEngine\math\Matrix4x4.cpp" />
+    <ClCompile Include="KujakuEngine\math\Random.cpp" />
     <ClCompile Include="KujakuEngine\math\Vector2.cpp" />
     <ClCompile Include="KujakuEngine\math\Vector3.cpp" />
     <ClCompile Include="KujakuEngine\shapes\Rect.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChipField.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerBehaviorAttack.cpp" />
+    <ClCompile Include="PlayerBehaviorKnockback.cpp" />
+    <ClCompile Include="PlayerBehaviorRoot.cpp" />
+    <ClCompile Include="ShieldEnemy.cpp" />
+    <ClCompile Include="ShieldEnemyBehaviorDead.cpp" />
+    <ClCompile Include="ShieldEnemyBehaviorGuard.cpp" />
+    <ClCompile Include="ShieldEnemyBehaviorRoot.cpp" />
     <ClCompile Include="Skydome.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseEnemy.h" />
     <ClInclude Include="CameraController.h" />
+    <ClInclude Include="DeathParticles.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyBehaviorDead.h" />
+    <ClInclude Include="EnemyBehaviorRoot.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
     <ClInclude Include="externals\imgui\imgui.h" />
     <ClInclude Include="externals\imgui\imgui_impl_dx12.h" />
@@ -139,7 +163,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="externals\imgui\imstb_rectpack.h" />
     <ClInclude Include="externals\imgui\imstb_textedit.h" />
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
+    <ClInclude Include="Fade.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="GuardEffect.h" />
+    <ClInclude Include="HitEffect.h" />
+    <ClInclude Include="IEnemyBehaviorState.h" />
+    <ClInclude Include="IPlayerBehavior.h" />
+    <ClInclude Include="IShieldEnemyBehaviorState.h" />
     <ClInclude Include="KujakuEngine\2d\ImGuiManager.h" />
     <ClInclude Include="KujakuEngine\2d\Sprite.h" />
     <ClInclude Include="KujakuEngine\3d\Camera.h" />
@@ -154,15 +184,26 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="KujakuEngine\base\WinApp.h" />
     <ClInclude Include="KujakuEngine\input\Input.h" />
     <ClInclude Include="KujakuEngine\KujakuEngine.h" />
+    <ClInclude Include="KujakuEngine\math\Easing.h" />
     <ClInclude Include="KujakuEngine\math\Matrix3x3.h" />
     <ClInclude Include="KujakuEngine\math\Matrix4x4.h" />
+    <ClInclude Include="KujakuEngine\math\Random.h" />
     <ClInclude Include="KujakuEngine\math\Vector2.h" />
     <ClInclude Include="KujakuEngine\math\Vector3.h" />
     <ClInclude Include="KujakuEngine\math\Vector4.h" />
     <ClInclude Include="KujakuEngine\shapes\Rect.h" />
+    <ClInclude Include="LRDirection.h" />
     <ClInclude Include="MapChipField.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerBehaviorAttack.h" />
+    <ClInclude Include="PlayerBehaviorKnockback.h" />
+    <ClInclude Include="PlayerBehaviorRoot.h" />
+    <ClInclude Include="ShieldEnemy.h" />
+    <ClInclude Include="ShieldEnemyBehaviorDead.h" />
+    <ClInclude Include="ShieldEnemyBehaviorGuard.h" />
+    <ClInclude Include="ShieldEnemyBehaviorRoot.h" />
     <ClInclude Include="Skydome.h" />
+    <ClInclude Include="TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

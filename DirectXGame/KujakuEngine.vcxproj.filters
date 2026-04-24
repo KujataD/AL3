@@ -55,6 +55,27 @@
     <Filter Include="KujakuEngine\shapes">
       <UniqueIdentifier>{4ce3014d-950b-41ee-9a0a-c94ca6731cb0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Scenes">
+      <UniqueIdentifier>{d5272886-d03c-4685-bb43-32efe339a0d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scenes\Transition">
+      <UniqueIdentifier>{34217457-f15c-4be7-af46-dbaeefb7e376}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObject\Enemy">
+      <UniqueIdentifier>{a913fd57-315b-4da5-890a-4e30398644ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObject\Enemy\normal">
+      <UniqueIdentifier>{5a390850-f595-4619-b58a-bf8e6aca3dac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObject\Enemy\shield">
+      <UniqueIdentifier>{4312e8f4-17e7-45b2-97f2-ec697f952d1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Particle">
+      <UniqueIdentifier>{7f7fb6cc-17b1-43b9-b34e-2f341839a627}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObject\Util">
+      <UniqueIdentifier>{628d27a3-9521-4947-9813-39ea9fae3daa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -120,9 +141,6 @@
     <ClCompile Include="KujakuEngine\2d\Sprite.cpp">
       <Filter>KujakuEngine\2d</Filter>
     </ClCompile>
-    <ClCompile Include="GameScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="KujakuEngine\base\Logger.cpp">
       <Filter>KujakuEngine\base</Filter>
     </ClCompile>
@@ -152,6 +170,66 @@
     </ClCompile>
     <ClCompile Include="KujakuEngine\shapes\Rect.cpp">
       <Filter>KujakuEngine\shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>ソース ファイル\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>ソース ファイル\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Fade.cpp">
+      <Filter>ソース ファイル\Scenes\Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBehaviorAttack.cpp">
+      <Filter>ソース ファイル\GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBehaviorKnockback.cpp">
+      <Filter>ソース ファイル\GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBehaviorRoot.cpp">
+      <Filter>ソース ファイル\GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\math\Random.cpp">
+      <Filter>KujakuEngine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="ShieldEnemy.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
+    </ClCompile>
+    <ClCompile Include="ShieldEnemyBehaviorDead.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
+    </ClCompile>
+    <ClCompile Include="ShieldEnemyBehaviorGuard.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
+    </ClCompile>
+    <ClCompile Include="ShieldEnemyBehaviorRoot.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\math\Easing.cpp">
+      <Filter>KujakuEngine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy\normal</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBehaviorDead.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy\normal</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBehaviorRoot.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy\normal</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseEnemy.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="GuardEffect.cpp">
+      <Filter>ソース ファイル\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="HitEffect.cpp">
+      <Filter>ソース ファイル\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="DeathParticles.cpp">
+      <Filter>ソース ファイル\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="IPlayerBehavior.cpp">
+      <Filter>ソース ファイル\GameObject\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -224,9 +302,6 @@
     <ClInclude Include="KujakuEngine\2d\Sprite.h">
       <Filter>KujakuEngine\2d</Filter>
     </ClInclude>
-    <ClInclude Include="GameScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="KujakuEngine\base\Logger.h">
       <Filter>KujakuEngine\base</Filter>
     </ClInclude>
@@ -253,6 +328,75 @@
     </ClInclude>
     <ClInclude Include="KujakuEngine\shapes\Rect.h">
       <Filter>KujakuEngine\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>ソース ファイル\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>ソース ファイル\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Fade.h">
+      <Filter>ソース ファイル\Scenes\Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBehaviorAttack.h">
+      <Filter>ソース ファイル\GameObject\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBehaviorKnockback.h">
+      <Filter>ソース ファイル\GameObject\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBehaviorRoot.h">
+      <Filter>ソース ファイル\GameObject\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\math\Random.h">
+      <Filter>KujakuEngine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="ShieldEnemy.h">
+      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
+    </ClInclude>
+    <ClInclude Include="ShieldEnemyBehaviorDead.h">
+      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
+    </ClInclude>
+    <ClInclude Include="ShieldEnemyBehaviorGuard.h">
+      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
+    </ClInclude>
+    <ClInclude Include="ShieldEnemyBehaviorRoot.h">
+      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>ソース ファイル\GameObject\Enemy\normal</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\math\Easing.h">
+      <Filter>KujakuEngine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBehaviorRoot.h">
+      <Filter>ソース ファイル\GameObject\Enemy\normal</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBehaviorDead.h">
+      <Filter>ソース ファイル\GameObject\Enemy\normal</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseEnemy.h">
+      <Filter>ソース ファイル\GameObject\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="GuardEffect.h">
+      <Filter>ソース ファイル\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="HitEffect.h">
+      <Filter>ソース ファイル\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="DeathParticles.h">
+      <Filter>ソース ファイル\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="IEnemyBehaviorState.h">
+      <Filter>ソース ファイル\GameObject\Enemy\normal</Filter>
+    </ClInclude>
+    <ClInclude Include="IShieldEnemyBehaviorState.h">
+      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
+    </ClInclude>
+    <ClInclude Include="IPlayerBehavior.h">
+      <Filter>ソース ファイル\GameObject\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="LRDirection.h">
+      <Filter>ソース ファイル\GameObject\Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
