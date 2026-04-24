@@ -4,7 +4,7 @@
 
 namespace KujakuEngine {
 
-namespace Easing {
+namespace EaseUtil {
 
 enum class EaseType { Linear, InQuad, OutQuad, InOutQuad, InBack, OutBack, OutBounce };
 

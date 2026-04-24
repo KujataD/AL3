@@ -1,10 +1,9 @@
 #include "PlayerBehaviorAttack.h"
 #include "Player.h"
 #include "PlayerBehaviorRoot.h"
-#include "Transform.h"
 #include <algorithm>
 
-using namespace KamataEngine;
+using namespace KujakuEngine;
 
 void PlayerBehaviorAttack::Enter(Player* player) {
 	// 速度停止

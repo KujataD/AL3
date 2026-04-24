@@ -1,9 +1,7 @@
 #include "TitleScene.h"
-#include "DeltaTime.h"
-#include "Transform.h"
 #include <numbers>
 
-using namespace KamataEngine;
+using namespace KujakuEngine;
 
 TitleScene::~TitleScene() {
 	delete playerModel_;
@@ -14,14 +12,14 @@ TitleScene::~TitleScene() {
 void TitleScene::Init() {
 
 	// プレイヤーモデル初期化
-	playerModel_ = Model::CreateFromOBJ("player", true);
+	playerModel_ = Model::CreateFromOBJ("player");
 	playerWorldTransform_.Initialize();
 	playerWorldTransform_.translation_ = Vector3(0.0f, -4.5f, 0.0f);
 	playerWorldTransform_.rotation_.y = std::numbers::pi_v<float>;
 	playerWorldTransform_.scale_ = Vector3(4.0f, 4.0f, 4.0f);
 
 	// タイトル文字初期化
-	titleFontModel_ = Model::CreateFromOBJ("titleFont", true);
+	titleFontModel_ = Model::CreateFromOBJ("titlefont");
 	titleFontWorldTransform_.Initialize();
 	titleFontWorldTransform_.translation_ = Vector3(0.0f, 2.0f, 0.0f);
 	titleFontAnimStartPosY_ = titleFontWorldTransform_.translation_.y;
@@ -40,7 +38,7 @@ void TitleScene::Update() {
 	{ // タイトル文字の上下アニメーション
 
 		// デルタタイム加算
-		titleFontAnimCounter_ += DeltaTime::Get();
+		titleFontAnimCounter_ += 1.0f / 60.0f;
 
 		// sin波で上下動
 		float animPosY = std::cos(2.0f * std::numbers::pi_v<float> * titleFontAnimCounter_ / kTitleFontAnimDuration);
@@ -60,7 +58,7 @@ void TitleScene::Update() {
 		break;
 	case Phase::kMain:
 		// シーン遷移
-		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+		if (Input::GetKeyTrigger(DIK_SPACE)) {
 			phase_ = Phase::kFadeOut;
 			fade_->Start(Fade::Status::FadeOut, kFadeDuration);
 		}
@@ -81,10 +79,11 @@ void TitleScene::Update() {
 	// ------------------------------------------
 
 	// プレイヤー
-	WorldTransformUpdate(playerWorldTransform_);
+	playerWorldTransform_.UpdateMatrix(camera_);
 
 	// タイトル文字
-	WorldTransformUpdate(titleFontWorldTransform_);
+	titleFontWorldTransform_.UpdateMatrix(camera_);
+
 }
 
 void TitleScene::Draw() {

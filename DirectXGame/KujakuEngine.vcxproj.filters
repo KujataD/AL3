@@ -231,6 +231,15 @@
     <ClCompile Include="IPlayerBehavior.cpp">
       <Filter>ソース ファイル\GameObject\Player</Filter>
     </ClCompile>
+    <ClCompile Include="KujakuEngine\shapes\AABB.cpp">
+      <Filter>KujakuEngine\shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\shapes\ShapeUtil.cpp">
+      <Filter>KujakuEngine\shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="StageManager.cpp">
+      <Filter>ソース ファイル\GameObject\World</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -397,6 +406,15 @@
     </ClInclude>
     <ClInclude Include="LRDirection.h">
       <Filter>ソース ファイル\GameObject\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\shapes\AABB.h">
+      <Filter>KujakuEngine\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\shapes\ShapeUtil.h">
+      <Filter>KujakuEngine\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="StageManager.h">
+      <Filter>ソース ファイル\GameObject\World</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

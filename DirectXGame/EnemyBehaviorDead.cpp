@@ -2,7 +2,7 @@
 #include "Enemy.h"
 #include <algorithm>
 
-using namespace KamataEngine;
+using namespace KujakuEngine;
 
 void EnemyBehaviorDead::OnEnter(Enemy* enemy) {
 	

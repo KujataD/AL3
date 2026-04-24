@@ -4,9 +4,9 @@
 #include "DirectionalLight.h"
 #include "GraphicsPipeline.h"
 #include <cassert>
+#include <filesystem>
 #include <fstream>
 #include <sstream>
-
 namespace KujakuEngine {
 
 Model* Model::CreateFromOBJ(const std::string& directoryPath, const std::string& filename, bool enableLighting) {
@@ -20,7 +20,22 @@ Model* Model::CreateFromOBJ(const std::string& directoryPath, const std::string&
 	}
 	return model;
 }
-Model* Model::Create(const std::string& textureFilePath, bool enableLighting ) {
+
+Model* Model::CreateFromOBJ(const std::string& objname, bool enableLighting) {
+	Model* model = new Model();
+	std::string directoryPathFinal = "resources/" + objname;
+	std::string filename = objname + ".obj";
+
+	ModelRawData rawData = LoadObjFile(directoryPathFinal, filename);
+	rawData.material.enableLighting = enableLighting;
+	model->CreateVertexBuffer(rawData.vertices);
+	model->CreateMaterialBuffer(rawData.material);
+	if (!rawData.material.textureFilePath.empty()) {
+		model->LoadTexture(rawData.material.textureFilePath);
+	}
+	return model;
+}
+Model* Model::Create(const std::string& textureFilePath, bool enableLighting) {
 	Model* model = new Model();
 
 	std::vector<VertexData> vertices = {
@@ -154,7 +169,9 @@ MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, c
 		if (identifier == "map_Kd") {
 			std::string textureFilename;
 			s >> textureFilename;
-			materialData.textureFilePath = directoryPath + "/" + textureFilename;
+			// ファイル名だけ取り出す（絶対パス対策）
+			std::filesystem::path texPath(textureFilename);
+			materialData.textureFilePath = directoryPath + "/" + texPath.filename().string();
 		}
 	}
 	return materialData;
@@ -280,11 +297,27 @@ void Model::LoadTexture(const std::string& filePath) {
 	DirectX::ScratchImage image{};
 	std::wstring filePathW(filePath.begin(), filePath.end());
 	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
-	assert(SUCCEEDED(hr));
+	if (FAILED(hr)) {
+		MessageBoxA(nullptr, filePath.c_str(), "LoadTexture Failed", MB_OK);
+		assert(false);
+	}
 
 	DirectX::ScratchImage mipImages{};
-	hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
-	assert(SUCCEEDED(hr));
+	// 1x1など既にミップマップ生成不要なサイズの場合はスキップ
+	if (image.GetMetadata().width > 1 && image.GetMetadata().height > 1) {
+		hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
+		assert(SUCCEEDED(hr));
+	} else {
+		// そのままコピー
+		hr = mipImages.InitializeFromImage(*image.GetImages());
+		assert(SUCCEEDED(hr));
+	}
+	if (FAILED(hr)) {
+		char buf[256];
+		sprintf_s(buf, "GenerateMipMaps failed: 0x%08X, fmt: %d, w: %zu, h: %zu\n", hr, (int)image.GetMetadata().format, image.GetMetadata().width, image.GetMetadata().height);
+		OutputDebugStringA(buf);
+		assert(false);
+	}
 
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 

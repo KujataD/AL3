@@ -91,6 +91,15 @@ Matrix4x4 Matrix4x4::operator/(float scalar) const {
     };
 }
 
+
+Matrix4x4 Matrix4x4::MakeAffineMatrixOrientations(const Vector3 orientations[3], const Vector3& translate) {
+	return {
+	    {{orientations[0].x, orientations[0].y, orientations[0].z, 0.0f},
+	     {orientations[1].x, orientations[1].y, orientations[1].z, 0.0f},
+	     {orientations[2].x, orientations[2].y, orientations[2].z, 0.0f},
+	     {translate.x, translate.y, translate.z, 1.0f}}
+    };
+}
 Matrix4x4 Matrix4x4::Inverse(const Matrix4x4& m) {
 	Matrix4x4 result;
 

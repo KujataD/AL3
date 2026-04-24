@@ -2,9 +2,10 @@
 #include <assert.h>
 #include <cmath>
 
-namespace KujakuEngine{
+namespace KujakuEngine {
 
 class Matrix4x4;
+class Segment;
 
 class Vector3 {
 public:
@@ -16,6 +17,7 @@ public:
 	Vector3 operator-(const Vector3& v) const { return {x - v.x, y - v.y, z - v.z}; }
 	Vector3 operator*(float scalar) const { return {x * scalar, y * scalar, z * scalar}; }
 	Vector3 operator/(float scalar) const { return {x / scalar, y / scalar, z / scalar}; }
+	Vector3 operator-() const { return {-x, -y, -z}; }
 
 	void operator+=(const Vector3& v) {
 		x += v.x;
@@ -48,8 +50,8 @@ public:
 
 	static Vector3 Transform(const Vector3& v, const Matrix4x4& m);
 	static Vector3 Project(const Vector3& a, const Vector3& b);
-	//static Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
+	static Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
 	static Vector3 Perpendicular(const Vector3& vector);
 };
 
-}
+} // namespace KujakuEngine

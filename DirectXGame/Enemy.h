@@ -1,8 +1,7 @@
 #pragma once
-#include "AABB.h"
 #include "BaseEnemy.h"
 #include "IEnemyBehaviorState.h"
-#include <KamataEngine.h>
+#include "KujakuEngine/KujakuEngine.h"
 #include <cmath>
 #include <numbers>
 
@@ -19,7 +18,7 @@ public:
 	~Enemy();
 
 	// 初期化
-	void Init(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine::Vector3& position) override;
+	void Init(KujakuEngine::Model* model, KujakuEngine::Camera* camera, const KujakuEngine::Vector3& position) override;
 
 	// 更新
 	void Update() override;
@@ -45,9 +44,9 @@ public:
 
 	// --- get ---
 
-	KamataEngine::Vector3 GetWorldPosition() const override;
-	KamataEngine::Vector3 GetWorldRotation() const override;
-	AABB GetAABB() const override;
+	KujakuEngine::Vector3 GetWorldPosition() const override;
+	KujakuEngine::Vector3 GetWorldRotation() const override;
+	KujakuEngine::AABB GetAABB() const override;
 
 	// API
 	// ------------------------------------------
@@ -64,7 +63,7 @@ public:
 
 	void ChangeBehavior(IEnemyBehaviorState* behavior);
 
-	void SetRotationEaseOut(const KamataEngine::Vector3& startRotation, const KamataEngine::Vector3& endRotation, float t);
+	void SetRotationEaseOut(const KujakuEngine::Vector3& startRotation, const KujakuEngine::Vector3& endRotation, float t);
 
 public:
 	// 定数
@@ -101,18 +100,18 @@ private:
 	// --- 外部参照 ---
 
 	// モデル
-	KamataEngine::Model* model_ = nullptr;
+	KujakuEngine::Model* model_ = nullptr;
 
 	// カメラ
-	KamataEngine::Camera* camera_ = nullptr;
+	KujakuEngine::Camera* camera_ = nullptr;
 
 	// --- 内部プロパティ ---
 
 	// ワールドトランスフォーム
-	KamataEngine::WorldTransform worldTransform_;
+	KujakuEngine::WorldTransform worldTransform_;
 
 	// 速度
-	KamataEngine::Vector3 velocity_ = {};
+	KujakuEngine::Vector3 velocity_ = {};
 
 	// 経過時間
 	float walkTimer_ = 0.0f;

@@ -42,11 +42,16 @@ class Model {
 public:
 	Model() = default;
 	~Model() = default;
-
+	
 	/// <summary>
 	/// OBJファイルからモデルを生成する
 	/// </summary>
-	static Model* CreateFromOBJ(const std::string& directoryPath, const std::string& filename, bool enableLighting = false);
+	Model* CreateFromOBJ(const std::string& directoryPath, const std::string& filename, bool enableLighting);
+
+	/// <summary>
+	/// OBJファイルからモデルを生成する(省略版)
+	/// </summary>
+	static Model* CreateFromOBJ(const std::string& objname, bool enableLighting = false);
 
 	static Model* Create(const std::string& textureFilePath, bool enableLighting = false);
 
@@ -68,7 +73,10 @@ public:
 	/// </summary>
 	void Draw(const WorldTransform& worldTransform, const Camera& camera);
 
+
 	// --- set ---
+	void SetColor(const Vector4& color) { materialMap_->color = color; }
+
 private:
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;

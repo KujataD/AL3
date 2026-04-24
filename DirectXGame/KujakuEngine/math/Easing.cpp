@@ -1,7 +1,7 @@
 #include "Easing.h"
 
 namespace KujakuEngine {
-namespace Easing {
+namespace EaseUtil {
 
 float GetEaseCalc(float t, EaseType easeType) {
 	switch (easeType) {

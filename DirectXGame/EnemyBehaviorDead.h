@@ -1,6 +1,6 @@
 #pragma once
 #include "IEnemyBehaviorState.h"
-#include "KamataEngine.h"
+#include "KujakuEngine/KujakuEngine.h"
 
 class EnemyBehaviorDead : public IEnemyBehaviorState {
 public:
@@ -14,6 +14,6 @@ private:
 	float animTimer_;
 
 	// デスアニメーションの初期回転
-	KamataEngine::Vector3 startRotation_;
-	KamataEngine::Vector3 endRotation_;
+	KujakuEngine::Vector3 startRotation_;
+	KujakuEngine::Vector3 endRotation_;
 };

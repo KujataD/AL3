@@ -1,3 +1,3 @@
 #include "BaseEnemy.h"
 
-using namespace KamataEngine;
+using namespace KujakuEngine;

@@ -1,6 +1,6 @@
 #pragma once
 #include "IPlayerBehavior.h"
-#include <KamataEngine.h>
+#include  "KujakuEngine/KujakuEngine.h"
 
 class PlayerBehaviorAttack : public IPlayerBehavior {
 public:
@@ -31,7 +31,7 @@ private:
 	float attackTimer_;
 
 	// アタック時の移動
-	KamataEngine::Vector3 attackMove_{};
+	KujakuEngine::Vector3 attackMove_{};
 
 	// アタック処理が終わったかどうか
 	bool isFinished_ = false;

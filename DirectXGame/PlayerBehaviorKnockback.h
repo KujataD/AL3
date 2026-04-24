@@ -1,6 +1,6 @@
 #pragma once
 #include "IPlayerBehavior.h"
-#include <KamataEngine.h>
+#include  "KujakuEngine/KujakuEngine.h"
 
 class PlayerBehaviorKnockback : public IPlayerBehavior {
 public:
@@ -15,7 +15,7 @@ private:
 	float knockbackTimer_ = 0.0f;
 
 	// ノックバック時の移動
-	KamataEngine::Vector3 knockbackMove_{};
+	KujakuEngine::Vector3 knockbackMove_{};
 
 	// ノックバック処理が終わったかどうか
 	bool isFinished_ = false;

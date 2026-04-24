@@ -1,7 +1,8 @@
 #pragma once
-#include <KamataEngine.h>
+#include "KujakuEngine/KujakuEngine.h"
 #include <cmath>
 #include <numbers>
+#include <array>
 
 class Player;
 
@@ -13,7 +14,7 @@ public:
 	// Methods
 	// ------------------------------------------
 
-	void Init(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine::Vector3& position);
+	void Init(KujakuEngine::Model* model, KujakuEngine::Camera* camera, const KujakuEngine::Vector3& position);
 
 	void Update();
 
@@ -48,13 +49,13 @@ private:
 	// ------------------------------------------
 
 	// 3Dモデル
-	KamataEngine::Model* model_ = nullptr;
+	KujakuEngine::Model* model_ = nullptr;
 
 	// カメラ
-	KamataEngine::Camera* camera_ = nullptr;
+	KujakuEngine::Camera* camera_ = nullptr;
 
 	// 各パーティクルのワールドトランスフォーム
-	std::array<KamataEngine::WorldTransform, kNumParticles> worldTransforms_;
+	std::array<KujakuEngine::WorldTransform, kNumParticles> worldTransforms_;
 
 	// --- パーティクル処理 ---
 
@@ -64,9 +65,6 @@ private:
 	// 経過時間カウント
 	float counter_ = 0.0f;
 
-	// 色変更オブジェクト
-	KamataEngine::ObjectColor objectColor_;
-	
 	// 色の数値
-	KamataEngine::Vector4 color_;
+	KujakuEngine::Vector4 color_;
 };

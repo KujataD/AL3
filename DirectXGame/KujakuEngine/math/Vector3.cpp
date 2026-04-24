@@ -1,5 +1,6 @@
 #include "Vector3.h"
 #include "Matrix4x4.h"
+#include "../shapes/ShapeUtil.h"
 
 
 namespace KujakuEngine{
@@ -40,13 +41,13 @@ Vector3 Vector3::Project(const Vector3& a, const Vector3& b) {
 	return result;
 }
 
-//Vector3 Vector3::ClosestPoint(const Vector3& point, const Segment& segment) {
-//	Vector3 a = point - segment.origin;
-//	float t = Dot(a, segment.diff) / std::powf(Length(segment.diff), 2);
-//	t = std::clamp(t, 0.0f, 1.0f);
-//	Vector3 cp = segment.origin + segment.diff * t;
-//	return cp;
-//}
+Vector3 Vector3::ClosestPoint(const Vector3& point, const Segment& segment) {
+	Vector3 a = point - segment.origin;
+	float t = Dot(a, segment.diff) / std::powf(Length(segment.diff), 2);
+	t = std::clamp(t, 0.0f, 1.0f);
+	Vector3 cp = segment.origin + segment.diff * t;
+	return cp;
+}
 
 Vector3 Vector3::Perpendicular(const Vector3& vector) {
 	if (vector.x != 0.0f || vector.y != 0.0f) {

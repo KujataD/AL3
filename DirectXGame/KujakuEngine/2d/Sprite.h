@@ -7,11 +7,11 @@
 
 #include "../3d/Model.h" // VertexData, MaterialData を共有
 
+#include "../../externals/DirectXTex/DirectXTex.h"
 #include "../math/Matrix4x4.h"
 #include "../math/Vector2.h"
 #include "../math/Vector3.h"
 #include "../math/Vector4.h"
-#include "../../externals/DirectXTex/DirectXTex.h"
 
 namespace KujakuEngine {
 
@@ -27,7 +27,7 @@ public:
 	/// <param name="position">左上の座標（スクリーン座標）</param>
 	/// <param name="size">表示サイズ（デフォルトはテクスチャサイズ相当）</param>
 	/// <param name="color">色（デフォルトは白・不透明）</param>
-	static Sprite* Create(const std::string& textureFilePath, const Vector2& position = {0.0f, 0.0f}, const Vector2& size = {1.0f, 1.0f}, const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
+	static Sprite* Create(const std::string& textureFilePath, const Vector2& position = {0.0f, 0.0f}, float width = 360.0f, float height = 360.0f, const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
 
 	/// <summary>
 	/// 描画前処理
@@ -49,10 +49,11 @@ public:
 	void SetSize(const Vector2& size) { size_ = size; }
 	void SetColor(const Vector4& color) { materialMap_->color = color; }
 	void SetRotation(float rotation) { rotation_ = rotation; }
-
 	void SetUVTranslate(const Vector2& translate) { uvTranslate_ = translate; }
 	void SetUVScale(const Vector2& scale) { uvScale_ = scale; }
 	void SetUVRotation(float rotation) { uvRotation_ = rotation; }
+	void SetVertexMap(float width, float height);
+
 
 	// --- get ---
 	const Vector2& GetPosition() const { return position_; }
@@ -74,8 +75,9 @@ private:
 	/// </summary>
 	void UpdateUVTransform();
 
+
 	// --- GPU リソース生成 ---
-	void CreateVertexBuffer();
+	void CreateVertexBuffer(float width, float height);
 	void CreateIndexBuffer();
 	void CreateTransformationMatrixBuffer();
 	void CreateMaterialBuffer();
@@ -113,6 +115,9 @@ private:
 	Vector2 uvTranslate_ = {0.0f, 0.0f};
 	Vector2 uvScale_ = {1.0f, 1.0f};
 	float uvRotation_ = 0.0f;
+
+	float width_ = 360.0f;
+	float height_ = 360.0f;
 };
 
 } // namespace KujakuEngine

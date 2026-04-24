@@ -1,17 +1,15 @@
 #include "Enemy.h"
-#include "DeltaTime.h"
-#include "Easing.h"
 #include "EnemyBehaviorDead.h"
 #include "EnemyBehaviorRoot.h"
+#include "GameScene.h"
+#include "KujakuEngine/KujakuEngine.h"
 #include "MapChipField.h"
 #include "Player.h"
-#include "Transform.h"
-#include "GameScene.h"
 #include <cassert>
 #include <numbers>
 
-using namespace KamataEngine;
-using namespace MathUtility;
+using namespace KujakuEngine;
+using namespace EaseUtil;
 
 Enemy::~Enemy() {}
 
@@ -70,7 +68,7 @@ void Enemy::OnCollision(Player* player) {
 	}
 }
 
-KamataEngine::Vector3 Enemy::GetWorldPosition() const {
+KujakuEngine::Vector3 Enemy::GetWorldPosition() const {
 	Vector3 worldPos;
 	worldPos.x = worldTransform_.translation_.x;
 	worldPos.y = worldTransform_.translation_.y;
@@ -78,7 +76,7 @@ KamataEngine::Vector3 Enemy::GetWorldPosition() const {
 	return worldPos;
 }
 
-KamataEngine::Vector3 Enemy::GetWorldRotation() const {
+KujakuEngine::Vector3 Enemy::GetWorldRotation() const {
 	Vector3 worldRot;
 	worldRot.x = worldTransform_.rotation_.x;
 	worldRot.y = worldTransform_.rotation_.y;
@@ -99,7 +97,7 @@ AABB Enemy::GetAABB() const {
 
 void Enemy::Move() {
 	// タイマー加算
-	walkTimer_ += DeltaTime::Get();
+	walkTimer_ += 1.0f / 60.0f;
 
 	// 回転アニメーション
 	float param = std::sin(2.0f * std::numbers::pi_v<float> * walkTimer_ / 1.0f);
@@ -112,7 +110,7 @@ void Enemy::Move() {
 
 void Enemy::UpdateTransform() {
 	// 行列の更新
-	WorldTransformUpdate(worldTransform_);
+	worldTransform_.UpdateMatrix(*camera_);
 }
 
 void Enemy::ChangeBehavior(IEnemyBehaviorState* behavior) {

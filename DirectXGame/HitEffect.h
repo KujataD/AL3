@@ -1,6 +1,7 @@
 #pragma once
-#include <KamataEngine.h> 
+#include  "KujakuEngine/KujakuEngine.h"
 #include <vector>
+#include <array>
 
 /// <summary>
 /// ヒット演出用エフェクト
@@ -12,16 +13,16 @@ public:
 		kDead,
 	};
 public:
-	void Init(const KamataEngine::Vector3 spawnPos, const KamataEngine::Vector4 color);
+	void Init(const KujakuEngine::Vector3 spawnPos, const KujakuEngine::Vector4 color);
 
 	void Update();
 
 	void Draw();
 
-	static HitEffect* Create(const KamataEngine::Vector3 spawnPos, const KamataEngine::Vector4 color);
+	static HitEffect* Create(const KujakuEngine::Vector3 spawnPos, const KujakuEngine::Vector4 color);
 
-	static void SetModel(KamataEngine::Model* model) { model_ = model; }
-	static void SetCamera(KamataEngine::Camera* camera) { camera_ = camera; }
+	static void SetModel(KujakuEngine::Model* model) { model_ = model; }
+	static void SetCamera(KujakuEngine::Camera* camera) { camera_ = camera; }
 
 	bool IsDead() const { return state_ == State::kDead; }
 
@@ -49,10 +50,10 @@ private:
 	// --- 外部依存 ---
 
 	// モデル
-	static KamataEngine::Model* model_;
+	static KujakuEngine::Model* model_;
 
 	// カメラ
-	static KamataEngine::Camera* camera_;
+	static KujakuEngine::Camera* camera_;
 
 	// --- インスタンスプロパティ ---
 
@@ -62,9 +63,7 @@ private:
 	// Alpha値
 	float alphaColor_ = 0.0f;
 
-	KamataEngine::ObjectColor objColor_;
-
-	KamataEngine::Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
+	KujakuEngine::Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
 
 	// 全サイズ
 	float allShapeSize_ = 1.0f;
@@ -73,8 +72,8 @@ private:
 	float animCounter_ = 0.0f;
 
 	// 円のワールドトランスフォーム
-	KamataEngine::WorldTransform circleWorldTransform_;
+	KujakuEngine::WorldTransform circleWorldTransform_;
 
 	// 楕円のワールドトランスフォーム
-	std::array<KamataEngine::WorldTransform, kEllipseValue> ellipseWorldTransforms_;
+	std::array<KujakuEngine::WorldTransform, kEllipseValue> ellipseWorldTransforms_;
 };

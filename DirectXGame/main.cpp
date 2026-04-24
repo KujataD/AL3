@@ -1,32 +1,82 @@
-#include "GameScene.h"
 #include "KujakuEngine/KujakuEngine.h"
-#include "externals/DirectXTex/DirectXTex.h"
-#include "externals/imgui/imgui.h"
-#include "externals/imgui/imgui_impl_dx12.h"
-#include "externals/imgui/imgui_impl_win32.h"
+#include <cassert>
+#include <fstream>
 #include <memory>
 
+#include "GameScene.h"
+#include "TitleScene.h"
+
+#include "StageManager.h"
+
 using namespace KujakuEngine;
+
+enum class Scene {
+	kUnknown = 0,
+	kTitle,
+	kGame,
+};
+
+StageManager* stageManager = nullptr;
+
+Scene scene = Scene::kUnknown;
+
+// ゲームシーン
+GameScene* gameScene = nullptr;
+
+// タイトルシーン
+TitleScene* titleScene;
+
+void InitScene();
+
+void ChangeScene();
+
+void UpdateScene();
+
+void DrawScene();
+
+void LoadDebugSettings();
 
 // Windowsアプリでのエントリーポイント
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// エンジン初期化
 	Initialize(L"LC2B_04_オオツカ_ダイチ_AL3", true);
+	// タイトルシーンの初期化
+	scene = Scene::kTitle;
 
-	GameScene* gameScene = new GameScene;
-	gameScene->Init();
+	// クラスインスタンスの生成
+	stageManager = new StageManager;
+	// ステージデータファイルを読み込む
+	stageManager->LoadStageDataFile();
+
+#ifdef _DEBUG
+	// デバッグ設定ファイル読み込み
+	LoadDebugSettings();
+
+	scene = Scene::kGame;
+#endif // _DEBUG
+
+	// シーン初期化
+	InitScene();
+
+	// Randomのシード初期化
+	Random::Init();
+
+	// ImGuiManagerインスタンスの取得
+	ImGuiManager* imguiManager = ImGuiManager::GetInstance();
 
 	// ゲームループ
 	while (Update()) {
 		Input::Update();
 
+		imguiManager->Begin();
 		///
-		ImGuiManager::GetInstance()->Begin();
 		/// ↓↓↓ 更新処理ここから ↓↓↓
 		///
 
-		gameScene->Update();
+		ChangeScene();
+
+		UpdateScene();
 
 #ifdef USE_IMGUI
 		ImGui::Begin("LightManager");
@@ -41,23 +91,127 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↑↑↑ 更新処理ここまで ↑↑↑
 		///
 
-		///
 		PreDraw();
+		///
 		/// ↓↓↓ 描画処理ここから ↓↓↓
 		///
 
-		gameScene->Draw();
+		DrawScene();
 
 		///
 		/// ↑↑↑ 描画処理ここまで ↑↑↑
-		PostDraw();
 		///
+		PostDraw();
 	}
 
+	delete titleScene;
+	titleScene = nullptr;
 	delete gameScene;
+	gameScene = nullptr;
+	delete stageManager;
 
 	// エンジンの終了処理
 	Finalize();
 
 	return 0;
+}
+
+void InitScene() {
+	switch (scene) {
+	case Scene::kUnknown:
+		break;
+	case Scene::kTitle:
+		if (!titleScene) {
+			titleScene = new TitleScene;
+			titleScene->Init();
+		}
+		break;
+	case Scene::kGame:
+		if (!gameScene) {
+			gameScene = new GameScene;
+			gameScene->Init(stageManager);
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void ChangeScene() {
+	switch (scene) {
+	case Scene::kTitle:
+		if (titleScene->IsFinished()) {
+			// シーン変更
+			scene = Scene::kGame;
+			// 旧シーンの解放
+			delete titleScene;
+			titleScene = nullptr;
+			// 新シーンの生成と初期化
+			gameScene = new GameScene;
+			gameScene->Init(stageManager);
+		}
+		break;
+	case Scene::kGame:
+		if (gameScene->IsFinished()) {
+			// シーン変更
+			scene = Scene::kTitle;
+			// 旧シーンの解放
+			delete gameScene;
+			gameScene = nullptr;
+			// 新シーンの生成と初期化
+			titleScene = new TitleScene;
+			titleScene->Init();
+		} else if (gameScene->GetReloadRequested()) {
+			// シーンリロード
+			delete gameScene;
+			gameScene = nullptr;
+			gameScene = new GameScene;
+			gameScene->Init(stageManager);
+		}
+		break;
+	}
+}
+
+void UpdateScene() {
+	switch (scene) {
+	case Scene::kTitle:
+		titleScene->Update();
+		break;
+	case Scene::kGame:
+		gameScene->Update();
+		break;
+	default:
+		break;
+	}
+}
+
+void DrawScene() {
+	switch (scene) {
+	case Scene::kTitle:
+		titleScene->Draw();
+		break;
+	case Scene::kGame:
+		gameScene->Draw();
+		break;
+	default:
+		break;
+	}
+}
+
+void LoadDebugSettings() {
+	// ステージデータファイルのパス
+	const std::string filePath = "DebugSettings.ini";
+
+	// ifstreamでステージデータファイルを開く
+	std::ifstream file;
+	file.open(filePath);
+	assert(file.is_open() && "DebugSettingsが存在しません");
+
+	std::string key;
+	std::string value;
+	file >> key >> value;
+
+	if (key == "InitialStage") {
+		stageManager->SetCurrentStageIndexByName(value);
+	}
 }

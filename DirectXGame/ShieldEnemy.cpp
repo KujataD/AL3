@@ -1,6 +1,4 @@
 #include "ShieldEnemy.h"
-#include "DeltaTime.h"
-#include "Easing.h"
 #include "GameScene.h"
 #include "MapChipField.h"
 #include "PlayerBehaviorAttack.h"
@@ -8,12 +6,11 @@
 #include "ShieldEnemyBehaviorDead.h"
 #include "ShieldEnemyBehaviorRoot.h"
 #include "ShieldEnemyBehaviorGuard.h"
-#include "Transform.h"
 #include <cassert>
 #include <numbers>
 
-using namespace KamataEngine;
-using namespace MathUtility;
+using namespace KujakuEngine;
+using namespace EaseUtil;
 
 void ShieldEnemy::Init(Model* model, Camera* camera, const Vector3& position) {
 	assert(model);
@@ -80,7 +77,7 @@ void ShieldEnemy::OnCollision(Player* player) {
 	}
 }
 
-KamataEngine::Vector3 ShieldEnemy::GetWorldPosition() const {
+KujakuEngine::Vector3 ShieldEnemy::GetWorldPosition() const {
 	Vector3 worldPos;
 	worldPos.x = worldTransform_.translation_.x;
 	worldPos.y = worldTransform_.translation_.y;
@@ -88,7 +85,7 @@ KamataEngine::Vector3 ShieldEnemy::GetWorldPosition() const {
 	return worldPos;
 }
 
-KamataEngine::Vector3 ShieldEnemy::GetWorldRotation() const {
+KujakuEngine::Vector3 ShieldEnemy::GetWorldRotation() const {
 	Vector3 worldRot;
 	worldRot.x = worldTransform_.rotation_.x;
 	worldRot.y = worldTransform_.rotation_.y;
@@ -110,7 +107,7 @@ AABB ShieldEnemy::GetAABB() const {
 void ShieldEnemy::Move() {
 
 	// タイマー加算
-	walkTimer_ += DeltaTime::Get();
+	walkTimer_ += 1.0f / 60.0f;
 
 	// 回転アニメーション
 	float param = std::sin(2.0f * std::numbers::pi_v<float> * walkTimer_ / 1.0f);
@@ -138,7 +135,7 @@ void ShieldEnemy::Move() {
 
 void ShieldEnemy::UpdateTransform() {
 	// 行列の更新
-	WorldTransformUpdate(worldTransform_);
+	worldTransform_.UpdateMatrix(*camera_);
 }
 
 void ShieldEnemy::ChangeBehavior(IShieldEnemyBehaviorState* behavior) {

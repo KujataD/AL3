@@ -2,10 +2,12 @@
 #include "PlayerBehaviorAttack.h"
 #include "Player.h"
 
+using namespace KujakuEngine;
+
 void PlayerBehaviorRoot::Update(Player* player) {
 
 	// スペースキーで攻撃
-	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_SPACE) && player->CanAttack()) {
+	if (Input::GetKeyTrigger(DIK_SPACE) && player->CanAttack()) {
 		// 攻撃ビヘイビアをリクエスト
 		player->RequestBehavior(new PlayerBehaviorAttack, BehaviorChangeToken{});
 		return;

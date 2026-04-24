@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <numbers>
 
-using namespace KamataEngine;
+using namespace KujakuEngine;
 
 void ShieldEnemyBehaviorGuard::OnEnter(ShieldEnemy* enemy) {
 	

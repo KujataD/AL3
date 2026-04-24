@@ -6,13 +6,12 @@
 
 namespace KujakuEngine {
 
-Sprite* Sprite::Create(const std::string& textureFilePath, const Vector2& position, const Vector2& size, const Vector4& color) {
-
+Sprite* Sprite::Create(const std::string& textureFilePath, const Vector2& position, float width, float height, const Vector4& color) {
 	Sprite* sprite = new Sprite();
 	sprite->position_ = position;
-	sprite->size_ = size;
+	sprite->size_ = {1.0f, 1.0f};
 
-	sprite->CreateVertexBuffer();
+	sprite->CreateVertexBuffer(width, height);
 	sprite->CreateIndexBuffer();
 	sprite->CreateTransformationMatrixBuffer();
 	sprite->CreateMaterialBuffer();
@@ -90,7 +89,25 @@ void Sprite::UpdateUVTransform() {
 	materialMap_->uvTransform = uvTransformMatrix;
 }
 
-void Sprite::CreateVertexBuffer() {
+void Sprite::SetVertexMap(float width, float height) {
+	vertexMap_[0].position = {0.0f, height, 0.0f, 1.0f}; // 左下
+	vertexMap_[0].texcoord = {0.0f, 1.0f};
+	vertexMap_[0].normal = {0.0f, 0.0f, -1.0f};
+
+	vertexMap_[1].position = {0.0f, 0.0f, 0.0f, 1.0f}; // 左上
+	vertexMap_[1].texcoord = {0.0f, 0.0f};
+	vertexMap_[1].normal = {0.0f, 0.0f, -1.0f};
+
+	vertexMap_[2].position = {width, height, 0.0f, 1.0f}; // 右下
+	vertexMap_[2].texcoord = {1.0f, 1.0f};
+	vertexMap_[2].normal = {0.0f, 0.0f, -1.0f};
+
+	vertexMap_[3].position = {width, 0.0f, 0.0f, 1.0f}; // 右上
+	vertexMap_[3].texcoord = {1.0f, 0.0f};
+	vertexMap_[3].normal = {0.0f, 0.0f, -1.0f};
+}
+
+void Sprite::CreateVertexBuffer(float width, float height) {
 
 	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
 	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -114,22 +131,7 @@ void Sprite::CreateVertexBuffer() {
 
 	// Mapしたままにして頂点を動的に変更できるようにする
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexMap_));
-
-	vertexMap_[0].position = {0.0f, 640.0f, 0.0f, 1.0f}; // 左下
-	vertexMap_[0].texcoord = {0.0f, 1.0f};
-	vertexMap_[0].normal = {0.0f, 0.0f, -1.0f};
-
-	vertexMap_[1].position = {0.0f, 0.0f, 0.0f, 1.0f}; // 左上
-	vertexMap_[1].texcoord = {0.0f, 0.0f};
-	vertexMap_[1].normal = {0.0f, 0.0f, -1.0f};
-
-	vertexMap_[2].position = {640.0f, 640.0f, 0.0f, 1.0f}; // 右下
-	vertexMap_[2].texcoord = {1.0f, 1.0f};
-	vertexMap_[2].normal = {0.0f, 0.0f, -1.0f};
-
-	vertexMap_[3].position = {640.0f, 0.0f, 0.0f, 1.0f}; // 右上
-	vertexMap_[3].texcoord = {1.0f, 0.0f};
-	vertexMap_[3].normal = {0.0f, 0.0f, -1.0f};
+	SetVertexMap(width, height);
 }
 
 void Sprite::CreateIndexBuffer() {
@@ -223,8 +225,15 @@ void Sprite::LoadTexture(const std::string& filePath) {
 	assert(SUCCEEDED(hr));
 
 	DirectX::ScratchImage mipImages{};
-	hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
-	assert(SUCCEEDED(hr));
+	// 1x1など最小サイズの場合はミップ生成をスキップ
+	if (image.GetMetadata().width > 1 && image.GetMetadata().height > 1) {
+		hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
+		assert(SUCCEEDED(hr));
+	} else {
+		// そのままコピー
+		hr = mipImages.InitializeFromImage(*image.GetImages());
+		assert(SUCCEEDED(hr));
+	}
 
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 
@@ -252,16 +261,16 @@ void Sprite::LoadTexture(const std::string& filePath) {
 	}
 
 	// SRV生成
-    ID3D12DescriptorHeap* srvHeap = DirectXCommon::GetInstance()->GetSrvDescriptorHeap();
-    const UINT descriptorSizeSRV = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	ID3D12DescriptorHeap* srvHeap = DirectXCommon::GetInstance()->GetSrvDescriptorHeap();
+	const UINT descriptorSizeSRV = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-    // テクスチャの数に応じて、場所を変える
-    UINT srvIndex = DirectXCommon::GetInstance()->AllocateSrvIndex();
+	// テクスチャの数に応じて、場所を変える
+	UINT srvIndex = DirectXCommon::GetInstance()->AllocateSrvIndex();
 
-    textureSrvHandleCPU_ = srvHeap->GetCPUDescriptorHandleForHeapStart();
-    textureSrvHandleCPU_.ptr += descriptorSizeSRV * srvIndex;
-    textureSrvHandleGPU_ = srvHeap->GetGPUDescriptorHandleForHeapStart();
-    textureSrvHandleGPU_.ptr += descriptorSizeSRV * srvIndex;
+	textureSrvHandleCPU_ = srvHeap->GetCPUDescriptorHandleForHeapStart();
+	textureSrvHandleCPU_.ptr += descriptorSizeSRV * srvIndex;
+	textureSrvHandleGPU_ = srvHeap->GetGPUDescriptorHandleForHeapStart();
+	textureSrvHandleGPU_.ptr += descriptorSizeSRV * srvIndex;
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = metadata.format;

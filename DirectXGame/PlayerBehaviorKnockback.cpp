@@ -3,7 +3,7 @@
 #include "PlayerBehaviorRoot.h"
 #include <algorithm>
 
-using namespace KamataEngine;
+using namespace KujakuEngine;
 
 void PlayerBehaviorKnockback::Update(Player* player) {
 	knockbackTimer_ += 1.0f / 60.0f;

@@ -41,7 +41,10 @@ void WorldTransform::UpdateMatrix(const Camera& camera) {
 		matWorld_ = matWorld_ * parent_->matWorld_;
 	}
 
-	// WVP行列の生成
+	TransferMatrix(camera);
+}
+
+void WorldTransform::TransferMatrix(const Camera& camera) {	// WVP行列の生成
 	Matrix4x4 matWVP = matWorld_ * camera.matView * camera.matProjection;
 
 	// 定数バッファへ転送

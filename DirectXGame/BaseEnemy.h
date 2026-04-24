@@ -1,6 +1,5 @@
 #pragma once
-#include <KamataEngine.h>
-#include "AABB.h"
+#include "KujakuEngine/KujakuEngine.h"
 
 class MapChipField;
 class Player;
@@ -10,7 +9,7 @@ class BaseEnemy {
 public:
 	virtual ~BaseEnemy() = default;
 
-	virtual void Init(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine::Vector3& position) = 0;
+	virtual void Init(KujakuEngine::Model* model, KujakuEngine::Camera* camera, const KujakuEngine::Vector3& position) = 0;
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 
@@ -28,9 +27,9 @@ public:
 	bool IsDead() const { return isDead_; }
 	bool IsCollisionDisabled() const { return isCollisionDisabled_; }
 
-	virtual KamataEngine::Vector3 GetWorldPosition() const = 0;
-	virtual KamataEngine::Vector3 GetWorldRotation() const = 0;
-	virtual AABB GetAABB() const = 0;
+	virtual KujakuEngine::Vector3 GetWorldPosition() const = 0;
+	virtual KujakuEngine::Vector3 GetWorldRotation() const = 0;
+	virtual KujakuEngine::AABB GetAABB() const = 0;
 
 protected:
 	// --- 外部依存 ---

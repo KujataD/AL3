@@ -1,13 +1,11 @@
 #include "Fade.h"
-#include "DeltaTime.h"
 #include <algorithm>
 
-using namespace KamataEngine;
+using namespace KujakuEngine;
 
 void Fade::Init() {
-	textureHandleWhite1x1 = TextureManager::Load("white1x1.png");
-	sprite_ = Sprite::Create(textureHandleWhite1x1, {0.0f, 0.0f});
-	sprite_->SetSize(Vector2(1280, 720));
+	sprite_ = Sprite::Create("resources/white1x1.png", {0.0f, 0.0f});
+	sprite_->SetVertexMap(1280, 720);
 	sprite_->SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
 }
 

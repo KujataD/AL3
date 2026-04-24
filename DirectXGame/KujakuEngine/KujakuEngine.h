@@ -3,6 +3,12 @@
 #include <cstdint>
 #include <string>
 
+// 追加モジュール
+#include "../externals/DirectXTex/DirectXTex.h"
+#include "../externals/imgui/imgui.h"
+#include "../externals/imgui/imgui_impl_dx12.h"
+#include "../externals/imgui/imgui_impl_win32.h"
+
 // エンジン内部モジュール
 #include "base/DirectXCommon.h"
 #include "base/WinApp.h"
@@ -28,6 +34,8 @@
 #include "math/Random.h"
 
 #include "shapes/Rect.h"
+#include "shapes/AABB.h"
+#include "shapes/ShapeUtil.h"
 
 #include "input/Input.h"
 

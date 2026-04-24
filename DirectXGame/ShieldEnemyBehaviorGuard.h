@@ -1,6 +1,6 @@
 #pragma once
 #include "IShieldEnemyBehaviorState.h"
-#include <KamataEngine.h>
+#include  "KujakuEngine/KujakuEngine.h"
 
 class ShieldEnemyBehaviorGuard : public IShieldEnemyBehaviorState {
 public:
@@ -14,11 +14,11 @@ private:
 	float animTimer_;
 
 	// ガードアニメーションの初期角度
-	KamataEngine::Vector3 startRotation_;
+	KujakuEngine::Vector3 startRotation_;
 
 	// 上にのけぞったときの角度
-	KamataEngine::Vector3 upperRotation_;
+	KujakuEngine::Vector3 upperRotation_;
 
 	// 
-	KamataEngine::Vector3 endRotation_;
+	KujakuEngine::Vector3 endRotation_;
 };

@@ -1,5 +1,5 @@
 #pragma once
-#include <KamataEngine.h>
+#include "KujakuEngine/KujakuEngine.h"
 
 class Fade {
 public:
@@ -27,7 +27,7 @@ public:
 
 private:
 	// 黒色スプライト
-	KamataEngine::Sprite* sprite_ = nullptr;
+	KujakuEngine::Sprite* sprite_ = nullptr;
 
 	// 白板テクスチャハンドル
 	uint32_t textureHandleWhite1x1 = 0;

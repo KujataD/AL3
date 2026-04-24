@@ -1,12 +1,9 @@
 #include "DeathParticles.h"
-#include "DeltaTime.h"
-#include "Transform.h"
 #include <algorithm>
 
-using namespace KamataEngine;
-using namespace MathUtility;
+using namespace KujakuEngine;
 
-void DeathParticles::Init(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine::Vector3& position) {
+void DeathParticles::Init(KujakuEngine::Model* model, KujakuEngine::Camera* camera, const KujakuEngine::Vector3& position) {
 	// nullptr check
 	assert(model);
 
@@ -19,7 +16,6 @@ void DeathParticles::Init(KamataEngine::Model* model, KamataEngine::Camera* came
 		worldTransform.translation_ = position;
 	}
 
-	objectColor_.Initialize();
 	color_ = {1.0f, 1.0f, 1.0f, 1.0f};
 }
 
@@ -31,7 +27,7 @@ void DeathParticles::Update() {
 	}
 
 	// カウンターを1フレーム分の秒数進める
-	counter_ += DeltaTime::Get();
+	counter_ += 1.0f / 60.0f;
 
 	// 存続時間の上限に達したら
 	if (counter_ >= kDuration) {
@@ -42,24 +38,24 @@ void DeathParticles::Update() {
 
 	color_.w = std::clamp(1.0f - counter_ / kDuration, 0.0f, 1.0f);
 	// 色変更オブジェクトに色の数値を設定する
-	objectColor_.SetColor(color_);
+	model_->SetColor(color_);
 
 	for (uint32_t i = 0; i < kNumParticles; i++) {
 		// 基本となる速度ベクトル
-		Vector3 velocity = {kSpeed * DeltaTime::Get(), 0, 0};
+		Vector3 velocity = {kSpeed *  1.0f / 60.0f, 0, 0};
 		// 回転角を計算する
 		float angle = kAngleUnit * i;
 		// Z軸まわり回転行列
-		Matrix4x4 matrixRotation = KamataEngine::MathUtility::MakeRotateZMatrix(angle);
+		Matrix4x4 matrixRotation = Matrix4x4::MakeRotateZMatrix(angle);
 		// 基本ベクトルを回転させて速度ベクトルを得る
-		velocity = Transform(velocity, matrixRotation);
+		velocity = Vector3::Transform(velocity, matrixRotation);
 		// 移動処理
 		worldTransforms_[i].translation_ += velocity;
 	}
 
 	// ワールド座標更新
 	for (WorldTransform& worldTransform : worldTransforms_) {
-		WorldTransformUpdate(worldTransform);
+		worldTransform.UpdateMatrix(*camera_);
 	}
 }
 
@@ -71,6 +67,6 @@ void DeathParticles::Draw() {
 
 	// モデル描画
 	for (WorldTransform& worldTransform : worldTransforms_) {
-		model_->Draw(worldTransform, *camera_, &objectColor_);
+		model_->Draw(worldTransform, *camera_);
 	}
 }

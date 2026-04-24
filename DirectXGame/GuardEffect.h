@@ -1,5 +1,5 @@
 #pragma once
-#include <KamataEngine.h> 
+#include  "KujakuEngine/KujakuEngine.h"
 #include <vector>
 
 /// <summary>
@@ -12,16 +12,16 @@ public:
 		kDead,
 	};
 public:
-	void Init(const KamataEngine::Vector3 spawnPos);
+	void Init(const KujakuEngine::Vector3 spawnPos);
 
 	void Update();
 
 	void Draw();
 
-	static GuardEffect* Create(const KamataEngine::Vector3 spawnPos);
+	static GuardEffect* Create(const KujakuEngine::Vector3 spawnPos);
 
-	static void SetModel(KamataEngine::Model* model) { model_ = model; }
-	static void SetCamera(KamataEngine::Camera* camera) { camera_ = camera; }
+	static void SetModel(KujakuEngine::Model* model) { model_ = model; }
+	static void SetCamera(KujakuEngine::Camera* camera) { camera_ = camera; }
 
 	bool IsDead() const { return state_ == State::kDead; }
 
@@ -40,10 +40,10 @@ private:
 	// --- 外部依存 ---
 
 	// モデル
-	static KamataEngine::Model* model_;
+	static KujakuEngine::Model* model_;
 
 	// カメラ
-	static KamataEngine::Camera* camera_;
+	static KujakuEngine::Camera* camera_;
 
 	// --- インスタンスプロパティ ---
 
@@ -57,6 +57,6 @@ private:
 	float animCounter_ = 0.0f;
 
 	// 円のワールドトランスフォーム
-	KamataEngine::WorldTransform circleWorldTransform_;
+	KujakuEngine::WorldTransform circleWorldTransform_;
 
 };

@@ -14,6 +14,8 @@ public:
 	Matrix4x4 operator*(const Matrix4x4& m) const;
 	Matrix4x4 operator/(float scalar) const;
 
+	static Matrix4x4 MakeAffineMatrixOrientations(const Vector3 orientations[3], const Vector3& translate);
+
 	static Matrix4x4 Inverse(const Matrix4x4& m);
 	static Matrix4x4 Transpose(const Matrix4x4& m);
 	static Matrix4x4 MakeIdentity();

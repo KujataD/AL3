@@ -46,6 +46,8 @@ public:
 	/// <param name="camera">カメラ（ビュー・プロジェクション行列を取得）</param>
 	void UpdateMatrix(const class Camera& camera);
 
+	void TransferMatrix(const class Camera& camera);
+
 	/// <summary>
 	/// 定数バッファの取得
 	/// </summary>
