@@ -10,6 +10,7 @@ void Skydome::Init(KujakuEngine::Model* model, KujakuEngine::Camera* camera) {
 
 	// ワールド変換の初期化
 	worldTransform_.Initialize();
+	worldTransform_.scale_ = {1.5f, 1.5f, 1.5f};
 }
 
 void Skydome::Update() { worldTransform_.UpdateMatrix(*camera_); }

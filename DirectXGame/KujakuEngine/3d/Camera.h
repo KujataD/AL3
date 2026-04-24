@@ -7,6 +7,7 @@
 #include "../base/WinApp.h"
 #include "../math/Matrix4x4.h"
 #include "../math/Vector3.h"
+#include "../shapes/Rect.h"
 
 namespace KujakuEngine {
 
@@ -62,8 +63,12 @@ public:
 	/// </summary>
 	void UpdateProjectionMatrix();
 
-
 	void TransferConstBuffer();
+
+	/// <summary>
+	/// カメラが映っている範囲を求める(回転固定)
+	/// </summary>
+	Rect GetVisibleRect(float posZ);
 
 private:
 	// 定数バッファ

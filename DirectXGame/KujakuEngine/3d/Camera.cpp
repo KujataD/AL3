@@ -52,4 +52,19 @@ void Camera::TransferConstBuffer() {
 	constMap_->pad = 0.0f;
 }
 
+Rect Camera::GetVisibleRect(float posZ) {
+	float distance = posZ - translation_.z;
+	float halfHeight = std::tan(fovAngleY * 0.5f) * distance;
+	float halfWidth = halfHeight * aspectRatio;
+
+	Rect r = {
+	    .left = translation_.x - halfWidth,
+	    .right = translation_.x + halfWidth,
+	    .bottom = translation_.y - halfHeight,
+	    .top = translation_.y + halfHeight,
+	};
+
+	return r;
+}
+
 } // namespace KujakuEngine

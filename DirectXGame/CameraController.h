@@ -8,15 +8,28 @@ class Player;
 /// </summary>
 class CameraController {
 public:
+	enum class Mode { kFollow, kForcedScroll };
+
+public:
 	void Init(KujakuEngine::Camera* camera);
 
 	void Update();
 
 	void Reset();
 
+	// accessor
+	
+	// --- setter ---
+
 	void SetTarget(Player* target) { target_ = target; }
 
 	void SetMovableArea(KujakuEngine::Rect& area) { movableArea_ = area; }
+
+	void SetMode(Mode mode) { mode_ = mode; }
+
+	// --- getter ---
+
+	Mode GetMode() const { return mode_; }
 
 private:
 	// 定数
@@ -33,7 +46,9 @@ private:
 
 	// 変数
 	// ------------------------------------------
-	
+
+	Mode mode_ = Mode::kFollow;
+
 	// カメラ
 	KujakuEngine::Camera* camera_ = nullptr;
 
