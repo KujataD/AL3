@@ -380,10 +380,10 @@ void DirectXCommon::PostDraw() {
 	commandQueue_->ExecuteCommandLists(1, commandLists);
 
 	// GPUとOSに画面の交換を行うよう通知する
-	//swapChain_->Present(1, 0);
+	swapChain_->Present(1, 0);
 	
 	// VSync待ちによるPostDrawの周期的スパイクを避けるため、同期を切ってPresentする
-	swapChain_->Present(0, 0);
+	//swapChain_->Present(0, 0);
 
 	// Fenceの値を更新
 	fenceValue_++;
