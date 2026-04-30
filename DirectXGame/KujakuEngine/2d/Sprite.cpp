@@ -64,6 +64,7 @@ void Sprite::Draw() {
 	GraphicsPipeline::GetInstance()->SetCommandList(PipelineType::kObject3d, blendMode_);
 
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
+
 	commandList->IASetIndexBuffer(&indexBufferView_);
 
 	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
@@ -125,7 +126,7 @@ void Sprite::CreateVertexBuffer(float width, float height) {
 }
 
 void Sprite::CreateIndexBuffer() {
-	indexResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(uint32_t) * 4);
+	indexResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(uint32_t) * 6);
 	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
 
 	indexBufferView_.SizeInBytes = sizeof(uint32_t) * 6;

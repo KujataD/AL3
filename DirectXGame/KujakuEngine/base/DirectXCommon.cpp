@@ -160,7 +160,7 @@ void DirectXCommon::CreateSwapChain() {
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;           // 色の形式
 	swapChainDesc.SampleDesc.Count = 1;                          // マルチサンプルしない
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // 描画のターゲットとして利用する
-	swapChainDesc.BufferCount = 2;                               // ダブルバッファ
+	swapChainDesc.BufferCount = kSwapChainBufferCount;                               // ダブルバッファ
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;    // モニタにうつしたら、中身を破棄
 
 	// コマンドキュー、ウィンドウハンドル、設定を渡して生成する
@@ -380,7 +380,10 @@ void DirectXCommon::PostDraw() {
 	commandQueue_->ExecuteCommandLists(1, commandLists);
 
 	// GPUとOSに画面の交換を行うよう通知する
-	swapChain_->Present(1, 0);
+	//swapChain_->Present(1, 0);
+	
+	// VSync待ちによるPostDrawの周期的スパイクを避けるため、同期を切ってPresentする
+	swapChain_->Present(0, 0);
 
 	// Fenceの値を更新
 	fenceValue_++;

@@ -57,7 +57,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)externals\DirectXTex</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)externals\DirectXTex;$(ProjectDir)KujakuEngine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -84,6 +84,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>$(ProjectDir)KujakuEngine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -119,12 +120,18 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="KujakuEngine\3d\Camera.cpp" />
     <ClCompile Include="KujakuEngine\3d\DebugCamera.cpp" />
     <ClCompile Include="KujakuEngine\3d\DirectionalLight.cpp" />
-    <ClCompile Include="KujakuEngine\3d\GraphicsPipeline.cpp" />
+    <ClCompile Include="KujakuEngine\3d\GraphicsPipeline.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="KujakuEngine\3d\Model.cpp" />
     <ClCompile Include="KujakuEngine\3d\PointLight.cpp" />
     <ClCompile Include="KujakuEngine\3d\SpotLight.cpp" />
     <ClCompile Include="KujakuEngine\3d\WorldTransform.cpp" />
-    <ClCompile Include="KujakuEngine\base\DirectXCommon.cpp" />
+    <ClCompile Include="KujakuEngine\base\DirectXCommon.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="KujakuEngine\base\Logger.cpp" />
     <ClCompile Include="KujakuEngine\base\StringUtil.cpp" />
     <ClCompile Include="KujakuEngine\base\TextureManager.cpp" />

@@ -131,6 +131,7 @@ private:
 	void CreateFence();
 
 private:
+	static const uint32_t kSwapChainBufferCount = 2;
 	WinApp* winApp_ = nullptr;
 	bool initialized_ = false;
 

@@ -6,7 +6,7 @@
 #include <cmath>
 
 namespace KujakuEngine {
-class TransformationMatrix;
+struct TransformationMatrix;
 class Matrix4x4 {
 public:
 	float m[4][4];
