@@ -76,6 +76,9 @@
     <Filter Include="ソース ファイル\GameObject\Util">
       <UniqueIdentifier>{628d27a3-9521-4947-9813-39ea9fae3daa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KujakuEngine\vfx">
+      <UniqueIdentifier>{4f5860bd-f6c6-4cf0-a8b9-9e10e489908f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -239,6 +242,24 @@
     </ClCompile>
     <ClCompile Include="StageManager.cpp">
       <Filter>ソース ファイル\GameObject\World</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\3d\PointLight.cpp">
+      <Filter>KujakuEngine\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\3d\SpotLight.cpp">
+      <Filter>KujakuEngine\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\base\TextureManager.cpp">
+      <Filter>KujakuEngine\base</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\vfx\ParticleModel.cpp">
+      <Filter>KujakuEngine\vfx</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\vfx\ParticleField.cpp">
+      <Filter>KujakuEngine\vfx</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\vfx\ParticleEmitter.cpp">
+      <Filter>KujakuEngine\vfx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -416,6 +437,27 @@
     <ClInclude Include="StageManager.h">
       <Filter>ソース ファイル\GameObject\World</Filter>
     </ClInclude>
+    <ClInclude Include="KujakuEngine\3d\PointLight.h">
+      <Filter>KujakuEngine\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\3d\SpotLight.h">
+      <Filter>KujakuEngine\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\base\TextureManager.h">
+      <Filter>KujakuEngine\base</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\vfx\Particle.h">
+      <Filter>KujakuEngine\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\vfx\ParticleModel.h">
+      <Filter>KujakuEngine\vfx</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\vfx\ParticleField.h">
+      <Filter>KujakuEngine\vfx</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\vfx\ParticleEmitter.h">
+      <Filter>KujakuEngine\vfx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
@@ -426,12 +468,21 @@
     <None Include="KujakuEngine\shader\Object3d.hlsli">
       <Filter>KujakuEngine\shader</Filter>
     </None>
+    <None Include="KujakuEngine\shader\Particle.hlsli">
+      <Filter>KujakuEngine\shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="KujakuEngine\shader\Object3d.PS.hlsl">
       <Filter>KujakuEngine\shader</Filter>
     </FxCompile>
     <FxCompile Include="KujakuEngine\shader\Object3d.VS.hlsl">
+      <Filter>KujakuEngine\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="KujakuEngine\shader\Particle.PS.hlsl">
+      <Filter>KujakuEngine\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="KujakuEngine\shader\Particle.VS.hlsl">
       <Filter>KujakuEngine\shader</Filter>
     </FxCompile>
   </ItemGroup>

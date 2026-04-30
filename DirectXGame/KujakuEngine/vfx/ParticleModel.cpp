@@ -1,94 +1,77 @@
-#include "Model.h"
+#include "ParticleModel.h"
 #include "../base/DirectXCommon.h"
 #include "../base/TextureManager.h"
 #include "../base/WinApp.h"
-#include "DirectionalLight.h"
-#include "GraphicsPipeline.h"
-#include "PointLight.h"
-#include "SpotLight.h"
+#include "../3d/DirectionalLight.h"
+#include "../3d/GraphicsPipeline.h"
 #include <cassert>
 #include <filesystem>
 #include <fstream>
 #include <sstream>
+
 namespace KujakuEngine {
 
-Model* Model::CreateFromOBJ(const std::string& objname, ShaderModel shaderModel) {
-	Model* model = new Model();
+ParticleModel::~ParticleModel() { instanceParticles_.clear(); }
+
+void ParticleModel::Initialize() {
+	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+
+	// Instancing用のTransformationMatrixリソースを作る
+	instancingResource_ = dxCommon->CreateBufferResource(sizeof(ParticleForGPU) * kMaxInstance);
+
+	// 書き込むためのアドレスを取得
+	instancingResource_->Map(0, nullptr, (void**)&instancingData_);
+
+	// Instancing用SRVを作成
+	ID3D12DescriptorHeap* srvHeap = dxCommon->GetSrvDescriptorHeap();
+	const UINT descriptorSizeSRV = dxCommon->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+	instancingSrvIndex_ = sInstancingSrvIndexCounter_++;
+	instancingSrvHandleCPU_ = srvHeap->GetCPUDescriptorHandleForHeapStart();
+	instancingSrvHandleCPU_.ptr += descriptorSizeSRV * instancingSrvIndex_;
+	instancingSrvHandleGPU_ = srvHeap->GetGPUDescriptorHandleForHeapStart();
+	instancingSrvHandleGPU_.ptr += descriptorSizeSRV * instancingSrvIndex_;
+
+	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
+	instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
+	instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+	instancingSrvDesc.Buffer.FirstElement = 0;
+	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+	instancingSrvDesc.Buffer.NumElements = kMaxInstance;
+	instancingSrvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
+
+	dxCommon->GetDevice()->CreateShaderResourceView(instancingResource_.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);
+		
+	// 毎フレーム push_back するため、先に最大数まで予約して再確保スパイクを防ぐ
+	instanceParticles_.reserve(kMaxInstance);
+
+	// 単位行列を書き込んでおく
+	for (uint32_t i = 0; i < kMaxInstance; ++i) {
+		instancingData_[i].WVP = Matrix4x4::MakeIdentity();
+		instancingData_[i].World = Matrix4x4::MakeIdentity();
+	}
+}
+
+ParticleModel* ParticleModel::CreateFromOBJ(const std::string& objname, bool enableLighting) {
+	ParticleModel* particle = new ParticleModel();
 	std::string directoryPathFinal = "resources/" + objname;
 	std::string filename = objname + ".obj";
 
 	ModelData rawData = LoadObjFile(directoryPathFinal, filename);
-	rawData.material.enableLighting = static_cast<int32_t>(shaderModel);
+	rawData.material.enableLighting = enableLighting;
 	if (!rawData.material.textureFilePath.empty()) {
 		rawData.material.textureIndex = TextureManager::GetInstance()->LoadTexture(rawData.material.textureFilePath);
 	} else {
 		rawData.material.textureIndex = TextureManager::GetInstance()->GetDefaultWhiteTexture();
 	}
-	model->CreateVertexBuffer(rawData.vertices);
-	model->CreateMaterialBuffer(rawData.material);
-	return model;
-}
-Model* Model::CreateSphere(const std::string& textureFilePath, ShaderModel shaderModel, uint32_t subdivision) {
-	Model* model = new Model();
-	const float kLonEvery = static_cast<float>(2.0f * std::numbers::pi_v<float> / subdivision);
-	const float kLatEvery = static_cast<float>(std::numbers::pi_v<float> / subdivision);
-
-	std::vector<VertexData> vertices;
-	vertices.resize(6 * subdivision * subdivision);
-
-	for (uint32_t latIndex = 0; latIndex < subdivision; ++latIndex) {
-		float lat = static_cast<float>(-std::numbers::pi_v<float> / 2.0f + kLatEvery * latIndex);
-
-		for (uint32_t lonIndex = 0; lonIndex < subdivision; ++lonIndex) {
-			float lon = lonIndex * kLonEvery;
-
-			float u0 = float(lonIndex) / float(subdivision);
-			float u1 = float(lonIndex + 1) / float(subdivision);
-
-			float v0 = 1.0f - float(latIndex) / float(subdivision);
-			float v1 = 1.0f - float(latIndex + 1) / float(subdivision);
-
-			uint32_t startIndex = (latIndex * subdivision + lonIndex) * 6;
-
-			vertices[startIndex].position = {cosf(lat) * cosf(lon), sinf(lat), cosf(lat) * sinf(lon), 1.0f};
-			vertices[startIndex].texcoord = {u0, v0};
-			vertices[startIndex].normal = {vertices[startIndex].position.x, vertices[startIndex].position.y, vertices[startIndex].position.z};
-
-			vertices[startIndex + 1].position = {cosf(lat + kLatEvery) * cosf(lon), sinf(lat + kLatEvery), cosf(lat + kLatEvery) * sinf(lon), 1.0f};
-			vertices[startIndex + 1].texcoord = {u0, v1};
-			vertices[startIndex + 1].normal = {vertices[startIndex + 1].position.x, vertices[startIndex + 1].position.y, vertices[startIndex + 1].position.z};
-
-			vertices[startIndex + 2].position = {cosf(lat) * cosf(lon + kLonEvery), sinf(lat), cosf(lat) * sinf(lon + kLonEvery), 1.0f};
-			vertices[startIndex + 2].texcoord = {u1, v0};
-			vertices[startIndex + 2].normal = {vertices[startIndex + 2].position.x, vertices[startIndex + 2].position.y, vertices[startIndex + 2].position.z};
-
-			vertices[startIndex + 3].position = {cosf(lat) * cosf(lon + kLonEvery), sinf(lat), cosf(lat) * sinf(lon + kLonEvery), 1.0f};
-			vertices[startIndex + 3].texcoord = {u1, v0};
-			vertices[startIndex + 3].normal = {vertices[startIndex + 3].position.x, vertices[startIndex + 3].position.y, vertices[startIndex + 3].position.z};
-
-			vertices[startIndex + 4].position = {cosf(lat + kLatEvery) * cosf(lon), sinf(lat + kLatEvery), cosf(lat + kLatEvery) * sinf(lon), 1.0f};
-			vertices[startIndex + 4].texcoord = {u0, v1};
-			vertices[startIndex + 4].normal = {vertices[startIndex + 4].position.x, vertices[startIndex + 4].position.y, vertices[startIndex + 4].position.z};
-
-			vertices[startIndex + 5].position = {cosf(lat + kLatEvery) * cosf(lon + kLonEvery), sinf(lat + kLatEvery), cosf(lat + kLatEvery) * sinf(lon + kLonEvery), 1.0f};
-			vertices[startIndex + 5].texcoord = {u1, v1};
-			vertices[startIndex + 5].normal = {vertices[startIndex + 5].position.x, vertices[startIndex + 5].position.y, vertices[startIndex + 5].position.z};
-		}
-	}
-
-	// MaterialData
-	MaterialData defaultMaterial{};
-	defaultMaterial.enableLighting = static_cast<int32_t>(shaderModel);
-	defaultMaterial.textureIndex = TextureManager::GetInstance()->LoadTexture(textureFilePath);
-
-	model->CreateVertexBuffer(vertices);
-	model->CreateMaterialBuffer(defaultMaterial);
-
-	return model;
+	particle->CreateVertexBuffer(rawData.vertices);
+	particle->CreateMaterialBuffer(rawData.material);
+	return particle;
 }
 
-Model* Model::CreateCube(const std::string& textureFilePath, ShaderModel shaderModel) {
-	Model* model = new Model();
+ParticleModel* ParticleModel::CreateCube(const std::string& textureFilePath, bool enableLighting) {
+	ParticleModel* particle = new ParticleModel();
 
 	std::vector<VertexData> vertices = {
 	    // 前面 (Z+)
@@ -142,17 +125,17 @@ Model* Model::CreateCube(const std::string& textureFilePath, ShaderModel shaderM
 
 	// MaterialData
 	MaterialData defaultMaterial{};
-	defaultMaterial.enableLighting = static_cast<int32_t>(shaderModel);
+	defaultMaterial.enableLighting = enableLighting;
 	defaultMaterial.textureIndex = TextureManager::GetInstance()->LoadTexture(textureFilePath);
 
-	model->CreateVertexBuffer(vertices);
-	model->CreateMaterialBuffer(defaultMaterial);
+	particle->CreateVertexBuffer(vertices);
+	particle->CreateMaterialBuffer(defaultMaterial);
 
-	return model;
+	return particle;
 }
 
-Model* Model::CreatePlane(const std::string& textureFilePath, ShaderModel shaderModel) {
-	Model* model = new Model();
+ParticleModel* ParticleModel::CreatePlane(const std::string& textureFilePath, bool enableLighting) {
+	ParticleModel* particle = new ParticleModel();
 
 	std::vector<VertexData> vertices;
 
@@ -189,16 +172,16 @@ Model* Model::CreatePlane(const std::string& textureFilePath, ShaderModel shader
 
 	// MaterialData
 	MaterialData defaultMaterial{};
-	defaultMaterial.enableLighting = static_cast<int32_t>(shaderModel);
+	defaultMaterial.enableLighting = enableLighting;
 	defaultMaterial.textureIndex = TextureManager::GetInstance()->LoadTexture(textureFilePath);
 
-	model->CreateVertexBuffer(vertices);
-	model->CreateMaterialBuffer(defaultMaterial);
+	particle->CreateVertexBuffer(vertices);
+	particle->CreateMaterialBuffer(defaultMaterial);
 
-	return model;
+	return particle;
 }
 
-void Model::PreDraw() {
+void ParticleModel::PreDraw() {
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 	ID3D12GraphicsCommandList* commandList = dxCommon->GetCommandList();
 
@@ -228,15 +211,15 @@ void Model::PreDraw() {
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void Model::PostDraw() {
+void ParticleModel::PostDraw() {
 	// 将来的にここで描画状態のリセットなどを行う
 }
 
-void Model::Draw(const WorldTransform& worldTransform, const Camera& camera) {
+void ParticleModel::Draw() {
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 
 	// RootSignature と PSO をセット
-	GraphicsPipeline::GetInstance()->SetCommandList(PipelineType::kObject3d, blendMode_);
+	GraphicsPipeline::GetInstance()->SetCommandList(PipelineType::kParticle, blendMode_);
 
 	// VBVを設定
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
@@ -244,28 +227,23 @@ void Model::Draw(const WorldTransform& worldTransform, const Camera& camera) {
 	// マテリアルCBuffer（RootParameter[0]: PixelShader, b0）
 	commandList->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 
-	// WVP・WorldCBuffer（RootParameter[1]: VertexShader, b0）
-	commandList->SetGraphicsRootConstantBufferView(1, worldTransform.GetConstBuffer()->GetGPUVirtualAddress());
+	// Instancing SRV（RootParameter[1]: VS t0 StructuredBuffer）
+	commandList->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
 
 	// テクスチャSRV（RootParameter[2]: DescriptorTable）
 	auto handle = TextureManager::GetInstance()->GetSrvHandle(textureIndex_);
 	commandList->SetGraphicsRootDescriptorTable(2, handle);
 
-	// directional light
+	// ライト
 	commandList->SetGraphicsRootConstantBufferView(3, DirectionalLight::GetInstance()->GetResource()->GetGPUVirtualAddress());
-
-	// カメラ（RootParameter[4]: VertexShader, b2）
-	commandList->SetGraphicsRootConstantBufferView(4, camera.GetCameraForGPUResource()->GetGPUVirtualAddress());
-
-	// pointlight
-	commandList->SetGraphicsRootConstantBufferView(5, PointLight::GetInstance()->GetResource()->GetGPUVirtualAddress());
-	commandList->SetGraphicsRootConstantBufferView(6, SpotLight::GetInstance()->GetResource()->GetGPUVirtualAddress());
-
 	// 描画
-	commandList->DrawInstanced(vertexCount_, 1, 0, 0);
+	commandList->DrawInstanced(vertexCount_, static_cast<uint32_t>(instanceParticles_.size()), 0, 0);
+	instanceParticles_.clear();
 }
 
-MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename) {
+void ParticleModel::UpdateBuffer() { memcpy(instancingData_, instanceParticles_.data(), sizeof(ParticleForGPU) * instanceParticles_.size()); }
+
+MaterialData ParticleModel::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename) {
 	MaterialData materialData;
 	std::string line;
 	std::ifstream file(directoryPath + "/" + filename);
@@ -287,8 +265,8 @@ MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, c
 	return materialData;
 }
 
-ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& filename) {
-	ModelData modelData;
+ModelData ParticleModel::LoadObjFile(const std::string& directoryPath, const std::string& filename) {
+	ModelData ModelData;
 	std::vector<Vector4> positions;
 	std::vector<Vector3> normals;
 	std::vector<Vector2> texcoords;
@@ -336,22 +314,21 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 
 			// 三角形に分割
 			for (size_t i = 1; i + 1 < faceVertices.size(); ++i) {
-				modelData.vertices.push_back(faceVertices[0]);
-				modelData.vertices.push_back(faceVertices[i + 1]);
-				modelData.vertices.push_back(faceVertices[i]);
+				ModelData.vertices.push_back(faceVertices[0]);
+				ModelData.vertices.push_back(faceVertices[i + 1]);
+				ModelData.vertices.push_back(faceVertices[i]);
 			}
 		} else if (identifier == "mtllib") {
 			std::string materialFilename;
 			s >> materialFilename;
-			modelData.material = LoadMaterialTemplateFile(directoryPath, materialFilename);
+			ModelData.material = LoadMaterialTemplateFile(directoryPath, materialFilename);
 		}
 	}
-	return modelData;
+	return ModelData;
 }
 
-void Model::CreateVertexBuffer(const std::vector<VertexData>& vertices) {
+void ParticleModel::CreateVertexBuffer(const std::vector<VertexData>& vertices) {
 	vertexCount_ = static_cast<uint32_t>(vertices.size());
-
 	vertexResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(VertexData) * vertexCount_);
 
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
@@ -364,15 +341,13 @@ void Model::CreateVertexBuffer(const std::vector<VertexData>& vertices) {
 	vertexResource_->Unmap(0, nullptr);
 }
 
-void Model::CreateMaterialBuffer(const MaterialData& material) {
-
-	materialResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(VertexData) * vertexCount_);
+void ParticleModel::CreateMaterialBuffer(const MaterialData& material) {
+	materialResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(MaterialData));
 
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialMap_));
 	materialMap_->color = material.color;
 	materialMap_->enableLighting = material.enableLighting;
 	materialMap_->uvTransform = Matrix4x4::MakeIdentity();
-	materialMap_->shininess = material.shininess;
 	textureIndex_ = material.textureIndex;
 }
 } // namespace KujakuEngine

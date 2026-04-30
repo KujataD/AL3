@@ -2,6 +2,7 @@
 
 #include <d3d12.h>
 #include <wrl.h>
+#include <numbers>
 
 #include "../math/Matrix4x4.h"
 #include "../math/Vector3.h"
@@ -11,9 +12,10 @@ namespace KujakuEngine {
 /// <summary>
 /// 定数バッファ用データ構造体（ワールド変換）
 /// </summary>
-struct ConstBufferDataWorldTransform {
+struct TransformationMatrix {
 	Matrix4x4 WVP;   // ワールド・ビュー・プロジェクション合成行列
 	Matrix4x4 World; // ワールド行列（法線変換などに使用）
+	Matrix4x4 WorldInverseTranspose; // worldの逆転置行列
 };
 
 /// <summary>
@@ -45,19 +47,30 @@ public:
 	/// </summary>
 	/// <param name="camera">カメラ（ビュー・プロジェクション行列を取得）</param>
 	void UpdateMatrix(const class Camera& camera);
+	
+	/// <summary>
+	/// ワールド行列を更新してGPUに転送する
+	/// </summary>
+	/// <param name="camera">カメラ（ビュー・プロジェクション行列を取得）</param>
+	void UpdateBillboardMatrix(const class Camera& camera);
 
 	void TransferMatrix(const class Camera& camera);
+
+	TransformationMatrix GetMatrixData(const Camera& camera) const;
+	TransformationMatrix GetBillboardMatrixData(const Camera& camera) const;
 
 	/// <summary>
 	/// 定数バッファの取得
 	/// </summary>
-	const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return constBuffer_; }
+	const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return transformationMatrixResource_; }
+
+private:
 
 private:
 	// 定数バッファ
-	Microsoft::WRL::ComPtr<ID3D12Resource> constBuffer_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixResource_;
 	// マッピング済みアドレス
-	ConstBufferDataWorldTransform* constMap_ = nullptr;
+	TransformationMatrix* constMap_ = nullptr;
 
 	// コピー禁止
 	WorldTransform(const WorldTransform&) = delete;

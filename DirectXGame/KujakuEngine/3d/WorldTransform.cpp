@@ -7,24 +7,10 @@ namespace KujakuEngine {
 
 void WorldTransform::Initialize() {
 	// 定数バッファの生成
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
-
-	D3D12_RESOURCE_DESC bufferResourceDesc{};
-	bufferResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	bufferResourceDesc.Width = sizeof(ConstBufferDataWorldTransform);
-	bufferResourceDesc.Height = 1;
-	bufferResourceDesc.DepthOrArraySize = 1;
-	bufferResourceDesc.MipLevels = 1;
-	bufferResourceDesc.SampleDesc.Count = 1;
-	bufferResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-
-	ID3D12Device* device = DirectXCommon::GetInstance()->GetDevice();
-	HRESULT hr = device->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &bufferResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&constBuffer_));
-	assert(SUCCEEDED(hr));
+	transformationMatrixResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(TransformationMatrix));
 
 	// マッピング
-	hr = constBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&constMap_));
+	HRESULT hr = transformationMatrixResource_->Map(0, nullptr, reinterpret_cast<void**>(&constMap_));
 	assert(SUCCEEDED(hr));
 
 	// 単位行列で初期化
@@ -44,12 +30,45 @@ void WorldTransform::UpdateMatrix(const Camera& camera) {
 	TransferMatrix(camera);
 }
 
-void WorldTransform::TransferMatrix(const Camera& camera) {	// WVP行列の生成
+void WorldTransform::UpdateBillboardMatrix(const Camera& camera) {
+	// ワールド行列の生成
+	Matrix4x4 billboardMatrix = kBackToFrontMatrix * Matrix4x4::Inverse(camera.matView);
+	billboardMatrix.m[3][0] = 0.0f; // 平行移動成分は要らない
+	billboardMatrix.m[3][1] = 0.0f;
+	billboardMatrix.m[3][2] = 0.0f;
+
+	// 回転対応
+	Matrix4x4 rotateZMatrix = Matrix4x4::MakeRotateZMatrix(rotation_.z);
+
+	Matrix4x4 rotateMatrix = rotateZMatrix * billboardMatrix;
+	Matrix4x4 scaleMatrix = Matrix4x4::MakeScaleMatrix(scale_);
+	Matrix4x4 translateMatrix = Matrix4x4::MakeTranslateMatrix(translation_);
+
+	matWorld_ = scaleMatrix * rotateMatrix * translateMatrix;
+
+	TransferMatrix(camera);
+}
+
+void WorldTransform::TransferMatrix(const Camera& camera) { // WVP行列の生成
 	Matrix4x4 matWVP = matWorld_ * camera.matView * camera.matProjection;
 
 	// 定数バッファへ転送
 	constMap_->WVP = matWVP;
 	constMap_->World = matWorld_;
+	constMap_->WorldInverseTranspose = Matrix4x4::Transpose(Matrix4x4::Inverse(matWorld_));
 }
+
+TransformationMatrix WorldTransform::GetMatrixData(const Camera& camera) const {
+	TransformationMatrix data;
+
+	Matrix4x4 matWVP = matWorld_ * camera.matView * camera.matProjection;
+
+	data.WVP = matWVP;
+	data.World = matWorld_;
+
+	return data;
+}
+
+TransformationMatrix WorldTransform::GetBillboardMatrixData(const Camera& camera) const { return TransformationMatrix(); }
 
 } // namespace KujakuEngine

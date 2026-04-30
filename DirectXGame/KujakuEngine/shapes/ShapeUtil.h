@@ -42,7 +42,8 @@ struct ConicalPendulum {
 };
 
 
-struct Segment {
+class Segment {
+public:
 	Vector3 origin; // 始点
 	Vector3 diff;   // 終点の差分ベクトル
 };
@@ -78,6 +79,8 @@ bool IsCollision(const Segment& segment, const Triangle& triangle);
 bool IsCollision(const AABB& aabb1, const AABB& aabb2);
 
 bool IsCollision(const AABB& aabb, const Sphere& sphere);
+
+bool IsCollision(const AABB& aabb, const Vector3& point);
 
 bool IsCollision(const AABB& aabb, const Segment& segment);
 

@@ -4,7 +4,8 @@
 using namespace KujakuEngine;
 
 void Fade::Init() {
-	sprite_ = Sprite::Create("resources/white1x1.png", {0.0f, 0.0f});
+	uint32_t textureIndex = TextureManager::GetInstance()->LoadTexture("resources/white1x1.png");
+	sprite_ = Sprite::Create(textureIndex, {0.0f, 0.0f});
 	sprite_->SetVertexMap(1280, 720);
 	sprite_->SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
 }

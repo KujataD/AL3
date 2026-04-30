@@ -121,10 +121,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="KujakuEngine\3d\DirectionalLight.cpp" />
     <ClCompile Include="KujakuEngine\3d\GraphicsPipeline.cpp" />
     <ClCompile Include="KujakuEngine\3d\Model.cpp" />
+    <ClCompile Include="KujakuEngine\3d\PointLight.cpp" />
+    <ClCompile Include="KujakuEngine\3d\SpotLight.cpp" />
     <ClCompile Include="KujakuEngine\3d\WorldTransform.cpp" />
     <ClCompile Include="KujakuEngine\base\DirectXCommon.cpp" />
     <ClCompile Include="KujakuEngine\base\Logger.cpp" />
     <ClCompile Include="KujakuEngine\base\StringUtil.cpp" />
+    <ClCompile Include="KujakuEngine\base\TextureManager.cpp" />
     <ClCompile Include="KujakuEngine\base\WinApp.cpp" />
     <ClCompile Include="KujakuEngine\input\Input.cpp" />
     <ClCompile Include="KujakuEngine\KujakuEngine.cpp" />
@@ -137,6 +140,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="KujakuEngine\shapes\AABB.cpp" />
     <ClCompile Include="KujakuEngine\shapes\Rect.cpp" />
     <ClCompile Include="KujakuEngine\shapes\ShapeUtil.cpp" />
+    <ClCompile Include="KujakuEngine\vfx\ParticleEmitter.cpp" />
+    <ClCompile Include="KujakuEngine\vfx\ParticleField.cpp" />
+    <ClCompile Include="KujakuEngine\vfx\ParticleModel.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChipField.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -180,10 +186,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="KujakuEngine\3d\DirectionalLight.h" />
     <ClInclude Include="KujakuEngine\3d\GraphicsPipeline.h" />
     <ClInclude Include="KujakuEngine\3d\Model.h" />
+    <ClInclude Include="KujakuEngine\3d\PointLight.h" />
+    <ClInclude Include="KujakuEngine\3d\SpotLight.h" />
     <ClInclude Include="KujakuEngine\3d\WorldTransform.h" />
     <ClInclude Include="KujakuEngine\base\DirectXCommon.h" />
     <ClInclude Include="KujakuEngine\base\Logger.h" />
     <ClInclude Include="KujakuEngine\base\StringUtil.h" />
+    <ClInclude Include="KujakuEngine\base\TextureManager.h" />
     <ClInclude Include="KujakuEngine\base\WinApp.h" />
     <ClInclude Include="KujakuEngine\input\Input.h" />
     <ClInclude Include="KujakuEngine\KujakuEngine.h" />
@@ -197,6 +206,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="KujakuEngine\shapes\AABB.h" />
     <ClInclude Include="KujakuEngine\shapes\Rect.h" />
     <ClInclude Include="KujakuEngine\shapes\ShapeUtil.h" />
+    <ClInclude Include="KujakuEngine\vfx\Particle.h" />
+    <ClInclude Include="KujakuEngine\vfx\ParticleEmitter.h" />
+    <ClInclude Include="KujakuEngine\vfx\ParticleField.h" />
+    <ClInclude Include="KujakuEngine\vfx\ParticleModel.h" />
     <ClInclude Include="LRDirection.h" />
     <ClInclude Include="MapChipField.h" />
     <ClInclude Include="Player.h" />
@@ -219,6 +232,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="KujakuEngine\shader\Particle.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="KujakuEngine\shader\Object3d.PS.hlsl">
@@ -226,6 +243,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="KujakuEngine\shader\Object3d.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="KujakuEngine\shader\Particle.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="KujakuEngine\shader\Particle.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

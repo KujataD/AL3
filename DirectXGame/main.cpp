@@ -60,7 +60,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	InitScene();
 
 	// Randomのシード初期化
-	Random::Init();
+	Random::Initialize();
 
 	// ImGuiManagerインスタンスの取得
 	ImGuiManager* imguiManager = ImGuiManager::GetInstance();

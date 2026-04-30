@@ -26,8 +26,15 @@ void Initialize(const std::wstring& title, bool enableDebugLayer) {
 
 	// Light初期化
 	DirectionalLight::GetInstance()->Initialize();
+	PointLight::GetInstance()->Initialize();
+	SpotLight::GetInstance()->Initialize();
+	
+	// texture初期化
+	TextureManager::GetInstance()->Initialize();
 
 	Input::Initialize();
+
+	Random::Initialize();
 }
 
 void Finalize() { WinApp::GetInstance()->TerminateGameWindow(); }
@@ -43,9 +50,6 @@ bool Update() {
 void PreDraw() {
 	// バックバッファクリア＆バリア設定
 	DirectXCommon::GetInstance()->PreDraw();
-
-	// RootSignature・PSO・Viewport・ScissorRect をコマンドリストに積む
-	GraphicsPipeline::GetInstance()->SetCommandList();
 }
 
 void PostDraw() {
