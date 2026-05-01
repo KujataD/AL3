@@ -165,3 +165,84 @@ void GlobalVariables::SaveFile(const std::string& groupName) {
 	// ファイルを閉じる
 	ofs.close();
 }
+
+void GlobalVariables::LoadFiles() {
+	// 保存先ディレクトリのパスをローカル変数で宣言
+	std::filesystem::path dir(kDirectoryPath);
+
+	// ディレクトリがなければスキップする
+	if (!std::filesystem::exists(dir)) {
+		return;
+	}
+
+	std::filesystem::directory_iterator dir_it(dir);
+	for (const std::filesystem::directory_entry& entry : dir_it) {
+		// ファイルパスを取得
+		const std::filesystem::path& filePath = entry.path();
+		// ファイル拡張子を取得
+		std::string extension = filePath.extension().string();
+		// ·jsonファイル以外はスキップ
+		if (extension.compare(".json") != 0) {
+			continue;
+		}
+
+		// ファイル読み込み
+		// stem()で拡張子を除いたファイル名を抽出できる
+		LoadFile(filePath.stem().string());
+	
+	}
+}
+
+void GlobalVariables::LoadFile(const std::string& groupName) {
+	// 読み込むJSONファイルのフルパスを合成する
+	std::string filePath = kDirectoryPath + groupName + ".json";
+	// 読み込み用ファイルストリーム
+	std::ifstream ifs;
+	// ファイルを読み込みように開く
+	ifs.open(filePath);
+
+	// ファイルオープン失敗？
+	if (ifs.fail()) {
+		std::string message = "Failed open data file for write.";
+		MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
+		assert(0);
+	}
+
+	json root;
+
+	// json文字列からjsonのデータ構造に展開
+	ifs >> root;
+	// ファイルを閉じる
+	ifs.close();
+
+	// グループを検索
+	json::iterator itGroup = root.find(groupName);
+
+	// 未登録チェック
+	assert(itGroup != root.end());
+
+	// 各アイテムについて
+	for (json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
+		// アイテム名を取得
+		const std::string& itemName = itItem.key();
+
+		// int32_t型の値を保持していれば
+		if (itItem->is_number_integer()) {
+			// int型の値を登録
+			int32_t value = itItem->get<int32_t>();
+			SetValue(groupName, itemName, value);
+		} 
+		// float型の値を保持していれば
+		else if (itItem->is_number_float()) {
+			// float型の値を登録
+			float value = itItem->get<float>();
+			SetValue(groupName, itemName, static_cast<float>(value));
+		} 
+		// 要素数3の配列であれば
+		else if (itItem->is_array() && itItem->size() == 3) {
+			// int型の値を登録
+			Vector3 value = {itItem->at(0), itItem->at(1), itItem->at(2)};
+			SetValue(groupName, itemName, value);
+		}
+	}
+}

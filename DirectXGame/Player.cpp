@@ -47,10 +47,6 @@ void Player::Init(Model* model, Model* modelAttack, Camera* camera, const Vector
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const char* groupName = "Player";
 	// グループついか
-	globalVariables->CreateGroup(groupName);
-	globalVariables->SetValue(groupName, "Test Int", 90);
-	globalVariables->SetValue(groupName, "Test Float", 10.0f);
-	globalVariables->SetValue(groupName, "Test Vector3", {10.0f, 0.0f, 5.0f});
 }
 
 void Player::Update() {

@@ -45,6 +45,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// エンジン初期化
 	KujakuEngine::Initialize(L"LC2B_04_オオツカ_ダイチ_AL3", false);
+	
+	// グローバル変数の読み込み
+	GlobalVariables::GetInstance()->LoadFiles();
+	
 	// タイトルシーンの初期化
 	scene = Scene::kTitle;
 
