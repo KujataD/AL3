@@ -54,6 +54,10 @@ void Player::Init(Model* model, Model* modelAttack, Camera* camera, const Vector
 }
 
 void Player::Update() {
+	if (Input::GetKeyTrigger(DIK_J)) {
+		GlobalVariables::GetInstance()->SaveFile("Player");
+	}
+
 	// ふるまい変更のrequest処理
 	if (behaviorRequest_) {
 		ChangeBehavior(behaviorRequest_);

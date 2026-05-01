@@ -151,6 +151,7 @@ void GameScene::Update() {
 
 		// ブロックの更新
 		UpdateBlocks();
+
 	} break;
 	case GameScene::Phase::kPlay: {
 		// ゲームプレイフェーズ

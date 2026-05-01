@@ -1,0 +1,11 @@
+{
+    "Player": {
+        "Test Float": 10.0,
+        "Test Int": 90,
+        "Test Vector3": [
+            -10.0,
+            0.0,
+            5.0
+        ]
+    }
+}

@@ -3,6 +3,10 @@
 #include <map>
 #include <string>
 #include <variant>
+#include <sstream>
+#include <fstream>
+#include <filesystem>
+#include "externals/nlohmann/json.hpp"
 
 /// <summary>
 /// グローバル変数
@@ -42,6 +46,12 @@ public:
 	// 値のセット(Vector3)
 	void SetValue(const std::string& groupName, const std::string& key, const KujakuEngine::Vector3& value);
 
+	/// <summary>
+	/// ファイルに書き出し
+	/// </summary>
+	/// <param name="groupName">グループ</param>
+	void SaveFile(const std::string& groupName);
+
 private:
 	// シングルトン化
 	GlobalVariables() = default;
@@ -52,4 +62,7 @@ private:
 private:
 	// 全データ
 	std::map<std::string, Group> datas_;
+
+	// グローバル変数の保存先ファイルパス
+	const std::string kDirectoryPath = "Resources/GlobalVariables/";
 };
