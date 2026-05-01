@@ -82,6 +82,7 @@ public:
 	uint32_t GetDescriptorSizeDSV() const { return descriptorSizeDSV_; }
 	int32_t GetBackBufferWidth() const { return backBufferWidth_; }
 	int32_t GetBackBufferHeight() const { return backBufferHeight_; }
+	uint32_t GetSwapChainBufferCount() const { return kSwapChainBufferCount; }
 private:
 	DirectXCommon() = default;
 	~DirectXCommon() = default;
@@ -131,7 +132,7 @@ private:
 	void CreateFence();
 
 private:
-	static const uint32_t kSwapChainBufferCount = 2;
+	static const uint32_t kSwapChainBufferCount = 3;
 	WinApp* winApp_ = nullptr;
 	bool initialized_ = false;
 
@@ -139,12 +140,13 @@ private:
 	Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory_;
 	Microsoft::WRL::ComPtr<ID3D12Device> device_;
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList_;
-	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocator_;
+	//Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocator_;
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocators_[kSwapChainBufferCount];
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue_;
 	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain_;
 
 	// リソース関連
-	Microsoft::WRL::ComPtr<ID3D12Resource> swapChainResources_[2];
+	Microsoft::WRL::ComPtr<ID3D12Resource> swapChainResources_[kSwapChainBufferCount];
 	Microsoft::WRL::ComPtr<ID3D12Resource> depthStencilResource_;
 
 	// ディスクリプタヒープ
@@ -155,6 +157,7 @@ private:
 	// 同期関連
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence_;
 	uint64_t fenceValue_ = 0;
+	uint64_t fenceValues_[kSwapChainBufferCount] = {};
 	HANDLE fenceEvent_ = nullptr;
 
 	uint32_t descriptorSizeSRV_;

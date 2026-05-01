@@ -26,7 +26,7 @@ void TitleScene::Init() {
 
 	// カメラ初期化
 	camera_.Initialize();
-	camera_.translation_ = Vector3(0.0f, 0.0f, -20.0f);
+	camera_.translation_ = Vector3(0.0f, 0.0f, -30.0f);
 
 	// フェード処理の初期化
 	fade_ = new Fade();

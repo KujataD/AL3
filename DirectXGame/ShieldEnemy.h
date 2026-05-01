@@ -38,6 +38,7 @@ public:
 
 	void Destroy() override { isDead_ = true; }
 	void CollisionDisable() override { isCollisionDisabled_ = true; }
+	void CollisionEnable() { isCollisionDisabled_ = false; }
 
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }

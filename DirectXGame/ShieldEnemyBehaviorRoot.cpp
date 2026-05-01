@@ -1,6 +1,7 @@
 #include "ShieldEnemyBehaviorRoot.h"
 #include "ShieldEnemy.h"
 
+
 void ShieldEnemyBehaviorRoot::Update(ShieldEnemy* enemy) {
 
 	// 移動

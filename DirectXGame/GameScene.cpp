@@ -46,7 +46,7 @@ GameScene::~GameScene() {
 void GameScene::Init(StageManager* stageDataManager) {
 	// 引数をメンバに記録
 	stageManager_ = stageDataManager;
-	
+
 	// プレイヤー
 	// ------------------------------------------
 
@@ -90,7 +90,6 @@ void GameScene::Init(StageManager* stageDataManager) {
 	fade_->Init();
 	fade_->Start(Fade::Status::FadeIn, kFadeDuration);
 
-
 	// スカイドーム
 	// ------------------------------------------
 	modelSkydome_ = Model::CreateFromOBJ("sky_sphere");
@@ -115,8 +114,6 @@ void GameScene::Init(StageManager* stageDataManager) {
 
 	// デスパーティクル
 	modelDeathParticle_ = Model::CreateFromOBJ("deathParticle");
-	deathParticles_ = new DeathParticles;
-	deathParticles_->Init(modelDeathParticle_, &camera_, player_->GetWorldPosition());
 
 	// ヒットエフェクト
 	modelHitEffect_ = Model::CreateFromOBJ("particle");
@@ -170,7 +167,7 @@ void GameScene::Update() {
 
 		// 当たり判定処理
 		CheckAkkCollisions();
-		
+
 		// パーティクル処理
 		UpdateParticles();
 
@@ -191,6 +188,9 @@ void GameScene::Update() {
 		// ブロックの更新
 		UpdateBlocks();
 
+		if (deathParticles_) {
+			deathParticles_->Update();
+		}
 		break;
 
 	default:
@@ -387,8 +387,8 @@ void GameScene::CheckAkkCollisions() {
 
 			// AABB同士の交差判定
 			if (IsCollision(aabb1, aabb2)) {
-				player_->OnCollision(enemy);
 				enemy->OnCollision(player_);
+				player_->OnCollision(enemy);
 			}
 		}
 	}
@@ -397,22 +397,23 @@ void GameScene::CheckAkkCollisions() {
 
 void GameScene::ChangePhase() {
 	switch (phase_) {
-	case GameScene::Phase::kFadeIn:// フェードイン
+	case GameScene::Phase::kFadeIn: // フェードイン
 		if (fade_->IsFinished()) {
 			phase_ = GameScene::Phase::kPlay;
 		}
 		break;
-	case GameScene::Phase::kPlay:// ゲームプレイ
-		
+	case GameScene::Phase::kPlay: // ゲームプレイ
+
 		if (player_->IsDead()) {
 			phase_ = Phase::kDeath;
 			const Vector3& deathParticlesPosition = player_->GetWorldPosition();
 
+			deathParticles_ = new DeathParticles;
 			deathParticles_->Init(modelDeathParticle_, &camera_, deathParticlesPosition);
 		}
 
 		break;
-	case GameScene::Phase::kDeath:// デス演出フェーズ
+	case GameScene::Phase::kDeath: // デス演出フェーズ
 
 		// デス演出フェーズ終了
 		if (deathParticles_ && deathParticles_->IsFinished()) {
@@ -465,9 +466,6 @@ void GameScene::UpdateEnemies() { // エネミーの更新
 
 void GameScene::UpdateParticles() {
 	// パーティクル処理
-	if (deathParticles_) {
-		deathParticles_->Update();
-	}
 
 	for (HitEffect* hitEffect : hitEffects_) {
 		hitEffect->Update();

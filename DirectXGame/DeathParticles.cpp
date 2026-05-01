@@ -14,6 +14,7 @@ void DeathParticles::Init(KujakuEngine::Model* model, KujakuEngine::Camera* came
 	for (WorldTransform& worldTransform : worldTransforms_) {
 		worldTransform.Initialize();
 		worldTransform.translation_ = position;
+		worldTransform.UpdateMatrix(*camera);
 	}
 
 	color_ = {1.0f, 1.0f, 1.0f, 1.0f};

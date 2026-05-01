@@ -27,7 +27,7 @@ void ImGuiManager::Initialize() {
 	ImGui_ImplWin32_Init(winApp->GetHwnd());
 	ImGui_ImplDX12_Init(
 	    dxCommon->GetDevice(),
-	    2, // BufferCount（ダブルバッファ）
+	    dxCommon->GetSwapChainBufferCount(), // BufferCount
 	    DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, dxCommon->GetSrvDescriptorHeap(),
 	    // SRVヒープの先頭（index=0）をImGuiが使用する
 	    dxCommon->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart(), dxCommon->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());

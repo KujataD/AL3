@@ -76,7 +76,7 @@ public:
 	const KujakuEngine::Vector3& GetVelocity() const { return velocity_; }
 	bool IsDead() const { return isDead_; };
 	bool CanAttack() const { return attackCoolTimer_ <= 0.0f && attackCounter_ > 0; }
-	bool IsAttack() const { return behavior_->GetType() == IPlayerBehavior::BehaviorType::kAttack; }
+	bool IsAttack() const { return behavior_->GetType() == IPlayerBehavior::BehaviorType::kAttack || behavior_->GetType() == IPlayerBehavior::BehaviorType::kKnockback; }
 
 	LRDirection GetLRDirection() const { return lrDirection_; }
 
@@ -301,7 +301,7 @@ public:
 	// --- ノックバック ---
 
 	// ノックバックの移動速度
-	static inline const float kKnockbackSpeed = 0.75f;
+	static inline const float kKnockbackSpeed = kAttackBlinkSpeed * 0.5f;
 	
 	// ノックバックの持続時間
 	static inline const float kKnockbackDuration = 0.08f;
