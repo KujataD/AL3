@@ -108,7 +108,6 @@ void GameScene::Init(StageManager* stageDataManager) {
 	cameraController_->Init(&camera_);
 	cameraController_->SetTarget(player_);
 	cameraController_->Reset();
-	cameraController_->SetMode(CameraController::Mode::kForcedScroll);
 
 	// VFX
 	// ------------------------------------------

@@ -10,6 +10,7 @@
 #include <cassert>
 #include <cmath>
 #include <numbers>
+#include "GlobalVariables.h"
 
 using namespace KujakuEngine;
 using namespace EaseUtil;
@@ -42,6 +43,14 @@ void Player::Init(Model* model, Model* modelAttack, Camera* camera, const Vector
 
 	// ルートビヘイビアに変更
 	ChangeBehavior(new PlayerBehaviorRoot);
+
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const char* groupName = "Player";
+	// グループついか
+	globalVariables->CreateGroup(groupName);
+	globalVariables->SetValue(groupName, "Test Int", 90);
+	globalVariables->SetValue(groupName, "Test Float", 10.0f);
+	globalVariables->SetValue(groupName, "Test Vector3", {10.0f, 0.0f, 5.0f});
 }
 
 void Player::Update() {

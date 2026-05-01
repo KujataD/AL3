@@ -8,6 +8,8 @@
 #include "GameScene.h"
 #include "TitleScene.h"
 
+#include "GlobalVariables.h"
+
 #include "StageManager.h"
 
 using namespace KujakuEngine;
@@ -66,81 +68,33 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ImGuiManagerインスタンスの取得
 	ImGuiManager* imguiManager = ImGuiManager::GetInstance();
-	std::array<float, 180> frameMsHistory{};
-	size_t frameMsHistoryIndex = 0;
-	float frameMsMax = 0.0f;
-	auto frameStartTime = std::chrono::steady_clock::now();
-	float lastChangeSceneMs = 0.0f;
-	float lastUpdateSceneMs = 0.0f;
-	float lastDrawSceneMs = 0.0f;
-	float lastPostDrawMs = 0.0f;
-	float lastFrameWorkMs = 0.0f;
-
 
 	// ゲームループ
 	while (Update()) {
-		auto frameNow = std::chrono::steady_clock::now();
-		float frameMs = std::chrono::duration<float, std::milli>(frameNow - frameStartTime).count();
-		frameStartTime = frameNow;
-		frameMsHistory[frameMsHistoryIndex] = frameMs;
-		frameMsHistoryIndex = (frameMsHistoryIndex + 1) % frameMsHistory.size();
-		frameMsMax = 0.0f;
-		for (float ms : frameMsHistory) {
-			if (ms > frameMsMax) {
-				frameMsMax = ms;
-			}
-		}
-
 		Input::Update();
 
 		imguiManager->Begin();
 		auto frameWorkStart = std::chrono::steady_clock::now();
-		
+
 		///
 		/// ↓↓↓ 更新処理ここから ↓↓↓
 		///
 
-		auto t0 = std::chrono::steady_clock::now();
 		ChangeScene();
-		auto t1 = std::chrono::steady_clock::now();
 
 		UpdateScene();
-		auto t2 = std::chrono::steady_clock::now();
 
 #ifdef USE_IMGUI
-			ImGui::Begin("LightManager");
-			auto& light = DirectionalLight::GetInstance()->GetData();
-			ImGui::ColorEdit3("Light Color", &light.color.x);
-			ImGui::SliderFloat3("Direction", &light.direction.x, -1.0f, 1.0f);
-			ImGui::DragFloat("Intensity", &light.intensity, 0.01f);
-			ImGui::End();
 
-			ImGui::Begin("Performance");
-			ImGui::Text("Frame: %.2f ms (%.1f FPS)", frameMs, frameMs > 0.0f ? 1000.0f / frameMs : 0.0f);
-			ImGui::Text("Worst(Last %d): %.2f ms", static_cast<int>(frameMsHistory.size()), frameMsMax);
-			ImGui::PlotLines("Frame ms", frameMsHistory.data(), static_cast<int>(frameMsHistory.size()), static_cast<int>(frameMsHistoryIndex), nullptr, 0.0f, frameMsMax < 16.7f ? 16.7f : frameMsMax, ImVec2(0, 80));
-			ImGui::SeparatorText("Texture Load Events");
-			const auto& textureEvents = TextureManager::GetInstance()->GetRecentLoadEvents();
-			for (const auto& event : textureEvents) {
-				if (event.cacheHit) {
-					ImGui::Text("[HIT ] %s", event.filePath.c_str());
-				} else {
-					ImGui::Text("[LOAD] %6.2f ms : %s", event.loadMs, event.filePath.c_str());
-				}
-			}
-			ImGui::End();
+		GlobalVariables::GetInstance()->Update();
 
-			ImGui::Begin("Performance Breakdown");
-			ImGui::Text("Frame Work: %.2f ms", lastFrameWorkMs);
-			ImGui::Text("ChangeScene : %6.2f ms", lastChangeSceneMs);
-			ImGui::Text("UpdateScene : %6.2f ms", lastUpdateSceneMs);
-			ImGui::Text("DrawScene   : %6.2f ms", lastDrawSceneMs);
-			ImGui::Text("PostDraw    : %6.2f ms", lastPostDrawMs);
+		ImGui::Begin("LightManager");
+		auto& light = DirectionalLight::GetInstance()->GetData();
+		ImGui::ColorEdit3("Light Color", &light.color.x);
+		ImGui::SliderFloat3("Direction", &light.direction.x, -1.0f, 1.0f);
+		ImGui::DragFloat("Intensity", &light.intensity, 0.01f);
+		ImGui::End();
 
-			float phaseMs[4] = {lastChangeSceneMs, lastUpdateSceneMs, lastDrawSceneMs, lastPostDrawMs};
-			ImGui::SeparatorText("Phase Bars");
-			ImGui::PlotHistogram("##phase", phaseMs, 4, 0, nullptr, 0.0f, lastFrameWorkMs < 16.7f ? 16.7f : lastFrameWorkMs, ImVec2(0, 70));
-			ImGui::End();
 #endif // USE_IMGUI
 
 		///
@@ -157,16 +111,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↑↑↑ 描画処理ここまで ↑↑↑
 		///
-		auto t3 = std::chrono::steady_clock::now();
-			PostDraw();
-			auto t4 = std::chrono::steady_clock::now();
-
-			lastChangeSceneMs = std::chrono::duration<float, std::milli>(t1 - t0).count();
-			lastUpdateSceneMs = std::chrono::duration<float, std::milli>(t2 - t1).count();
-			lastDrawSceneMs = std::chrono::duration<float, std::milli>(t3 - t2).count();
-			lastPostDrawMs = std::chrono::duration<float, std::milli>(t4 - t3).count();
-			lastFrameWorkMs = std::chrono::duration<float, std::milli>(t4 - frameWorkStart).count();
-		}
+		PostDraw();
+	}
 
 	delete titleScene;
 	titleScene = nullptr;

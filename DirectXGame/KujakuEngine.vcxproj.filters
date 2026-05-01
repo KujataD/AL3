@@ -79,6 +79,9 @@
     <Filter Include="KujakuEngine\vfx">
       <UniqueIdentifier>{4f5860bd-f6c6-4cf0-a8b9-9e10e489908f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GrobalManager">
+      <UniqueIdentifier>{39d10a64-c2c0-4b26-af43-aa8df8a1af0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -260,6 +263,9 @@
     </ClCompile>
     <ClCompile Include="KujakuEngine\vfx\ParticleEmitter.cpp">
       <Filter>KujakuEngine\vfx</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalVariables.cpp">
+      <Filter>ソース ファイル\GrobalManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -457,6 +463,9 @@
     </ClInclude>
     <ClInclude Include="KujakuEngine\vfx\ParticleEmitter.h">
       <Filter>KujakuEngine\vfx</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalVariables.h">
+      <Filter>ソース ファイル\GrobalManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
