@@ -27,13 +27,6 @@ void CameraController::Update() {
 		break;
 	}
 
-#ifdef USE_IMGUI
-	ImGui::Begin("CameraController");
-	ImGui::DragFloat("movableArea.right", &movableArea_.right, 0.1f);
-	ImGui::End();
-#endif // USE_IMGUI
-
-
 	// 範囲内クランプ
 	ClampMovableArea();
 

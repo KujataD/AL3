@@ -43,7 +43,7 @@ private:
 	// ------------------------------------------
 
 	// 座標補間割合
-	static inline const float kInterpolationRate = 0.1f;
+	static inline const float kInterpolationRate = 0.02f;
 
 	// 速度掛け算
 	static inline const float kVelocityBias = 20.0f;
@@ -51,7 +51,7 @@ private:
 	// 追従対象の各方向へのカメラ移動範囲
 	static inline const KujakuEngine::Rect kMarginArea = {-10.0f, 10.0f, -5.0f, 5.0f};
 
-	static inline const float kScrollSpeed = 0.5f;
+	static inline const float kScrollSpeed = 0.05f;
 
 	// 変数
 	// ------------------------------------------

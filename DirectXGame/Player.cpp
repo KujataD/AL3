@@ -64,6 +64,24 @@ void Player::Update() {
 	if (behavior_) {
 		behavior_->Update(this);
 	}
+
+	// カメラが見えている範囲
+	Rect cameraVisibleRect = camera_->GetVisibleRect(worldTransform_.translation_.z);
+	
+	// ウィンドウ外に接しているかどうか
+	bool isHitWindow = false;
+	if (worldTransform_.translation_.x <= cameraVisibleRect.left + kWidth / 2.0f || worldTransform_.translation_.x >= cameraVisibleRect.right - kWidth / 2.0f) {
+		isHitWindow = true;
+	}
+
+	// ウィンドウ内にクランプする
+	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, cameraVisibleRect.left + kWidth / 2.0f, cameraVisibleRect.right - kWidth / 2.0f);
+	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, cameraVisibleRect.bottom + kHeight / 2.0f, cameraVisibleRect.top - kHeight / 2.0f);
+
+	// 壁に挟まれて死ぬ
+	if (isHitWindow && IsTouchingWall()) {
+		isDead_ = true;
+	}
 }
 
 void Player::Draw() {
@@ -450,7 +468,7 @@ void Player::CheckMapCollisionLeft(CollisionMapInfo& info) {
 	}
 }
 
-Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
+Vector3 Player::CornerPosition(const Vector3& center, Corner corner) const {
 	Vector3 offsetTable[kNumCorner] = {
 	    {+kWidth / 2.0f, -kHeight / 2.0f, 0}, // kRightBottom
 	    {-kWidth / 2.0f, -kHeight / 2.0f, 0}, // kLeftBottom
@@ -578,6 +596,27 @@ void Player::BehaviorRootUpdate() {
 	TurnControl();
 
 	UpdateTransform();
+}
+
+bool Player::IsTouchingWall() const {
+	constexpr float kWallCheckEpsilon = 0.01f;
+
+	Vector3 rightCheckPos = worldTransform_.translation_ + Vector3(kWallCheckEpsilon, 0.0f, 0.0f);
+	Vector3 leftCheckPos = worldTransform_.translation_ + Vector3(-kWallCheckEpsilon, 0.0f, 0.0f);
+
+	// コーナーをチェックするラムダ
+	auto IsBlockCorner = [this](const Vector3& center, Corner corner) -> bool {
+		Vector3 pos = CornerPosition(center, corner);
+
+		MapChipField::IndexSet indexSet = mapChipField_->GetMapChipIndexSetByPosition(pos);
+
+		return mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex) == MapChipType::kBlock;
+	};
+
+	// 左右判定
+	bool result = IsBlockCorner(rightCheckPos, kRightTop) || IsBlockCorner(rightCheckPos, kRightBottom) || IsBlockCorner(leftCheckPos, kLeftTop) || IsBlockCorner(leftCheckPos, kLeftBottom);
+
+	return result;
 }
 
 void Player::ChangeBehavior(IPlayerBehavior* newBehavior) {

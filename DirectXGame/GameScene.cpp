@@ -108,6 +108,7 @@ void GameScene::Init(StageManager* stageDataManager) {
 	cameraController_->Init(&camera_);
 	cameraController_->SetTarget(player_);
 	cameraController_->Reset();
+	cameraController_->SetMode(CameraController::Mode::kForcedScroll);
 
 	// VFX
 	// ------------------------------------------
@@ -137,6 +138,9 @@ void GameScene::Update() {
 	switch (phase_) {
 	case GameScene::Phase::kFadeIn: {
 
+		// カメラコントローラーの処理
+		cameraController_->Update();
+
 		// skydomeの処理
 		skydome_->Update();
 
@@ -152,6 +156,9 @@ void GameScene::Update() {
 	case GameScene::Phase::kPlay: {
 		// ゲームプレイフェーズ
 		// --------------------------------------
+
+		// カメラコントローラーの処理
+		cameraController_->Update();
 
 		// skydomeの処理
 		skydome_->Update();
@@ -217,9 +224,6 @@ void GameScene::Update() {
 	ImGui::End();
 
 #endif // USE_IMGUI
-
-	// カメラコントローラーの処理
-	cameraController_->Update();
 
 	// カメラの処理
 	if (isDebugCameraActive_) {

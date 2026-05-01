@@ -218,7 +218,7 @@ private:
 	/// <param name="center"></param>
 	/// <param name="corner"></param>
 	/// <returns></returns>
-	KujakuEngine::Vector3 CornerPosition(const KujakuEngine::Vector3& center, Corner corner);
+	KujakuEngine::Vector3 CornerPosition(const KujakuEngine::Vector3& center, Corner corner) const;
 
 	/// <summary>
 	/// 着地しているときの処理
@@ -230,6 +230,8 @@ private:
 	/// 通常行動更新
 	/// </summary>
 	void BehaviorRootUpdate();
+
+	bool IsTouchingWall() const;
 
 public:
 	// 定数
