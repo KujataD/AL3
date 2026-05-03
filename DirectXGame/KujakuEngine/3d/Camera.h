@@ -38,7 +38,7 @@ public:
 	float fovAngleY = 0.45f;                                                                                  // 垂直方向視野角（ラジアン）
 	float aspectRatio = static_cast<float>(WinApp::kWindowWidth) / static_cast<float>(WinApp::kWindowHeight); // アスペクト比
 	float nearZ = 0.1f;                                                                                       // 深度限界（手前側）
-	float farZ = 100.0f;                                                                                      // 深度限界（奥側）
+	float farZ = 300.0f;                                                                                      // 深度限界（奥側）
 
 	// ビュー・射影行列
 	Matrix4x4 matView;

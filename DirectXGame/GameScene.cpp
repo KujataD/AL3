@@ -10,7 +10,7 @@ void GameScene::Initialize() {
 	// カメラ
 	// ------------------------------------------
 	camera_.Initialize();
-	camera_.translation_ = {0.0f, 0.0f, -50.0f};
+	camera_.translation_ = {0.0f, 0.0f, -100.0f};
 	debugCamera_.Initialize(camera_.rotation_, camera_.translation_);
 
 	// プレイヤー
@@ -24,7 +24,7 @@ void GameScene::Initialize() {
 	// ------------------------------------------
 	modelEnemy_ = std::unique_ptr<Model>(Model::CreateFromOBJ("enemy_airship", ShaderModel::kHalfLambert));
 	enemy_ = std::make_unique<Enemy>();
-	enemy_->Initialize(modelEnemy_.get(), &camera_, {0.0f, 3.0f, 500.0f});
+	enemy_->Initialize(modelEnemy_.get(), &camera_, {0.0f, 3.0f, 200.0f});
 
 	RegisterAllVariables();
 }
