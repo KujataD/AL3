@@ -12,10 +12,11 @@ void GameScene::Initialize() {
 	// カメラ
 	// ------------------------------------------
 	camera_.Initialize();
+	camera_.translation_ = {0.0f, 0.0f, -30.0f};
 
 	// プレイヤー
 	// ------------------------------------------
-	modelPlayer_ = Model::CreateFromOBJ("player");
+	modelPlayer_ = Model::CreateFromOBJ("airship");
 	player_ = new Player;
 	player_->Initialize(modelPlayer_, &camera_);
 }

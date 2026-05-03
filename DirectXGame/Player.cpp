@@ -4,8 +4,9 @@ void Player::Initialize(KujakuEngine::Model* model, KujakuEngine::Camera* camera
 	assert(model);
 	assert(camera);
 
-	// カメラの設定
+	// 各要素のセット
 	camera_ = camera;
+	model_ = model;
 
 	worldTransform_.Initialize();
 	worldTransform_.UpdateMatrix(*camera_);
