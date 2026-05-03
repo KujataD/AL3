@@ -35,6 +35,10 @@ void Initialize(const std::wstring& title, bool enableDebugLayer) {
 	Input::Initialize();
 
 	Random::Initialize();
+	
+	// グローバル変数の読み込み
+	GlobalVariables::GetInstance()->LoadFiles();
+
 }
 
 void Finalize() { WinApp::GetInstance()->TerminateGameWindow(); }

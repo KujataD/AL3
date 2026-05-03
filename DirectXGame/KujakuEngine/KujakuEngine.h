@@ -47,6 +47,8 @@
 #include "vfx/ParticleField.h"
 #include "vfx/ParticleModel.h"
 
+#include "debug/GlobalVariables.h"
+
 namespace KujakuEngine {
 
 static inline float kDT = 1.0f / 60.0f;

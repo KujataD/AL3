@@ -40,47 +40,14 @@
     <Filter Include="KujakuEngine\input">
       <UniqueIdentifier>{bba9aba5-b068-4ac9-9b46-d796a5ec1803}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\GameObject">
-      <UniqueIdentifier>{ebbac2a2-863a-40d1-bc25-cfbf51048c52}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\GameObject\Player">
-      <UniqueIdentifier>{1f8aa0e3-2c91-4efb-aed1-fcdae701d030}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\GameObject\World">
-      <UniqueIdentifier>{8d88fa72-578a-4fa1-8ca9-6aefe950f26a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\GameObject\CameraController">
-      <UniqueIdentifier>{d31ee70b-3122-4106-8d2f-07e251f1b191}</UniqueIdentifier>
-    </Filter>
     <Filter Include="KujakuEngine\shapes">
       <UniqueIdentifier>{4ce3014d-950b-41ee-9a0a-c94ca6731cb0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Scenes">
-      <UniqueIdentifier>{d5272886-d03c-4685-bb43-32efe339a0d0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Scenes\Transition">
-      <UniqueIdentifier>{34217457-f15c-4be7-af46-dbaeefb7e376}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\GameObject\Enemy">
-      <UniqueIdentifier>{a913fd57-315b-4da5-890a-4e30398644ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\GameObject\Enemy\normal">
-      <UniqueIdentifier>{5a390850-f595-4619-b58a-bf8e6aca3dac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\GameObject\Enemy\shield">
-      <UniqueIdentifier>{4312e8f4-17e7-45b2-97f2-ec697f952d1e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Particle">
-      <UniqueIdentifier>{7f7fb6cc-17b1-43b9-b34e-2f341839a627}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\GameObject\Util">
-      <UniqueIdentifier>{628d27a3-9521-4947-9813-39ea9fae3daa}</UniqueIdentifier>
     </Filter>
     <Filter Include="KujakuEngine\vfx">
       <UniqueIdentifier>{4f5860bd-f6c6-4cf0-a8b9-9e10e489908f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\GrobalManager">
-      <UniqueIdentifier>{39d10a64-c2c0-4b26-af43-aa8df8a1af0e}</UniqueIdentifier>
+    <Filter Include="KujakuEngine\debug">
+      <UniqueIdentifier>{803e7b32-b964-49e0-bdfd-d9fe3d93bf2c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -162,89 +129,20 @@
     <ClCompile Include="KujakuEngine\input\Input.cpp">
       <Filter>KujakuEngine\input</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル\GameObject\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="MapChipField.cpp">
-      <Filter>ソース ファイル\GameObject\World</Filter>
-    </ClCompile>
-    <ClCompile Include="Skydome.cpp">
-      <Filter>ソース ファイル\GameObject\World</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraController.cpp">
-      <Filter>ソース ファイル\GameObject\CameraController</Filter>
-    </ClCompile>
     <ClCompile Include="KujakuEngine\shapes\Rect.cpp">
       <Filter>KujakuEngine\shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="GameScene.cpp">
-      <Filter>ソース ファイル\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="TitleScene.cpp">
-      <Filter>ソース ファイル\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Fade.cpp">
-      <Filter>ソース ファイル\Scenes\Transition</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerBehaviorAttack.cpp">
-      <Filter>ソース ファイル\GameObject\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerBehaviorKnockback.cpp">
-      <Filter>ソース ファイル\GameObject\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerBehaviorRoot.cpp">
-      <Filter>ソース ファイル\GameObject\Player</Filter>
     </ClCompile>
     <ClCompile Include="KujakuEngine\math\Random.cpp">
       <Filter>KujakuEngine\math</Filter>
     </ClCompile>
-    <ClCompile Include="ShieldEnemy.cpp">
-      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
-    </ClCompile>
-    <ClCompile Include="ShieldEnemyBehaviorDead.cpp">
-      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
-    </ClCompile>
-    <ClCompile Include="ShieldEnemyBehaviorGuard.cpp">
-      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
-    </ClCompile>
-    <ClCompile Include="ShieldEnemyBehaviorRoot.cpp">
-      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
-    </ClCompile>
     <ClCompile Include="KujakuEngine\math\Easing.cpp">
       <Filter>KujakuEngine\math</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>ソース ファイル\GameObject\Enemy\normal</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyBehaviorDead.cpp">
-      <Filter>ソース ファイル\GameObject\Enemy\normal</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyBehaviorRoot.cpp">
-      <Filter>ソース ファイル\GameObject\Enemy\normal</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseEnemy.cpp">
-      <Filter>ソース ファイル\GameObject\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="GuardEffect.cpp">
-      <Filter>ソース ファイル\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="HitEffect.cpp">
-      <Filter>ソース ファイル\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="DeathParticles.cpp">
-      <Filter>ソース ファイル\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="IPlayerBehavior.cpp">
-      <Filter>ソース ファイル\GameObject\Player</Filter>
     </ClCompile>
     <ClCompile Include="KujakuEngine\shapes\AABB.cpp">
       <Filter>KujakuEngine\shapes</Filter>
     </ClCompile>
     <ClCompile Include="KujakuEngine\shapes\ShapeUtil.cpp">
       <Filter>KujakuEngine\shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="StageManager.cpp">
-      <Filter>ソース ファイル\GameObject\World</Filter>
     </ClCompile>
     <ClCompile Include="KujakuEngine\3d\PointLight.cpp">
       <Filter>KujakuEngine\3d</Filter>
@@ -264,8 +162,8 @@
     <ClCompile Include="KujakuEngine\vfx\ParticleEmitter.cpp">
       <Filter>KujakuEngine\vfx</Filter>
     </ClCompile>
-    <ClCompile Include="GlobalVariables.cpp">
-      <Filter>ソース ファイル\GrobalManager</Filter>
+    <ClCompile Include="KujakuEngine\debug\GlobalVariables.cpp">
+      <Filter>KujakuEngine\debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -350,98 +248,20 @@
     <ClInclude Include="KujakuEngine\input\Input.h">
       <Filter>KujakuEngine\input</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>ソース ファイル\GameObject\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="MapChipField.h">
-      <Filter>ソース ファイル\GameObject\World</Filter>
-    </ClInclude>
-    <ClInclude Include="Skydome.h">
-      <Filter>ソース ファイル\GameObject\World</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraController.h">
-      <Filter>ソース ファイル\GameObject\CameraController</Filter>
-    </ClInclude>
     <ClInclude Include="KujakuEngine\shapes\Rect.h">
       <Filter>KujakuEngine\shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="GameScene.h">
-      <Filter>ソース ファイル\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="TitleScene.h">
-      <Filter>ソース ファイル\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Fade.h">
-      <Filter>ソース ファイル\Scenes\Transition</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerBehaviorAttack.h">
-      <Filter>ソース ファイル\GameObject\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerBehaviorKnockback.h">
-      <Filter>ソース ファイル\GameObject\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerBehaviorRoot.h">
-      <Filter>ソース ファイル\GameObject\Player</Filter>
     </ClInclude>
     <ClInclude Include="KujakuEngine\math\Random.h">
       <Filter>KujakuEngine\math</Filter>
     </ClInclude>
-    <ClInclude Include="ShieldEnemy.h">
-      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
-    </ClInclude>
-    <ClInclude Include="ShieldEnemyBehaviorDead.h">
-      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
-    </ClInclude>
-    <ClInclude Include="ShieldEnemyBehaviorGuard.h">
-      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
-    </ClInclude>
-    <ClInclude Include="ShieldEnemyBehaviorRoot.h">
-      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>ソース ファイル\GameObject\Enemy\normal</Filter>
-    </ClInclude>
     <ClInclude Include="KujakuEngine\math\Easing.h">
       <Filter>KujakuEngine\math</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyBehaviorRoot.h">
-      <Filter>ソース ファイル\GameObject\Enemy\normal</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyBehaviorDead.h">
-      <Filter>ソース ファイル\GameObject\Enemy\normal</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseEnemy.h">
-      <Filter>ソース ファイル\GameObject\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="GuardEffect.h">
-      <Filter>ソース ファイル\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="HitEffect.h">
-      <Filter>ソース ファイル\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="DeathParticles.h">
-      <Filter>ソース ファイル\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="IEnemyBehaviorState.h">
-      <Filter>ソース ファイル\GameObject\Enemy\normal</Filter>
-    </ClInclude>
-    <ClInclude Include="IShieldEnemyBehaviorState.h">
-      <Filter>ソース ファイル\GameObject\Enemy\shield</Filter>
-    </ClInclude>
-    <ClInclude Include="IPlayerBehavior.h">
-      <Filter>ソース ファイル\GameObject\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="LRDirection.h">
-      <Filter>ソース ファイル\GameObject\Util</Filter>
     </ClInclude>
     <ClInclude Include="KujakuEngine\shapes\AABB.h">
       <Filter>KujakuEngine\shapes</Filter>
     </ClInclude>
     <ClInclude Include="KujakuEngine\shapes\ShapeUtil.h">
       <Filter>KujakuEngine\shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="StageManager.h">
-      <Filter>ソース ファイル\GameObject\World</Filter>
     </ClInclude>
     <ClInclude Include="KujakuEngine\3d\PointLight.h">
       <Filter>KujakuEngine\3d</Filter>
@@ -464,8 +284,8 @@
     <ClInclude Include="KujakuEngine\vfx\ParticleEmitter.h">
       <Filter>KujakuEngine\vfx</Filter>
     </ClInclude>
-    <ClInclude Include="GlobalVariables.h">
-      <Filter>ソース ファイル\GrobalManager</Filter>
+    <ClInclude Include="KujakuEngine\debug\GlobalVariables.h">
+      <Filter>KujakuEngine\debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
