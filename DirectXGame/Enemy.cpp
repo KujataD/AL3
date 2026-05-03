@@ -1,11 +1,8 @@
 #include "Enemy.h"
+#include "EnemyStateApproach.h"
 
 using namespace KujakuEngine;
 
-void (Enemy::*Enemy::phaseFuncTable[])() = {
-	&Enemy::Approach,
-	&Enemy::Leave
-};
 
 void Enemy::Initialize(KujakuEngine::Model* model, KujakuEngine::Camera* camera, KujakuEngine::Vector3 position) {
 	assert(model);
@@ -16,12 +13,14 @@ void Enemy::Initialize(KujakuEngine::Model* model, KujakuEngine::Camera* camera,
 
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
+
+	ChangeState(std::make_unique<EnemyStateApproach>(this));
 }
 
 void Enemy::Update() {
 
 	// 各フェーズの関数を呼び出す
-	(this->*phaseFuncTable[static_cast<size_t>(phase_)])();
+	state_->Update();
 
 	worldTransform_.UpdateMatrix(*camera_);
 }
@@ -42,9 +41,11 @@ void Enemy::ApplyGlobalVariables() {
 
 void Enemy::Approach() {
 	worldTransform_.translation_ += Param::approachVelocity_;
-	if (worldTransform_.translation_.z <= 0.0f) {
-		phase_ = Phase::Leave;
-	}
 }
 
 void Enemy::Leave() { worldTransform_.translation_ += Param::leaveVelocity_; }
+
+void Enemy::ChangeState(std::unique_ptr<BaseEnemyState> state) {
+	state_ = std::move(state);
+	state_->DebugLog();
+}

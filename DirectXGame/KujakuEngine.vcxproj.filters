@@ -67,6 +67,9 @@
     <Filter Include="ソース ファイル\GameObject\Enemy\Weapon">
       <UniqueIdentifier>{c1af630a-5db8-4534-9523-1253a76c2b6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameObject\Enemy\Phase">
+      <UniqueIdentifier>{9a936e35-8e80-4b4a-a9f7-b949f9877042}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -194,6 +197,15 @@
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>ソース ファイル\GameObject\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseEnemyState.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy\Phase</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStateApproach.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy\Phase</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStateLeave.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy\Phase</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -328,6 +340,15 @@
     </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>ソース ファイル\GameObject\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseEnemyState.h">
+      <Filter>ソース ファイル\GameObject\Enemy\Phase</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateApproach.h">
+      <Filter>ソース ファイル\GameObject\Enemy\Phase</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateLeave.h">
+      <Filter>ソース ファイル\GameObject\Enemy\Phase</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

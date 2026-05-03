@@ -1,5 +1,6 @@
 #pragma once
 #include <KujakuEngine.h>
+#include "BaseEnemyState.h"
 
 class Enemy {
 public:
@@ -38,15 +39,17 @@ public:
 	static void ApplyGlobalVariables();
 
 	// - get -
-	bool IsDead() const { return isDead_; }
+	bool IsDead() const { return isDead_; } 
+ 	const KujakuEngine::Vector3& GetPosition() const { return worldTransform_.translation_; }
 
-private:
-	// メンバ関数ポインタのテーブル
-	static void (Enemy::* phaseFuncTable[])();
-
+	//　--- 外部API ---
 	void Approach();
+
 	void Leave();
 
+	void ChangeState(std::unique_ptr<BaseEnemyState> state);
+
+private:
 private:
 	KujakuEngine::Model* model_;
 	KujakuEngine::Camera* camera_;
@@ -56,5 +59,5 @@ private:
 
 	bool isDead_ = false;
 
-	Phase phase_ = Phase::Approach;
+	std::unique_ptr<BaseEnemyState> state_;
 };
