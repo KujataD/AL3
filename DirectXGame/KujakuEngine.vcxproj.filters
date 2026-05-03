@@ -207,6 +207,9 @@
     <ClCompile Include="EnemyStateLeave.cpp">
       <Filter>ソース ファイル\GameObject\Enemy\Phase</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyBullet.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy\Weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -349,6 +352,9 @@
     </ClInclude>
     <ClInclude Include="EnemyStateLeave.h">
       <Filter>ソース ファイル\GameObject\Enemy\Phase</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>ソース ファイル\GameObject\Enemy\Weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

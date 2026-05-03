@@ -2,8 +2,7 @@
 
 using namespace KujakuEngine;
 
-GameScene::~GameScene() {
-}
+GameScene::~GameScene() {}
 
 void GameScene::Initialize() {
 
@@ -23,8 +22,9 @@ void GameScene::Initialize() {
 	// エネミー
 	// ------------------------------------------
 	modelEnemy_ = std::unique_ptr<Model>(Model::CreateFromOBJ("enemy_airship", ShaderModel::kHalfLambert));
+	modelEnemyBullet_ = std::unique_ptr<Model>(Model::CreateCube("resources/white1x1.png"));
 	enemy_ = std::make_unique<Enemy>();
-	enemy_->Initialize(modelEnemy_.get(), &camera_, {0.0f, 3.0f, 200.0f});
+	enemy_->Initialize(modelEnemy_.get(), modelEnemyBullet_.get(), &camera_, {20.0f, 0.0f, 200.0f});
 
 	RegisterAllVariables();
 }

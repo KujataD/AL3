@@ -37,6 +37,7 @@ private:
 	std::unique_ptr<Enemy> enemy_;
 
 	std::unique_ptr<KujakuEngine::Model> modelEnemy_;
+	std::unique_ptr<KujakuEngine::Model> modelEnemyBullet_;
 
 
 };

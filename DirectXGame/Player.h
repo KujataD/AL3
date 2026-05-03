@@ -73,6 +73,7 @@ private:
 	// ------------------------------------------
 	KujakuEngine::Camera* camera_ = nullptr;
 	KujakuEngine::Model* model_ = nullptr;
+	KujakuEngine::Model* modelBullet_ = nullptr;
 
 	// 内部プロパティ
 	// ------------------------------------------
@@ -81,5 +82,4 @@ private:
 	// 弾
 	// ------------------------------------------
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
-	KujakuEngine::Model* modelBullet_ = nullptr;
 };

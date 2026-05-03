@@ -11,7 +11,7 @@ void PlayerBullet::Initialize(KujakuEngine::Model* model, KujakuEngine::Camera* 
 
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
-	worldTransform_.scale_ = {0.5f, 2.0f, 1.0f};
+	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
 	model_->SetColor({Param::colorRGB_.x, Param::colorRGB_.y, Param::colorRGB_.z, 1.0f});
 	velocity_ = velocity;
 	deathTimer_ = Param::lifeTime_;
