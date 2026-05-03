@@ -5,11 +5,6 @@
 using namespace KujakuEngine;
 
 Player::~Player() {
-	for (PlayerBullet* bullet : bullets_) {
-		delete bullet;
-		bullet = nullptr;
-	}
-	bullets_.clear();
 }
 
 void Player::Initialize(KujakuEngine::Model* model, KujakuEngine::Model* modelBullet, KujakuEngine::Camera* camera) {
@@ -41,9 +36,7 @@ void Player::Update() {
 	Attack();
 
 	// 弾
-	for (PlayerBullet* bullet : bullets_) {
-		bullet->Update();
-	}
+	UpdateBullets();
 
 	// クランプ処理
 	ClampInWindow();
@@ -54,25 +47,29 @@ void Player::Update() {
 
 void Player::Draw() {
 	model_->Draw(worldTransform_, *camera_);
-	
+
 	// 弾描画
-	for (PlayerBullet* bullet : bullets_) {
+	for (auto& bullet : bullets_) {
 		bullet->Draw();
 	}
 }
 
 void Player::RegisterGlobalVariables() {
 	GlobalVariables* gv = GlobalVariables::GetInstance();
+
 	gv->AddItem(ParamKey::kGroupKey, ParamKey::kSpeed, Param::speed_);
 	gv->AddItem(ParamKey::kGroupKey, ParamKey::kMoveLimitBlank, Param::moveLimitBlank_);
 	gv->AddItem(ParamKey::kGroupKey, ParamKey::kRotateSpeed, Param::rotateSpeed_);
+	gv->AddItem(ParamKey::kGroupKey, ParamKey::kBulletSpeed, Param::bulletSpeed_);
 }
 
 void Player::ApplyGlobalVariables() {
 	GlobalVariables* gv = GlobalVariables::GetInstance();
+
 	Param::speed_ = gv->GetValue<float>(ParamKey::kGroupKey, ParamKey::kSpeed);
 	Param::moveLimitBlank_ = gv->GetValue<float>(ParamKey::kGroupKey, ParamKey::kMoveLimitBlank);
 	Param::rotateSpeed_ = gv->GetValue<float>(ParamKey::kGroupKey, ParamKey::kRotateSpeed);
+	Param::bulletSpeed_ = gv->GetValue<float>(ParamKey::kGroupKey, ParamKey::kBulletSpeed);
 }
 
 void Player::Move() { // 移動ベクトル
@@ -89,7 +86,7 @@ void Player::Move() { // 移動ベクトル
 		move.y += 1.0f;
 	}
 
-	worldTransform_.translation_ += Vector3::Normalize(move) * Param::speed_;
+	worldTransform_.translation_ += Normalize(move) * Param::speed_;
 }
 
 void Player::Rotate() {
@@ -116,11 +113,34 @@ void Player::ClampInWindow() {
 
 void Player::Attack() {
 	if (Input::GetKeyTrigger(DIK_SPACE)) {
+		// 弾の速度
+		Vector3 velocity(0, 0, -Param::bulletSpeed_);
+
+		// 速度ベクトルを自機の向きに合わせて回転させる
+		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+
 		// 弾を生成し、初期化
-		PlayerBullet* newBullet = new PlayerBullet;
-		newBullet->Initialize(modelBullet_, camera_, worldTransform_.translation_);
+		std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
+		newBullet->Initialize(modelBullet_, camera_, worldTransform_.translation_, velocity);
 
 		// 弾を登録する
-		bullets_.push_back(newBullet);
+		bullets_.push_back(std::move(newBullet));
 	}
+}
+
+void Player::UpdateBullets() {
+
+	// 更新
+	for (auto& bullet : bullets_) {
+		bullet->Update();
+	}
+
+	// デスフラグの立った弾を排除
+	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
+		if (bullet->IsDead()) {
+			return true;
+		}
+		return false;
+	});
+
 }

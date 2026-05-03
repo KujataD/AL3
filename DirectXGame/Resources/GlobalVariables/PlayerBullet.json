@@ -1,0 +1,10 @@
+{
+    "PlayerBullet": {
+        "ColorRGB": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "LifeTime": 1.5
+    }
+}

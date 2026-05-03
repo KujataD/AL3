@@ -51,10 +51,10 @@ void DebugCamera::Update() {
 
 void DebugCamera::UpdateViewMatrix() {
 	// 回転行列と平行移動行列からワールド行列を計算する
-	matRot_ = Matrix4x4::MakeRotateXMatrix(rotation_.x) * Matrix4x4::MakeRotateYMatrix(rotation_.y);
-	Matrix4x4 cameraMatrix = matRot_ * Matrix4x4::MakeTranslateMatrix(translation_);
+	matRot_ = MakeRotateXMatrix(rotation_.x) * MakeRotateYMatrix(rotation_.y);
+	Matrix4x4 cameraMatrix = matRot_ * MakeTranslateMatrix(translation_);
 
 	// ワールド行列の逆行列
-	matView_ = Matrix4x4::Inverse(cameraMatrix);
+	matView_ = Inverse(cameraMatrix);
 }
 }

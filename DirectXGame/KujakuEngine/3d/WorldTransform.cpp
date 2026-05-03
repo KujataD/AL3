@@ -14,13 +14,13 @@ void WorldTransform::Initialize() {
 	assert(SUCCEEDED(hr));
 
 	// 単位行列で初期化
-	constMap_->WVP = Matrix4x4::MakeIdentity();
-	constMap_->World = Matrix4x4::MakeIdentity();
+	constMap_->WVP = MakeIdentity();
+	constMap_->World = MakeIdentity();
 }
 
 void WorldTransform::UpdateMatrix(const Camera& camera) {
 	// ワールド行列の生成
-	matWorld_ = Matrix4x4::MakeAffineMatrix(scale_, rotation_, translation_);
+	matWorld_ = MakeAffineMatrix(scale_, rotation_, translation_);
 
 	// 親がいれば親のワールド行列を掛ける（階層構造）
 	if (parent_) {
@@ -32,17 +32,17 @@ void WorldTransform::UpdateMatrix(const Camera& camera) {
 
 void WorldTransform::UpdateBillboardMatrix(const Camera& camera) {
 	// ワールド行列の生成
-	Matrix4x4 billboardMatrix = kBackToFrontMatrix * Matrix4x4::Inverse(camera.matView);
+	Matrix4x4 billboardMatrix = kBackToFrontMatrix * Inverse(camera.matView);
 	billboardMatrix.m[3][0] = 0.0f; // 平行移動成分は要らない
 	billboardMatrix.m[3][1] = 0.0f;
 	billboardMatrix.m[3][2] = 0.0f;
 
 	// 回転対応
-	Matrix4x4 rotateZMatrix = Matrix4x4::MakeRotateZMatrix(rotation_.z);
+	Matrix4x4 rotateZMatrix = MakeRotateZMatrix(rotation_.z);
 
 	Matrix4x4 rotateMatrix = rotateZMatrix * billboardMatrix;
-	Matrix4x4 scaleMatrix = Matrix4x4::MakeScaleMatrix(scale_);
-	Matrix4x4 translateMatrix = Matrix4x4::MakeTranslateMatrix(translation_);
+	Matrix4x4 scaleMatrix = MakeScaleMatrix(scale_);
+	Matrix4x4 translateMatrix = MakeTranslateMatrix(translation_);
 
 	matWorld_ = scaleMatrix * rotateMatrix * translateMatrix;
 
@@ -55,7 +55,7 @@ void WorldTransform::TransferMatrix(const Camera& camera) { // WVP行列の生�
 	// 定数バッファへ転送
 	constMap_->WVP = matWVP;
 	constMap_->World = matWorld_;
-	constMap_->WorldInverseTranspose = Matrix4x4::Transpose(Matrix4x4::Inverse(matWorld_));
+	constMap_->WorldInverseTranspose = Transpose(Inverse(matWorld_));
 }
 
 TransformationMatrix WorldTransform::GetMatrixData(const Camera& camera) const {

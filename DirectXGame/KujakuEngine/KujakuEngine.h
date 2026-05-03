@@ -2,6 +2,9 @@
 
 #include <cstdint>
 #include <string>
+#include <memory>
+#include <cmath>
+#include <numbers>
 
 // 追加モジュール
 #include "../externals/DirectXTex/DirectXTex.h"

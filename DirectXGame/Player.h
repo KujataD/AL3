@@ -11,12 +11,14 @@ public:
 		static inline const std::string kSpeed = "Speed";
 		static inline const std::string kMoveLimitBlank = "MoveLimitBlank";
 		static inline const std::string kRotateSpeed = "RotateSpeed";
+		static inline const std::string kBulletSpeed = "BulletSpeed";
 	};
 
 	struct Param {
 		static inline float speed_ = 0.1f;
 		static inline float moveLimitBlank_ = 1.0f;
 		static inline float rotateSpeed_ = 0.01f;
+		static inline float bulletSpeed_ = 0.03f;
 	};
 
 public:
@@ -56,7 +58,15 @@ private:
 	/// </summary>
 	void ClampInWindow();
 
+	/// <summary>
+	/// 攻撃処理
+	/// </summary>
 	void Attack();
+
+	/// <summary>
+	/// 弾の更新
+	/// </summary>
+	void UpdateBullets();
 
 private:
 	// 外部受け取り
@@ -70,6 +80,6 @@ private:
 
 	// 弾
 	// ------------------------------------------
-	std::list<PlayerBullet*> bullets_;
+	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 	KujakuEngine::Model* modelBullet_ = nullptr;
 };

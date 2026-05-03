@@ -59,6 +59,12 @@ void GameScene::UpdateCamera() {
 	}
 }
 
-void GameScene::ApplyAllVariables() { Player::ApplyGlobalVariables(); }
+void GameScene::ApplyAllVariables() {
+	Player::ApplyGlobalVariables();
+	PlayerBullet::ApplyGlobalVariables();
+}
 
-void GameScene::RegisterAllVariables() { Player::RegisterGlobalVariables(); }
+void GameScene::RegisterAllVariables() {
+	Player::RegisterGlobalVariables();
+	PlayerBullet::RegisterGlobalVariables();
+}

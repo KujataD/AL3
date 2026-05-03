@@ -38,7 +38,7 @@ void ParticleEmitter::Update(float deltaTime, const Camera& camera) {
 		(*particleIterator).color.w = alpha;
 		(*particleIterator).translation += (*particleIterator).velocity * deltaTime;
 
-		TransformationMatrix billboardMatrix = Matrix4x4::MakeBillboardMatrix((*particleIterator).scale, (*particleIterator).rotation, (*particleIterator).translation, camera);
+		TransformationMatrix billboardMatrix = MakeBillboardMatrix((*particleIterator).scale, (*particleIterator).rotation, (*particleIterator).translation, camera);
 
 		// InstancingModelに追加
 		model_->AddInstanceParticle(billboardMatrix, (*particleIterator).color);

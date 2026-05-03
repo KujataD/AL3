@@ -24,11 +24,11 @@ void Camera::UpdateMatrix() {
 void Camera::UpdateViewMatrix() {
 	// cameraMatrix = MakeAffineMatrix(scale=1, rotate, translate)
 	// viewMatrix   = Inverse(cameraMatrix)
-	Matrix4x4 cameraMatrix = Matrix4x4::MakeAffineMatrix({1.0f, 1.0f, 1.0f}, rotation_, translation_);
-	matView = Matrix4x4::Inverse(cameraMatrix);
+	Matrix4x4 cameraMatrix = MakeAffineMatrix({1.0f, 1.0f, 1.0f}, rotation_, translation_);
+	matView = Inverse(cameraMatrix);
 }
 
-void Camera::UpdateProjectionMatrix() { matProjection = Matrix4x4::MakePerspectiveFovMatrix(fovAngleY, aspectRatio, nearZ, farZ); }
+void Camera::UpdateProjectionMatrix() { matProjection = MakePerspectiveFovMatrix(fovAngleY, aspectRatio, nearZ, farZ); }
 
 void Camera::TransferConstBuffer() {
 	// 定数バッファへ転送

@@ -79,19 +79,19 @@ void Sprite::Draw() {
 }
 
 void Sprite::UpdateMatrix() {
-	Matrix4x4 worldMatrix = Matrix4x4::MakeAffineMatrix({size_.x, size_.y, 1.0f}, {0.0f, 0.0f, rotation_}, {position_.x, position_.y, 0.0f});
+	Matrix4x4 worldMatrix = MakeAffineMatrix({size_.x, size_.y, 1.0f}, {0.0f, 0.0f, rotation_}, {position_.x, position_.y, 0.0f});
 
-	Matrix4x4 viewMatrix = Matrix4x4::MakeIdentity();
-	Matrix4x4 projectionMatrix = Matrix4x4::MakeOrthographicMatrix(0.0f, 0.0f, static_cast<float>(WinApp::kWindowWidth), static_cast<float>(WinApp::kWindowHeight), 0.0f, 100.0f);
+	Matrix4x4 viewMatrix = MakeIdentity();
+	Matrix4x4 projectionMatrix = MakeOrthographicMatrix(0.0f, 0.0f, static_cast<float>(WinApp::kWindowWidth), static_cast<float>(WinApp::kWindowHeight), 0.0f, 100.0f);
 
 	*transformationMatrixMap_ = worldMatrix * viewMatrix * projectionMatrix;
 }
 
 void Sprite::UpdateUVTransform() {
 
-	Matrix4x4 uvTransformMatrix = Matrix4x4::MakeScaleMatrix({uvScale_.x, uvScale_.y, 1.0f});
-	uvTransformMatrix = uvTransformMatrix * Matrix4x4::MakeRotateZMatrix(uvRotation_);
-	uvTransformMatrix = uvTransformMatrix * Matrix4x4::MakeTranslateMatrix({uvTranslate_.x, uvTranslate_.y, 0.0f});
+	Matrix4x4 uvTransformMatrix = MakeScaleMatrix({uvScale_.x, uvScale_.y, 1.0f});
+	uvTransformMatrix = uvTransformMatrix * MakeRotateZMatrix(uvRotation_);
+	uvTransformMatrix = uvTransformMatrix * MakeTranslateMatrix({uvTranslate_.x, uvTranslate_.y, 0.0f});
 	materialMap_->uvTransform = uvTransformMatrix;
 }
 
@@ -147,7 +147,7 @@ void Sprite::CreateTransformationMatrixBuffer() {
 	transformationMatrixResource_ = DirectXCommon::GetInstance()->CreateBufferResource((sizeof(Matrix4x4) + 0xFF) & ~0xFF);
 	transformationMatrixResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixMap_));
 	// 単位行列で初期化
-	*transformationMatrixMap_ = Matrix4x4::MakeIdentity();
+	*transformationMatrixMap_ = MakeIdentity();
 }
 
 void Sprite::CreateMaterialBuffer() {
@@ -156,7 +156,7 @@ void Sprite::CreateMaterialBuffer() {
 
 	materialMap_->color = {1.0f, 1.0f, 1.0f, 1.0f};
 	materialMap_->enableLighting = 0; // スプライトはライティングなし
-	materialMap_->uvTransform = Matrix4x4::MakeIdentity();
+	materialMap_->uvTransform = MakeIdentity();
 }
 
 } // namespace KujakuEngine

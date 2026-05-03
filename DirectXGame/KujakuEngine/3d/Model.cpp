@@ -371,8 +371,9 @@ void Model::CreateMaterialBuffer(const MaterialData& material) {
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialMap_));
 	materialMap_->color = material.color;
 	materialMap_->enableLighting = material.enableLighting;
-	materialMap_->uvTransform = Matrix4x4::MakeIdentity();
+	materialMap_->uvTransform = MakeIdentity();
 	materialMap_->shininess = material.shininess;
 	textureIndex_ = material.textureIndex;
 }
 } // namespace KujakuEngine
+

@@ -48,8 +48,8 @@ void ParticleModel::Initialize() {
 
 	// 単位行列を書き込んでおく
 	for (uint32_t i = 0; i < kMaxInstance; ++i) {
-		instancingData_[i].WVP = Matrix4x4::MakeIdentity();
-		instancingData_[i].World = Matrix4x4::MakeIdentity();
+		instancingData_[i].WVP = MakeIdentity();
+		instancingData_[i].World = MakeIdentity();
 	}
 }
 
@@ -347,7 +347,7 @@ void ParticleModel::CreateMaterialBuffer(const MaterialData& material) {
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialMap_));
 	materialMap_->color = material.color;
 	materialMap_->enableLighting = material.enableLighting;
-	materialMap_->uvTransform = Matrix4x4::MakeIdentity();
+	materialMap_->uvTransform = MakeIdentity();
 	textureIndex_ = material.textureIndex;
 }
 } // namespace KujakuEngine
