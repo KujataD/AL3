@@ -14,8 +14,17 @@ public:
 	void Draw();
 
 private:
+	void UpdateCamera();
+
+	void ApplyAllVariables();
+	void RegisterAllVariables();
+	
+
+private:
 	// カメラ
 	KujakuEngine::Camera camera_;
+	KujakuEngine::DebugCamera debugCamera_;
+	bool isActiveDebugCamera_ = false;
 
 	// --- プレイヤー ---
 	Player* player_ = nullptr;
