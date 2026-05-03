@@ -1,9 +1,0 @@
-{
-    "HitEffect": {
-        "AnimDuration": 0.5,
-        "EllipseHeight": 2.0,
-        "EllipseWidth": 0.10000000149011612,
-        "SizeEnd": 1.2000000476837158,
-        "SizeStart": 0.5
-    }
-}
