@@ -10,6 +10,10 @@ GlobalVariables* GlobalVariables::GetInstance() {
 }
 
 void GlobalVariables::Update() {
+	if ((int32_t)datas_.size() <= 0) {
+		return;
+	}
+	
 	// メニューバーが使用可能な
 	if (!ImGui::Begin("Global Variables", nullptr, ImGuiWindowFlags_MenuBar)) {
 		ImGui::End();

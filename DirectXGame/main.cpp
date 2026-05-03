@@ -1,9 +1,5 @@
 #include <KujakuEngine.h>
-#include <array>
-#include <cassert>
-#include <chrono>
-#include <fstream>
-#include <memory>
+#include "GameScene.h"
 
 using namespace KujakuEngine;
 
@@ -16,6 +12,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ImGuiManagerインスタンスの取得
 	ImGuiManager* imguiManager = ImGuiManager::GetInstance();
 
+	// ゲームシーン
+	GameScene* gameScene = new GameScene;
+	gameScene->Initialize();
+
 	// ゲームループ
 	while (Update()) {
 		Input::Update();
@@ -25,6 +25,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓↓↓ 更新処理ここから ↓↓↓
 		///
+		
+		gameScene->Update();
 
 #ifdef USE_IMGUI
 		GlobalVariables::GetInstance()->Update();
@@ -38,6 +40,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓↓↓ 描画処理ここから ↓↓↓
 		///
+
+		gameScene->Draw();
 
 		///
 		/// ↑↑↑ 描画処理ここまで ↑↑↑

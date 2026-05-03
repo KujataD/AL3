@@ -47,7 +47,7 @@
 #include "vfx/ParticleField.h"
 #include "vfx/ParticleModel.h"
 
-#include "debug/GlobalVariables.h"
+#include "param/GlobalVariables.h"
 
 namespace KujakuEngine {
 

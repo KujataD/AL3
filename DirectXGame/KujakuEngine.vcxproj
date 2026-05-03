@@ -108,6 +108,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="externals\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="externals\imgui\imgui_tables.cpp" />
     <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="KujakuEngine\2d\ImGuiManager.cpp" />
     <ClCompile Include="KujakuEngine\2d\Sprite.cpp" />
     <ClCompile Include="KujakuEngine\3d\Camera.cpp" />
@@ -129,7 +130,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="KujakuEngine\base\StringUtil.cpp" />
     <ClCompile Include="KujakuEngine\base\TextureManager.cpp" />
     <ClCompile Include="KujakuEngine\base\WinApp.cpp" />
-    <ClCompile Include="KujakuEngine\debug\GlobalVariables.cpp" />
     <ClCompile Include="KujakuEngine\input\Input.cpp" />
     <ClCompile Include="KujakuEngine\KujakuEngine.cpp" />
     <ClCompile Include="KujakuEngine\math\Easing.cpp" />
@@ -138,6 +138,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="KujakuEngine\math\Random.cpp" />
     <ClCompile Include="KujakuEngine\math\Vector2.cpp" />
     <ClCompile Include="KujakuEngine\math\Vector3.cpp" />
+    <ClCompile Include="KujakuEngine\param\GlobalVariables.cpp" />
     <ClCompile Include="KujakuEngine\shapes\AABB.cpp" />
     <ClCompile Include="KujakuEngine\shapes\Rect.cpp" />
     <ClCompile Include="KujakuEngine\shapes\ShapeUtil.cpp" />
@@ -145,6 +146,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="KujakuEngine\vfx\ParticleField.cpp" />
     <ClCompile Include="KujakuEngine\vfx\ParticleModel.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -155,6 +157,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="externals\imgui\imstb_rectpack.h" />
     <ClInclude Include="externals\imgui\imstb_textedit.h" />
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="KujakuEngine\2d\ImGuiManager.h" />
     <ClInclude Include="KujakuEngine\2d\Sprite.h" />
     <ClInclude Include="KujakuEngine\3d\Camera.h" />
@@ -170,7 +173,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="KujakuEngine\base\StringUtil.h" />
     <ClInclude Include="KujakuEngine\base\TextureManager.h" />
     <ClInclude Include="KujakuEngine\base\WinApp.h" />
-    <ClInclude Include="KujakuEngine\debug\GlobalVariables.h" />
     <ClInclude Include="KujakuEngine\input\Input.h" />
     <ClInclude Include="KujakuEngine\KujakuEngine.h" />
     <ClInclude Include="KujakuEngine\math\Easing.h" />
@@ -180,6 +182,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="KujakuEngine\math\Vector2.h" />
     <ClInclude Include="KujakuEngine\math\Vector3.h" />
     <ClInclude Include="KujakuEngine\math\Vector4.h" />
+    <ClInclude Include="KujakuEngine\param\GlobalVariables.h" />
     <ClInclude Include="KujakuEngine\shapes\AABB.h" />
     <ClInclude Include="KujakuEngine\shapes\Rect.h" />
     <ClInclude Include="KujakuEngine\shapes\ShapeUtil.h" />
@@ -187,6 +190,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="KujakuEngine\vfx\ParticleEmitter.h" />
     <ClInclude Include="KujakuEngine\vfx\ParticleField.h" />
     <ClInclude Include="KujakuEngine\vfx\ParticleModel.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

@@ -49,6 +49,15 @@
     <Filter Include="KujakuEngine\debug">
       <UniqueIdentifier>{803e7b32-b964-49e0-bdfd-d9fe3d93bf2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameObject">
+      <UniqueIdentifier>{2ed25e23-2846-4f5d-b6fe-1c18f85ad2cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObject\Player">
+      <UniqueIdentifier>{64dbd852-5b56-468c-b1c4-cfd876226a0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scenes">
+      <UniqueIdentifier>{1c8f8e1b-377e-4519-beaf-2b09c68bc669}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -162,8 +171,14 @@
     <ClCompile Include="KujakuEngine\vfx\ParticleEmitter.cpp">
       <Filter>KujakuEngine\vfx</Filter>
     </ClCompile>
-    <ClCompile Include="KujakuEngine\debug\GlobalVariables.cpp">
+    <ClCompile Include="GameScene.cpp">
+      <Filter>ソース ファイル\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\param\GlobalVariables.cpp">
       <Filter>KujakuEngine\debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\GameObject\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -284,8 +299,14 @@
     <ClInclude Include="KujakuEngine\vfx\ParticleEmitter.h">
       <Filter>KujakuEngine\vfx</Filter>
     </ClInclude>
-    <ClInclude Include="KujakuEngine\debug\GlobalVariables.h">
+    <ClInclude Include="GameScene.h">
+      <Filter>ソース ファイル\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\param\GlobalVariables.h">
       <Filter>KujakuEngine\debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ソース ファイル\GameObject\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
