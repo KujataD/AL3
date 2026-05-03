@@ -2,6 +2,11 @@
 
 using namespace KujakuEngine;
 
+void (Enemy::*Enemy::phaseFuncTable[])() = {
+	&Enemy::Approach,
+	&Enemy::Leave
+};
+
 void Enemy::Initialize(KujakuEngine::Model* model, KujakuEngine::Camera* camera, KujakuEngine::Vector3 position) {
 	assert(model);
 	assert(camera);
@@ -14,16 +19,10 @@ void Enemy::Initialize(KujakuEngine::Model* model, KujakuEngine::Camera* camera,
 }
 
 void Enemy::Update() {
-	switch (phase_) {
-	case Enemy::Phase::Approach:
-		Approach();
-		break;
-	case Enemy::Phase::Leave:
-		Leave();
-		break;
-	default:
-		break;
-	}
+
+	// 各フェーズの関数を呼び出す
+	(this->*phaseFuncTable[static_cast<size_t>(phase_)])();
+
 	worldTransform_.UpdateMatrix(*camera_);
 }
 

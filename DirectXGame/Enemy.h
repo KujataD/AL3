@@ -41,6 +41,9 @@ public:
 	bool IsDead() const { return isDead_; }
 
 private:
+	// メンバ関数ポインタのテーブル
+	static void (Enemy::* phaseFuncTable[])();
+
 	void Approach();
 	void Leave();
 
