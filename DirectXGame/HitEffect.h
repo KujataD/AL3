@@ -1,17 +1,33 @@
 #pragma once
-#include  "KujakuEngine/KujakuEngine.h"
-#include <vector>
+#include "KujakuEngine/KujakuEngine.h"
 #include <array>
+#include <vector>
 
 /// <summary>
 /// ヒット演出用エフェクト
 /// </summary>
 class HitEffect {
 public:
-	enum class State{
+	enum class State {
 		kAnim,
 		kDead,
 	};
+
+	struct ParamKeys {
+		static inline const std::string kGroup = "HitEffect";
+
+		// --- 形状 ---
+		static inline const std::string kEllipseWidthKey = "EllipseWidth";
+		static inline const std::string kEllipseHeightKey = "EllipseHeight";
+
+		// --- サイズ ---
+		static inline const std::string kSizeStartKey = "SizeStart";
+		static inline const std::string kSizeEndKey = "SizeEnd";
+
+		// --- アニメーション ---
+		static inline const std::string kAnimDurationKey = "AnimDuration";
+	};
+
 public:
 	void Init(const KujakuEngine::Vector3 spawnPos, const KujakuEngine::Vector4 color);
 
@@ -21,6 +37,10 @@ public:
 
 	static HitEffect* Create(const KujakuEngine::Vector3 spawnPos, const KujakuEngine::Vector4 color);
 
+	static void RegisterGlobalVariables();
+
+	static void ApplyGlobalVariables();
+
 	static void SetModel(KujakuEngine::Model* model) { model_ = model; }
 	static void SetCamera(KujakuEngine::Camera* camera) { camera_ = camera; }
 
@@ -28,25 +48,24 @@ public:
 
 public:
 	// --- 定数 ---
-	
+
 	// 楕円の数
 	static inline const int32_t kEllipseValue = 2;
 
 	// 楕円の横幅
-	static inline const float kEllipseWidth = 0.1f;
-	
+	static inline float kEllipseWidth = 0.1f;
+
 	// 楕円の長さ
-	static inline const float kEllipseHeight = 2.0f;
+	static inline float kEllipseHeight = 2.0f;
 
 	// 楕円のサイズ
-	static inline const float kSizeStart = 0.5f;
-	static inline const float kSizeEnd = 1.2f;
+	static inline float kSizeStart = 0.5f;
+	static inline float kSizeEnd = 1.2f;
 
-	// ライフタイム 
-	static inline const float kAnimDuration = 0.5f;
+	// ライフタイム
+	static inline float kAnimDuration = 0.5f;
 
 private:
-
 	// --- 外部依存 ---
 
 	// モデル

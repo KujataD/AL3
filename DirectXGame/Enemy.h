@@ -14,6 +14,28 @@ class GameScene;
 /// </summary>
 class Enemy final : public BaseEnemy {
 public:
+	struct ParamKeys {
+		static inline const std::string kGroup = "Enemy";
+
+		// --- サイズ ---
+		static inline const std::string kWidthKey = "Width";
+		static inline const std::string kHeightKey = "Height";
+
+		// --- 移動 ---
+		static inline const std::string kWalkSpeedKey = "WalkSpeed";
+
+		// --- 歩行アニメーション ---
+		static inline const std::string kWalkAnimationDurationKey = "WalkAnimationDuration";
+		static inline const std::string kStartWalkAnimationRotationDegreeKey = "StartWalkAnimationRotationDegree";
+		static inline const std::string kEndWalkAnimationRotationDegreeKey = "EndWalkAnimationRotationDegree";
+
+		// --- デスアニメーション ---
+		static inline const std::string kDeadAnimDurationKey = "DeadAnimDuration";
+		static inline const std::string kDeadAnimRotationXKey = "DeadAnimRotationX";
+		static inline const std::string kDeadAnimAdditionalRotationYKey = "DeadAnimAdditionalRotationY";
+	};
+
+public:
 	Enemy() = default;
 	~Enemy();
 
@@ -65,34 +87,38 @@ public:
 
 	void SetRotationEaseOut(const KujakuEngine::Vector3& startRotation, const KujakuEngine::Vector3& endRotation, float t);
 
+	static void RegisterGlobalVariables();
+
+	static void ApplyGlobalVariables();
+
 public:
 	// 定数
 	// ------------------------------------------
 
 	// キャラクターの当たり判定サイズ
-	static inline const float kWidth = 0.8f;
-	static inline const float kHeight = 0.8f;
+	static inline float kWidth = 0.8f;
+	static inline float kHeight = 0.8f;
 
 	// 歩行の速さ
-	static inline const float kWalkSpeed = 0.05f;
+	static inline float kWalkSpeed = 0.05f;
 
 	// 歩行アニメーションの周期（秒）
-	static inline const float kWalkAnimationDuration = 1.0f;
+	static inline float kWalkAnimationDuration = 1.0f;
 
 	// 歩行アニメーションの最初の角度（Degree）
-	static inline const float kStartWalkAnimationRotationDegree = -45.0f;
+	static inline float kStartWalkAnimationRotationDegree = -45.0f;
 
 	// 歩行アニメーションの最後の角度（Degree）
-	static inline const float kEndWalkAnimationRotationDegree = 90.0f;
+	static inline float kEndWalkAnimationRotationDegree = 90.0f;
 
 	// デスアニメーションの時間（秒）
-	static inline const float kDeadAnimDuration = 0.5f;
+	static inline float kDeadAnimDuration = 0.5f;
 
 	// デスアニメーションでX軸回転する角度（radian）
-	static inline const float kDeadAnimRotationX = -std::numbers::pi_v<float> * 0.25f;
+	static inline float kDeadAnimRotationX = -std::numbers::pi_v<float> * 0.25f;
 
 	// デスアニメーションでY軸回転加算する角度（radian）
-	static inline const float kDeadAnimAdditionalRotationY = std::numbers::pi_v<float> * -1.0f;
+	static inline float kDeadAnimAdditionalRotationY = std::numbers::pi_v<float> * -1.0f;
 
 private:
 	// 変数
@@ -118,5 +144,4 @@ private:
 
 	// ふるまい
 	std::unique_ptr<IEnemyBehaviorState> behavior_;
-
 };

@@ -6,6 +6,7 @@
 #include "ShieldEnemyBehaviorDead.h"
 #include "ShieldEnemyBehaviorRoot.h"
 #include "ShieldEnemyBehaviorGuard.h"
+#include "GlobalVariables.h"
 #include <cassert>
 #include <numbers>
 
@@ -31,12 +32,16 @@ void ShieldEnemy::Init(Model* model, Camera* camera, const Vector3& position) {
 	walkTimer_ = 0.0f;
 
 	ChangeBehavior(new ShieldEnemyBehaviorRoot);
+
+	RegisterGlobalVariables();
 }
 
 void ShieldEnemy::Update() {
 	if (isDead_) {
 		return;
 	}
+
+	ApplyGlobalVariables();
 
 	if (behavior_) {
 		behavior_->Update(this);
@@ -154,4 +159,54 @@ void ShieldEnemy::SetRotationEaseOut(const Vector3& startRotation, const Vector3
 	worldTransform_.rotation_.x = EaseLerp(startRotation.x, endRotation.x, t, EaseType::OutQuad);
 	worldTransform_.rotation_.y = EaseLerp(startRotation.y, endRotation.y, t, EaseType::OutQuad);
 	worldTransform_.rotation_.z = EaseLerp(startRotation.z, endRotation.z, t, EaseType::OutQuad);
+}
+
+void ShieldEnemy::ApplyGlobalVariables() {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+
+	// --- サイズ ---
+	kWidth = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kWidthKey);
+	kHeight = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kHeightKey);
+
+	// --- 移動 ---
+	kWalkSpeed = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kWalkSpeedKey);
+
+	// --- 歩行アニメーション ---
+	kWalkAnimationDuration = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kWalkAnimationDurationKey);
+	kStartWalkAnimationRotationDegree = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kStartWalkAnimationRotationDegreeKey);
+	kEndWalkAnimationRotationDegree = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kEndWalkAnimationRotationDegreeKey);
+
+	// --- デスアニメーション ---
+	kDeadAnimDuration = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kDeadAnimDurationKey);
+	kDeadAnimRotationX = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kDeadAnimRotationXKey);
+	kDeadAnimAdditionalRotationY = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kDeadAnimAdditionalRotationYKey);
+
+	// --- ガードアニメーション ---
+	kGuardAnimDuration = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kGuardAnimDurationKey);
+	kGuardAnimUpperRotationZ = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kGuardAnimUpperRotationZKey);
+}
+
+void ShieldEnemy::RegisterGlobalVariables() {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+
+	// --- サイズ ---
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kWidthKey, kWidth);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kHeightKey, kHeight);
+
+	// --- 移動 ---
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kWalkSpeedKey, kWalkSpeed);
+
+	// --- 歩行アニメーション ---
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kWalkAnimationDurationKey, kWalkAnimationDuration);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kStartWalkAnimationRotationDegreeKey, kStartWalkAnimationRotationDegree);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kEndWalkAnimationRotationDegreeKey, kEndWalkAnimationRotationDegree);
+
+	// --- デスアニメーション ---
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kDeadAnimDurationKey, kDeadAnimDuration);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kDeadAnimRotationXKey, kDeadAnimRotationX);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kDeadAnimAdditionalRotationYKey, kDeadAnimAdditionalRotationY);
+
+	// --- ガードアニメーション ---
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kGuardAnimDurationKey, kGuardAnimDuration);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kGuardAnimUpperRotationZKey, kGuardAnimUpperRotationZ);
 }

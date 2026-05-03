@@ -10,6 +10,21 @@ class CameraController {
 public:
 	enum class Mode { kFollow, kForcedScroll };
 
+	struct ParamKeys {
+		static inline const std::string kGroup = "CameraController";
+
+		static inline const std::string kInterpolationRateKey = "InterpolationRate";
+		static inline const std::string kVelocityBiasKey = "VelocityBias";
+
+		// --- MarginArea ---
+		static inline const std::string kMarginAreaLeftKey = "MarginAreaLeft";
+		static inline const std::string kMarginAreaRightKey = "MarginAreaRight";
+		static inline const std::string kMarginAreaBottomKey = "MarginAreaBottom";
+		static inline const std::string kMarginAreaTopKey = "MarginAreaTop";
+
+		static inline const std::string kScrollSpeedKey = "ScrollSpeed";
+	};
+
 public:
 	void Init(KujakuEngine::Camera* camera);
 
@@ -18,7 +33,7 @@ public:
 	void Reset();
 
 	// accessor
-	
+
 	// --- setter ---
 
 	void SetTarget(Player* target) { target_ = target; }
@@ -31,27 +46,30 @@ public:
 
 	Mode GetMode() const { return mode_; }
 
+	static void RegisterGlobalVariables();
+
+	static void ApplyGlobalVariables();
+
 private:
 	void Follow();
 
 	void ForcedScroll();
 
 	void ClampMovableArea();
-
 private:
 	// 定数
 	// ------------------------------------------
 
 	// 座標補間割合
-	static inline const float kInterpolationRate = 0.02f;
+	static inline float kInterpolationRate = 0.02f;
 
 	// 速度掛け算
-	static inline const float kVelocityBias = 20.0f;
+	static inline float kVelocityBias = 20.0f;
 
 	// 追従対象の各方向へのカメラ移動範囲
-	static inline const KujakuEngine::Rect kMarginArea = {-10.0f, 10.0f, -5.0f, 5.0f};
+	static inline KujakuEngine::Rect kMarginArea = {-10.0f, 10.0f, -5.0f, 5.0f};
 
-	static inline const float kScrollSpeed = 0.05f;
+	static inline float kScrollSpeed = 0.05f;
 
 	// 変数
 	// ------------------------------------------

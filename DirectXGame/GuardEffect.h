@@ -1,5 +1,5 @@
 #pragma once
-#include  "KujakuEngine/KujakuEngine.h"
+#include "KujakuEngine/KujakuEngine.h"
 #include <vector>
 
 /// <summary>
@@ -7,10 +7,19 @@
 /// </summary>
 class GuardEffect {
 public:
-	enum class State{
+	enum class State {
 		kAnim,
 		kDead,
 	};
+
+	struct ParamKeys {
+		static inline const std::string kGroup = "GuardEffect";
+
+		static inline const std::string kSizeStartKey = "SizeStart";
+		static inline const std::string kSizeEndKey = "SizeEnd";
+		static inline const std::string kAnimDurationKey = "AnimDuration";
+	};
+
 public:
 	void Init(const KujakuEngine::Vector3 spawnPos);
 
@@ -19,6 +28,10 @@ public:
 	void Draw();
 
 	static GuardEffect* Create(const KujakuEngine::Vector3 spawnPos);
+
+	static void RegisterGlobalVariables();
+
+	static void ApplyGlobalVariables();
 
 	static void SetModel(KujakuEngine::Model* model) { model_ = model; }
 	static void SetCamera(KujakuEngine::Camera* camera) { camera_ = camera; }
@@ -29,14 +42,13 @@ public:
 	// --- 定数 ---
 
 	// 楕円のサイズ
-	static inline const float kSizeStart = 0.0f;
-	static inline const float kSizeEnd = 1.5f;
+	static inline float kSizeStart = 0.0f;
+	static inline float kSizeEnd = 1.5f;
 
-	// ライフタイム 
-	static inline const float kAnimDuration = 0.25f;
+	// ライフタイム
+	static inline float kAnimDuration = 0.25f;
 
 private:
-
 	// --- 外部依存 ---
 
 	// モデル
@@ -58,5 +70,4 @@ private:
 
 	// 円のワールドトランスフォーム
 	KujakuEngine::WorldTransform circleWorldTransform_;
-
 };

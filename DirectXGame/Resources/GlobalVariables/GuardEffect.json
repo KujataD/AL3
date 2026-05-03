@@ -1,0 +1,7 @@
+{
+    "GuardEffect": {
+        "AnimDuration": 0.25,
+        "SizeEnd": 1.5,
+        "SizeStart": 0.0
+    }
+}

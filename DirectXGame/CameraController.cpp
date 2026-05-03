@@ -1,8 +1,9 @@
 #include "CameraController.h"
 
-#include "externals/imgui/imgui.h"
 #include "Math.h"
 #include "Player.h"
+#include "GlobalVariables.h"
+#include "externals/imgui/imgui.h"
 #include <algorithm>
 
 using namespace KujakuEngine;
@@ -53,7 +54,6 @@ void CameraController::Follow() {
 	// 追従対象が画面外に出ないように補正
 	camera_->translation_.x = std::clamp(camera_->translation_.x, targetWorldTransform.translation_.x + kMarginArea.left, targetWorldTransform.translation_.x + kMarginArea.right);
 	camera_->translation_.y = std::clamp(camera_->translation_.y, targetWorldTransform.translation_.y + kMarginArea.bottom, targetWorldTransform.translation_.y + kMarginArea.top);
-
 }
 
 void CameraController::ForcedScroll() { camera_->translation_.x += kScrollSpeed; }
@@ -62,4 +62,34 @@ void CameraController::ClampMovableArea() {
 	// 移動範囲制限
 	camera_->translation_.x = std::clamp(camera_->translation_.x, movableArea_.left, movableArea_.right);
 	camera_->translation_.y = std::clamp(camera_->translation_.y, movableArea_.bottom, movableArea_.top);
+}
+
+void CameraController::RegisterGlobalVariables() {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kInterpolationRateKey, kInterpolationRate);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kVelocityBiasKey, kVelocityBias);
+
+	// --- MarginArea ---
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kMarginAreaLeftKey, kMarginArea.left);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kMarginAreaRightKey, kMarginArea.right);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kMarginAreaBottomKey, kMarginArea.bottom);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kMarginAreaTopKey, kMarginArea.top);
+
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kScrollSpeedKey, kScrollSpeed);
+}
+
+void CameraController::ApplyGlobalVariables() {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+
+	kInterpolationRate = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kInterpolationRateKey);
+	kVelocityBias = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kVelocityBiasKey);
+
+	// --- MarginArea ---
+	kMarginArea.left = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kMarginAreaLeftKey);
+	kMarginArea.right = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kMarginAreaRightKey);
+	kMarginArea.bottom = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kMarginAreaBottomKey);
+	kMarginArea.top = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kMarginAreaTopKey);
+
+	kScrollSpeed = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kScrollSpeedKey);
 }

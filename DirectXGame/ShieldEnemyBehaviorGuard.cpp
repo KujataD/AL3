@@ -14,7 +14,7 @@ void ShieldEnemyBehaviorGuard::OnEnter(ShieldEnemy* enemy) {
 	// 始回転角
 	startRotation_ = {0.0f, enemy->GetInitRotationY(), 0.0f};
 
-	upperRotation_ = {0.0f, enemy->GetInitRotationY(), ShieldEnemy::kGuardAnimUpperRoatationZ};
+	upperRotation_ = {0.0f, enemy->GetInitRotationY(), ShieldEnemy::kGuardAnimUpperRotationZ};
 	
 	// 終回転角
 	endRotation_ = startRotation_;

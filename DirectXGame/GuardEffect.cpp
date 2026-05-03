@@ -1,4 +1,5 @@
 #include "GuardEffect.h"
+#include "GlobalVariables.h"
 #include <algorithm>
 
 // 生定期メンバの実体
@@ -58,4 +59,20 @@ GuardEffect* GuardEffect::Create(const KujakuEngine::Vector3 spawnPos) {
 	instance->Init(spawnPos);
 	// 初期化したインスタンスを返す
 	return instance;
+}
+
+void GuardEffect::RegisterGlobalVariables() {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kSizeStartKey, kSizeStart);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kSizeEndKey, kSizeEnd);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kAnimDurationKey, kAnimDuration);
+}
+
+void GuardEffect::ApplyGlobalVariables() {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+
+	kSizeStart = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kSizeStartKey);
+	kSizeEnd = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kSizeEndKey);
+	kAnimDuration = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kAnimDurationKey);
 }

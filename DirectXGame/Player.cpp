@@ -1,5 +1,6 @@
 #define NOMINMAX
 #include "Player.h"
+#include "GlobalVariables.h"
 #include "MapChipField.h"
 #include "Math.h"
 #include "PlayerBehaviorAttack.h"
@@ -10,7 +11,6 @@
 #include <cassert>
 #include <cmath>
 #include <numbers>
-#include "GlobalVariables.h"
 
 using namespace KujakuEngine;
 using namespace EaseUtil;
@@ -44,15 +44,9 @@ void Player::Init(Model* model, Model* modelAttack, Camera* camera, const Vector
 	// ルートビヘイビアに変更
 	ChangeBehavior(new PlayerBehaviorRoot);
 
-	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
-	const char* groupName = "Player";
-	// グループついか
 }
 
 void Player::Update() {
-	if (Input::GetKeyTrigger(DIK_J)) {
-		GlobalVariables::GetInstance()->SaveFile("Player");
-	}
 
 	// ふるまい変更のrequest処理
 	if (behaviorRequest_) {
@@ -76,7 +70,7 @@ void Player::Update() {
 
 	// カメラが見えている範囲
 	Rect cameraVisibleRect = camera_->GetVisibleRect(worldTransform_.translation_.z);
-	
+
 	// ウィンドウ外に接しているかどうか
 	bool isHitWindow = false;
 	if (worldTransform_.translation_.x <= cameraVisibleRect.left + kWidth / 2.0f || worldTransform_.translation_.x >= cameraVisibleRect.right - kWidth / 2.0f) {
@@ -115,6 +109,90 @@ void Player::Draw() {
 		worldTransformAttack_.UpdateMatrix(*camera_);
 		modelAttack_->Draw(worldTransformAttack_, *camera_);
 	}
+}
+
+void Player::ApplyGlobalVariables() {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+
+	// --- 移動 ---
+	kAcceleration = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kAccelerationKey);
+	kAttenuation = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kAttenuationKey);
+	kAttenuationLanding = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kAttenuationLandingKey);
+	kAttenuationWall = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kAttenuationWallKey);
+	kLimitRunSpeed = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kLimitRunSpeedKey);
+	kTimeTurn = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kTimeTurnKey);
+
+	// --- 重力・ジャンプ ---
+	kGravityAcceleration = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kGravityAccelerationKey);
+	kLimitFallSpeed = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kLimitFallSpeedKey);
+	kJumpAcceleration = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kJumpAccelerationKey);
+
+	// --- サイズ ---
+	kWidth = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kWidthKey);
+	kHeight = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kHeightKey);
+	kInitSize = globalVariables->GetValue<KujakuEngine::Vector3>(ParamKeys::kGroup, ParamKeys::kInitSizeKey);
+
+	kBlank = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kBlankKey);
+	kGroundCheckEpsilon = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kGroundCheckEpsilonKey);
+
+	// --- アタック ---
+	kAttackBlinkPrepDuration = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kAttackBlinkPrepDurationKey);
+	kAttackBlinkDashDuration = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kAttackBlinkDashDurationKey);
+	kAttackBlinkAfterDuration = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kAttackBlinkAfterDurationKey);
+	kAttackBlinkSpeed = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kAttackBlinkSpeedKey);
+	kAttackBlinkCoolTime = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kAttackBlinkCoolTimeKey);
+
+	kAttackBlinkDashSize = globalVariables->GetValue<KujakuEngine::Vector3>(ParamKeys::kGroup, ParamKeys::kAttackBlinkDashSizeKey);
+	kAttackBlinkAfterSize = globalVariables->GetValue<KujakuEngine::Vector3>(ParamKeys::kGroup, ParamKeys::kAttackBlinkAfterSizeKey);
+
+	kAttackMaxCount = globalVariables->GetValue<int32_t>(ParamKeys::kGroup, ParamKeys::kAttackMaxCountKey);
+
+	// --- ノックバック ---
+	kKnockbackSpeed = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kKnockbackSpeedKey);
+	kKnockbackDuration = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kKnockbackDurationKey);
+}
+
+void Player::RegisterGlobalVariables() {
+
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	// グループ追加
+
+	// --- 移動 ---
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kAccelerationKey, kAcceleration);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kAttenuationKey, kAttenuation);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kAttenuationLandingKey, kAttenuationLanding);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kAttenuationWallKey, kAttenuationWall);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kLimitRunSpeedKey, kLimitRunSpeed);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kTimeTurnKey, kTimeTurn);
+
+	// --- 重力・ジャンプ ---
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kGravityAccelerationKey, kGravityAcceleration);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kLimitFallSpeedKey, kLimitFallSpeed);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kJumpAccelerationKey, kJumpAcceleration);
+
+	// --- サイズ ---
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kWidthKey, kWidth);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kHeightKey, kHeight);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kInitSizeKey, kInitSize);
+
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kBlankKey, kBlank);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kGroundCheckEpsilonKey, kGroundCheckEpsilon);
+
+	// --- アタック ---
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kAttackBlinkPrepDurationKey, kAttackBlinkPrepDuration);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kAttackBlinkDashDurationKey, kAttackBlinkDashDuration);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kAttackBlinkAfterDurationKey, kAttackBlinkAfterDuration);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kAttackBlinkSpeedKey, kAttackBlinkSpeed);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kAttackBlinkCoolTimeKey, kAttackBlinkCoolTime);
+
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kAttackBlinkDashSizeKey, kAttackBlinkDashSize);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kAttackBlinkAfterSizeKey, kAttackBlinkAfterSize);
+
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kAttackMaxCountKey, kAttackMaxCount);
+
+	// --- ノックバック ---
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kKnockbackSpeedKey, kKnockbackSpeed);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kKnockbackDurationKey, kKnockbackDuration);
 }
 
 void Player::OnCollision(const BaseEnemy* enemy) {

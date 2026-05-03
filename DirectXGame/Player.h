@@ -42,6 +42,47 @@ public:
 		KujakuEngine::Vector3 moveAmount; // 移動量
 	};
 
+	struct ParamKeys {
+		static inline const std::string kGroup = "Player";
+
+		// --- 移動 ---
+		static inline const std::string kAccelerationKey = "Acceleration";
+		static inline const std::string kAttenuationKey = "Attenuation";
+		static inline const std::string kAttenuationLandingKey = "AttenuationLanding";
+		static inline const std::string kAttenuationWallKey = "AttenuationWall";
+		static inline const std::string kLimitRunSpeedKey = "LimitRunSpeed";
+		static inline const std::string kTimeTurnKey = "TimeTurn";
+
+		// --- 重力・ジャンプ ---
+		static inline const std::string kGravityAccelerationKey = "GravityAcceleration";
+		static inline const std::string kLimitFallSpeedKey = "LimitFallSpeed";
+		static inline const std::string kJumpAccelerationKey = "JumpAcceleration";
+
+		// --- サイズ ---
+		static inline const std::string kWidthKey = "Width";
+		static inline const std::string kHeightKey = "Height";
+		static inline const std::string kInitSizeKey = "InitSize";
+
+		static inline const std::string kBlankKey = "Blank";
+		static inline const std::string kGroundCheckEpsilonKey = "GroundCheckEpsilon";
+
+		// --- アタック ---
+		static inline const std::string kAttackBlinkPrepDurationKey = "AttackBlinkPrepDuration";
+		static inline const std::string kAttackBlinkDashDurationKey = "AttackBlinkDashDuration";
+		static inline const std::string kAttackBlinkAfterDurationKey = "AttackBlinkAfterDuration";
+		static inline const std::string kAttackBlinkSpeedKey = "AttackBlinkSpeed";
+		static inline const std::string kAttackBlinkCoolTimeKey = "AttackBlinkCoolTime";
+
+		static inline const std::string kAttackBlinkDashSizeKey = "AttackBlinkDashSize";
+		static inline const std::string kAttackBlinkAfterSizeKey = "AttackBlinkAfterSize";
+
+		static inline const std::string kAttackMaxCountKey = "AttackMaxCount";
+
+		// --- ノックバック ---
+		static inline const std::string kKnockbackSpeedKey = "KnockbackSpeed";
+		static inline const std::string kKnockbackDurationKey = "KnockbackDuration";
+	};
+
 public:
 	Player();
 	~Player();
@@ -60,6 +101,9 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
+
+	static void ApplyGlobalVariables();
+	static void RegisterGlobalVariables();
 
 	// Accessor
 	// ------------------------------------------
@@ -129,7 +173,7 @@ public:
 	/// </summary>
 	/// <param name="speed"></param>
 	float GetBlinkVelocityX();
-	
+
 	/// <summary>
 	/// ブリンク攻撃時の速度を取得
 	/// </summary>
@@ -154,7 +198,6 @@ public:
 	void SetSizeEaseOut(const KujakuEngine::Vector3& startSize, const KujakuEngine::Vector3& endSize, float t);
 
 	void InitSize() { worldTransform_.scale_ = kInitSize; }
-
 
 private:
 	/// <summary>
@@ -234,79 +277,80 @@ private:
 	bool IsTouchingWall() const;
 
 public:
-	// 定数
+	// 各パラメータ初期値(実体はjson)
 	// ------------------------------------------
 
 	// 加速度
-	static inline const float kAcceleration = 0.01f;
+	static inline float kAcceleration = 0.01f;
 
 	// 摩擦
-	static inline const float kAttenuation = 0.05f;
+	static inline float kAttenuation = 0.05f;
 
 	// 着地時の速度減衰率
-	static inline const float kAttenuationLanding = 0.3f;
+	static inline float kAttenuationLanding = 0.3f;
 
 	// 接壁時の速度減衰率
-	static inline const float kAttenuationWall = 0.5f;
+	static inline float kAttenuationWall = 0.5f;
 
 	// 最高ダッシュ速度
-	static inline const float kLimitRunSpeed = 0.5f;
+	static inline float kLimitRunSpeed = 0.5f;
 
 	// 旋回時間<秒>
-	static inline const float kTimeTurn = 0.3f;
+	static inline float kTimeTurn = 0.3f;
 
 	// 重力加速度(下方向)
-	static inline const float kGravityAcceleration = 0.025f;
+	static inline float kGravityAcceleration = 0.025f;
 
 	// 最大落下速度(下方向)
-	static inline const float kLimitFallSpeed = 0.3f;
+	static inline float kLimitFallSpeed = 0.3f;
 
 	// ジャンプ初速(上方向)
-	static inline const float kJumpAcceleration = 0.5f;
+	static inline float kJumpAcceleration = 0.5f;
 
 	// キャラクターの当たり判定サイズ
-	static inline const float kWidth = 0.8f;
-	static inline const float kHeight = 0.8f;
+	static inline float kWidth = 0.8f;
+	static inline float kHeight = 0.8f;
 
 	// キャラクターの見た目サイズ
-	static inline const KujakuEngine::Vector3 kInitSize = {1.0f, 1.0f, 1.0f};
+	static inline KujakuEngine::Vector3 kInitSize = {1.0f, 1.0f, 1.0f};
 
-	static inline const float kBlank = 0.01f;
+	static inline float kBlank = 0.01f;
 
 	// 接地判定時のごくわずかな空白
-	static inline const float kGroundCheckEpsilon = 0.02f;
+	static inline float kGroundCheckEpsilon = 0.02f;
 
 	// --- アタック ---
 
 	// ブリンクの溜め時間
-	static inline const float kAttackBlinkPrepDuration = 0.1f;
+	static inline float kAttackBlinkPrepDuration = 0.1f;
 
 	// ブリンクの持続時間
-	static inline const float kAttackBlinkDashDuration = 0.1f;
+	static inline float kAttackBlinkDashDuration = 0.1f;
 
 	// ブリンクの余韻時間
-	static inline const float kAttackBlinkAfterDuration = 0.1f;
+	static inline float kAttackBlinkAfterDuration = 0.1f;
 
 	// ブリンクの移動速度
-	static inline const float kAttackBlinkSpeed = 0.75f;
+	static inline float kAttackBlinkSpeed = 0.75f;
 
 	// ブリンクのクールタイム
-	static inline const float kAttackBlinkCoolTime = 0.2f;
+	static inline float kAttackBlinkCoolTime = 0.2f;
 
 	// ブリンク溜めサイズ
-	static inline const KujakuEngine::Vector3 kAttackBlinkDashSize = {1.0f, 1.6f, 0.3f};
-	static inline const KujakuEngine::Vector3 kAttackBlinkAfterSize = {1.0f, 0.7f, 1.3f};
+	static inline KujakuEngine::Vector3 kAttackBlinkDashSize = {1.0f, 1.6f, 0.3f};
+	static inline KujakuEngine::Vector3 kAttackBlinkAfterSize = {1.0f, 0.7f, 1.3f};
 
 	// 連続アタック回数
-	static inline const int32_t kAttackMaxCount = 1;
+	static inline int32_t kAttackMaxCount = 1;
 
 	// --- ノックバック ---
 
 	// ノックバックの移動速度
-	static inline const float kKnockbackSpeed = kAttackBlinkSpeed * 0.5f;
-	
+	static inline float kKnockbackSpeed = kAttackBlinkSpeed * 0.5f;
+
 	// ノックバックの持続時間
-	static inline const float kKnockbackDuration = 0.08f;
+	static inline float kKnockbackDuration = 0.08f;
+
 private:
 	// 変数
 	// ------------------------------------------
@@ -356,7 +400,7 @@ private:
 	std::unique_ptr<IPlayerBehavior> behavior_;
 
 	// 次のビヘイビアを予約
-	IPlayerBehavior* behaviorRequest_ = nullptr; 
+	IPlayerBehavior* behaviorRequest_ = nullptr;
 
 	// --- アタック ---
 

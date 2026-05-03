@@ -124,9 +124,27 @@ void GameScene::Init(StageManager* stageDataManager) {
 	modelGuardEffect_ = Model::CreateFromOBJ("ring");
 	GuardEffect::SetModel(modelGuardEffect_);
 	GuardEffect::SetCamera(&camera_);
+
+	// 調整項目の登録
+	Player::RegisterGlobalVariables();
+	Enemy::RegisterGlobalVariables();
+	ShieldEnemy::RegisterGlobalVariables();
+	CameraController::RegisterGlobalVariables();
+	DeathParticles::RegisterGlobalVariables();
+	GuardEffect::RegisterGlobalVariables();
+	HitEffect::RegisterGlobalVariables();
 }
 
 void GameScene::Update() {
+
+	// 各クラスの調整項目を適用
+	Player::ApplyGlobalVariables();
+	Enemy::ApplyGlobalVariables();
+	ShieldEnemy::ApplyGlobalVariables();
+	CameraController::ApplyGlobalVariables();
+	DeathParticles::ApplyGlobalVariables();
+	GuardEffect::ApplyGlobalVariables();
+	HitEffect::ApplyGlobalVariables();
 
 	// フェーズ切り替え処理
 	ChangePhase();

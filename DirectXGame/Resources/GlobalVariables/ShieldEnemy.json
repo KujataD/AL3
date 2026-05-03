@@ -1,0 +1,15 @@
+{
+    "ShieldEnemy": {
+        "DeadAnimAdditionalRotationY": -3.1415927410125732,
+        "DeadAnimDuration": 0.5,
+        "DeadAnimRotationX": -0.7853981852531433,
+        "EndWalkAnimationRotationDegree": 90.0,
+        "GuardAnimDuration": 0.5,
+        "GuardAnimUpperRotationZ": -1.5707963705062866,
+        "Height": 0.800000011920929,
+        "StartWalkAnimationRotationDegree": -45.0,
+        "WalkAnimationDuration": 1.0,
+        "WalkSpeed": 0.05000000074505806,
+        "Width": 0.800000011920929
+    }
+}

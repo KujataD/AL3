@@ -1,4 +1,5 @@
 #include "DeathParticles.h"
+#include "GlobalVariables.h"
 #include <algorithm>
 
 using namespace KujakuEngine;
@@ -70,4 +71,18 @@ void DeathParticles::Draw() {
 	for (WorldTransform& worldTransform : worldTransforms_) {
 		model_->Draw(worldTransform, *camera_);
 	}
+}
+
+void DeathParticles::RegisterGlobalVariables() {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kDurationKey, kDuration);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kSpeedKey, kSpeed);
+}
+
+void DeathParticles::ApplyGlobalVariables() {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+
+	kDuration = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kDurationKey);
+	kSpeed = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kSpeedKey);
 }

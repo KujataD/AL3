@@ -101,6 +101,36 @@ void GlobalVariables::SetValue(const std::string& groupName, const std::string& 
 	group[key] = newItem; // 指定したkeyの項目がまだ無ければ新規に登録する。あれば上書きされる
 }
 
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, int32_t value) {
+	// グループの参照を取得
+	Group& group = datas_[groupName];
+
+	// 項目が未登録なら
+	if (group.find(key) == group.end()) {
+		SetValue(groupName, key, value);
+	}
+}
+
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, float value) {
+	// グループの参照を取得
+	Group& group = datas_[groupName];
+
+	// 項目が未登録なら
+	if (group.find(key) == group.end()) {
+		SetValue(groupName, key, value);
+	}
+}
+
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector3& value) {
+	// グループの参照を取得
+	Group& group = datas_[groupName];
+
+	// 項目が未登録なら
+	if (group.find(key) == group.end()) {
+		SetValue(groupName, key, value);
+	}
+}
+
 void GlobalVariables::SaveFile(const std::string& groupName) {
 	// グループを検索
 	std::map<std::string, Group>::iterator itGroup = datas_.find(groupName);

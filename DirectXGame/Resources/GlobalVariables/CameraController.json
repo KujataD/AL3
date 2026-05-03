@@ -1,0 +1,11 @@
+{
+    "CameraController": {
+        "InterpolationRate": 0.019999999552965164,
+        "MarginAreaBottom": -5.0,
+        "MarginAreaLeft": -10.0,
+        "MarginAreaRight": 10.0,
+        "MarginAreaTop": 5.0,
+        "ScrollSpeed": 0.05000000074505806,
+        "VelocityBias": 20.0
+    }
+}

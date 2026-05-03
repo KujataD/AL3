@@ -1,12 +1,12 @@
 #pragma once
+#include "externals/nlohmann/json.hpp"
 #include <KujakuEngine.h>
+#include <filesystem>
+#include <fstream>
 #include <map>
+#include <sstream>
 #include <string>
 #include <variant>
-#include <sstream>
-#include <fstream>
-#include <filesystem>
-#include "externals/nlohmann/json.hpp"
 
 /// <summary>
 /// グローバル変数
@@ -45,6 +45,28 @@ public:
 
 	// 値のセット(Vector3)
 	void SetValue(const std::string& groupName, const std::string& key, const KujakuEngine::Vector3& value);
+
+	// 項目の追加(int)
+	void AddItem(const std::string& groupName, const std::string& key, int32_t value);
+
+	// 項目の追加(float)
+	void AddItem(const std::string& groupName, const std::string& key, float value);
+
+	// 項目の追加(Vector3)
+	void AddItem(const std::string& groupName, const std::string& key, const KujakuEngine::Vector3& value);
+
+	template<typename T>
+	T GetValue(const std::string& groupName, const std::string& key) const{
+		assert(datas_.find(groupName) != datas_.end());
+		// グループの参照を取得
+		const Group& group = datas_.at(groupName);
+
+		// 指定グループに指定のキーが存在する
+		assert(group.find(key) != group.end());
+
+		// 指定グループから指定のキーの値を登録
+		return std::get<T>(group.at(key));
+	}
 
 	/// <summary>
 	/// ファイルに書き出し

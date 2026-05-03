@@ -1,4 +1,5 @@
 #include "HitEffect.h"
+#include "GlobalVariables.h"
 #include <algorithm>
 
 // 生定期メンバの実体
@@ -83,4 +84,28 @@ HitEffect* HitEffect::Create(const KujakuEngine::Vector3 spawnPos, const KujakuE
 	instance->Init(spawnPos, color);
 	// 初期化したインスタンスを返す
 	return instance;
+}
+
+void HitEffect::RegisterGlobalVariables() {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kEllipseWidthKey, kEllipseWidth);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kEllipseHeightKey, kEllipseHeight);
+
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kSizeStartKey, kSizeStart);
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kSizeEndKey, kSizeEnd);
+
+	globalVariables->AddItem(ParamKeys::kGroup, ParamKeys::kAnimDurationKey, kAnimDuration);
+}
+
+void HitEffect::ApplyGlobalVariables() {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+
+	kEllipseWidth = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kEllipseWidthKey);
+	kEllipseHeight = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kEllipseHeightKey);
+
+	kSizeStart = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kSizeStartKey);
+	kSizeEnd = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kSizeEndKey);
+
+	kAnimDuration = globalVariables->GetValue<float>(ParamKeys::kGroup, ParamKeys::kAnimDurationKey);
 }
