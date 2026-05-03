@@ -3,9 +3,6 @@
 using namespace KujakuEngine;
 
 GameScene::~GameScene() {
-	delete player_;
-	delete modelPlayer_;
-	delete modelBullet_;
 }
 
 void GameScene::Initialize() {
@@ -13,15 +10,21 @@ void GameScene::Initialize() {
 	// カメラ
 	// ------------------------------------------
 	camera_.Initialize();
-	camera_.translation_ = {0.0f, 0.0f, -100.0f};
+	camera_.translation_ = {0.0f, 0.0f, -50.0f};
 	debugCamera_.Initialize(camera_.rotation_, camera_.translation_);
 
 	// プレイヤー
 	// ------------------------------------------
-	modelPlayer_ = Model::CreateFromOBJ("airship", ShaderModel::kHalfLambert);
-	player_ = new Player;
-	modelBullet_ = Model::CreateCube("resources/white1x1.png");
-	player_->Initialize(modelPlayer_, modelBullet_, &camera_);
+	modelPlayer_ = std::unique_ptr<Model>(Model::CreateFromOBJ("airship", ShaderModel::kHalfLambert));
+	modelBullet_ = std::unique_ptr<Model>(Model::CreateCube("resources/white1x1.png"));
+	player_ = std::make_unique<Player>();
+	player_->Initialize(modelPlayer_.get(), modelBullet_.get(), &camera_);
+
+	// エネミー
+	// ------------------------------------------
+	modelEnemy_ = std::unique_ptr<Model>(Model::CreateFromOBJ("enemy_airship", ShaderModel::kHalfLambert));
+	enemy_ = std::make_unique<Enemy>();
+	enemy_->Initialize(modelEnemy_.get(), &camera_, {0.0f, 3.0f, 500.0f});
 
 	RegisterAllVariables();
 }
@@ -31,11 +34,13 @@ void GameScene::Update() {
 
 	UpdateCamera();
 	player_->Update();
+	enemy_->Update();
 }
 
 void GameScene::Draw() {
 	Model::PreDraw();
 	player_->Draw();
+	enemy_->Draw();
 }
 
 void GameScene::UpdateCamera() {
@@ -62,9 +67,11 @@ void GameScene::UpdateCamera() {
 void GameScene::ApplyAllVariables() {
 	Player::ApplyGlobalVariables();
 	PlayerBullet::ApplyGlobalVariables();
+	Enemy::ApplyGlobalVariables();
 }
 
 void GameScene::RegisterAllVariables() {
 	Player::RegisterGlobalVariables();
 	PlayerBullet::RegisterGlobalVariables();
+	Enemy::RegisterGlobalVariables();
 }

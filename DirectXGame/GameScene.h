@@ -1,6 +1,7 @@
 #pragma once
-#include <KujakuEngine.h>
+#include "Enemy.h"
 #include "Player.h"
+#include <KujakuEngine.h>
 
 class GameScene {
 public:
@@ -8,7 +9,7 @@ public:
 	~GameScene();
 
 	void Initialize();
-	
+
 	void Update();
 
 	void Draw();
@@ -18,7 +19,6 @@ private:
 
 	void ApplyAllVariables();
 	void RegisterAllVariables();
-	
 
 private:
 	// カメラ
@@ -27,11 +27,16 @@ private:
 	bool isActiveDebugCamera_ = false;
 
 	// --- プレイヤー ---
-	Player* player_ = nullptr;
+	std::unique_ptr<Player> player_;
 
 	// モデル
-	KujakuEngine::Model* modelPlayer_ = nullptr;
-	KujakuEngine::Model* modelBullet_ = nullptr;
+	std::unique_ptr<KujakuEngine::Model> modelPlayer_;
+	std::unique_ptr<KujakuEngine::Model> modelBullet_;
 
-	
+	// --- エネミー ---
+	std::unique_ptr<Enemy> enemy_;
+
+	std::unique_ptr<KujakuEngine::Model> modelEnemy_;
+
+
 };

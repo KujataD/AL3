@@ -61,6 +61,12 @@
     <Filter Include="ソース ファイル\GameObject\Player\Weapon">
       <UniqueIdentifier>{d3137f61-1255-46c6-b863-4596c96b96fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameObject\Enemy">
+      <UniqueIdentifier>{b72ae5be-88d7-47ae-a60d-71405a04f519}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObject\Enemy\Weapon">
+      <UniqueIdentifier>{c1af630a-5db8-4534-9523-1253a76c2b6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -185,6 +191,9 @@
     </ClCompile>
     <ClCompile Include="PlayerBullet.cpp">
       <Filter>ソース ファイル\GameObject\Player\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -316,6 +325,9 @@
     </ClInclude>
     <ClInclude Include="PlayerBullet.h">
       <Filter>ソース ファイル\GameObject\Player\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>ソース ファイル\GameObject\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
