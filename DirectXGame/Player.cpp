@@ -4,6 +4,14 @@
 
 using namespace KujakuEngine;
 
+Player::~Player() {
+	for (PlayerBullet* bullet : bullets_) {
+		delete bullet;
+		bullet = nullptr;
+	}
+	bullets_.clear();
+}
+
 void Player::Initialize(KujakuEngine::Model* model, KujakuEngine::Model* modelBullet, KujakuEngine::Camera* camera) {
 	assert(model);
 	assert(camera);
@@ -33,8 +41,8 @@ void Player::Update() {
 	Attack();
 
 	// 弾
-	if (bullet_) {
-		bullet_->Update();
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Update();
 	}
 
 	// クランプ処理
@@ -46,8 +54,10 @@ void Player::Update() {
 
 void Player::Draw() {
 	model_->Draw(worldTransform_, *camera_);
-	if (bullet_) {
-		bullet_->Draw();
+	
+	// 弾描画
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Draw();
 	}
 }
 
@@ -111,6 +121,6 @@ void Player::Attack() {
 		newBullet->Initialize(modelBullet_, camera_, worldTransform_.translation_);
 
 		// 弾を登録する
-		bullet_ = newBullet;
+		bullets_.push_back(newBullet);
 	}
 }

@@ -1,6 +1,7 @@
 #pragma once
-#include <KujakuEngine.h>
 #include "PlayerBullet.h"
+#include <KujakuEngine.h>
+#include <list>
 
 class Player {
 public:
@@ -17,7 +18,9 @@ public:
 		static inline float moveLimitBlank_ = 1.0f;
 		static inline float rotateSpeed_ = 0.01f;
 	};
+
 public:
+	~Player();
 
 	void Initialize(KujakuEngine::Model* model, KujakuEngine::Model* modelBullet, KujakuEngine::Camera* camera);
 	void Update();
@@ -31,6 +34,7 @@ public:
 	static void RegisterGlobalVariables();
 
 	static void ApplyGlobalVariables();
+
 private:
 	/// <summary>
 	/// 移動
@@ -55,7 +59,6 @@ private:
 	void Attack();
 
 private:
-
 	// 外部受け取り
 	// ------------------------------------------
 	KujakuEngine::Camera* camera_ = nullptr;
@@ -67,7 +70,6 @@ private:
 
 	// 弾
 	// ------------------------------------------
-	PlayerBullet* bullet_ = nullptr;
+	std::list<PlayerBullet*> bullets_;
 	KujakuEngine::Model* modelBullet_ = nullptr;
-
 };

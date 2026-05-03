@@ -5,6 +5,7 @@ using namespace KujakuEngine;
 GameScene::~GameScene() {
 	delete player_;
 	delete modelPlayer_;
+	delete modelBullet_;
 }
 
 void GameScene::Initialize() {
