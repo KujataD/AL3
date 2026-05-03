@@ -58,6 +58,9 @@
     <Filter Include="ソース ファイル\Scenes">
       <UniqueIdentifier>{1c8f8e1b-377e-4519-beaf-2b09c68bc669}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameObject\Player\Weapon">
+      <UniqueIdentifier>{d3137f61-1255-46c6-b863-4596c96b96fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -179,6 +182,9 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル\GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>ソース ファイル\GameObject\Player\Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -307,6 +313,9 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>ソース ファイル\GameObject\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>ソース ファイル\GameObject\Player\Weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

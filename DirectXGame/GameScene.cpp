@@ -19,7 +19,8 @@ void GameScene::Initialize() {
 	// ------------------------------------------
 	modelPlayer_ = Model::CreateFromOBJ("airship", ShaderModel::kHalfLambert);
 	player_ = new Player;
-	player_->Initialize(modelPlayer_, &camera_);
+	modelBullet_ = Model::CreateCube("resources/white1x1.png");
+	player_->Initialize(modelPlayer_, modelBullet_, &camera_);
 
 	RegisterAllVariables();
 }

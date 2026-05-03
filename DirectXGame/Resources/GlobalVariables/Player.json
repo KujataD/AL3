@@ -1,6 +1,7 @@
 {
     "Player": {
         "MoveLimitBlank": 3.0,
+        "RotateSpeed": 0.019999999552965164,
         "Speed": 0.4000000059604645
     }
 }

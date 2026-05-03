@@ -31,6 +31,7 @@ private:
 
 	// モデル
 	KujakuEngine::Model* modelPlayer_ = nullptr;
+	KujakuEngine::Model* modelBullet_ = nullptr;
 
 	
 };

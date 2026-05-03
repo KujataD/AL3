@@ -1,22 +1,25 @@
 #pragma once
 #include <KujakuEngine.h>
+#include "PlayerBullet.h"
 
 class Player {
 public:
-	struct ParamKeys {
+	struct ParamKey {
 		static inline const std::string kGroupKey = "Player";
 
-		static inline const std::string kSpeedKey = "Speed";
+		static inline const std::string kSpeed = "Speed";
 		static inline const std::string kMoveLimitBlank = "MoveLimitBlank";
+		static inline const std::string kRotateSpeed = "RotateSpeed";
 	};
 
 	struct Param {
 		static inline float speed_ = 0.1f;
 		static inline float moveLimitBlank_ = 1.0f;
+		static inline float rotateSpeed_ = 0.01f;
 	};
 public:
 
-	void Initialize(KujakuEngine::Model* model, KujakuEngine::Camera* camera);
+	void Initialize(KujakuEngine::Model* model, KujakuEngine::Model* modelBullet, KujakuEngine::Camera* camera);
 	void Update();
 	void Draw();
 
@@ -26,7 +29,30 @@ public:
 	}
 
 	static void RegisterGlobalVariables();
+
 	static void ApplyGlobalVariables();
+private:
+	/// <summary>
+	/// 移動
+	/// </summary>
+	void Move();
+
+	/// <summary>
+	/// 回転
+	/// </summary>
+	void Rotate();
+
+	/// <summary>
+	/// IMGUIの管理
+	/// </summary>
+	void ManageImGui();
+
+	/// <summary>
+	/// 画面内に納めます
+	/// </summary>
+	void ClampInWindow();
+
+	void Attack();
 
 private:
 
@@ -38,4 +64,10 @@ private:
 	// 内部プロパティ
 	// ------------------------------------------
 	KujakuEngine::WorldTransform worldTransform_;
+
+	// 弾
+	// ------------------------------------------
+	PlayerBullet* bullet_ = nullptr;
+	KujakuEngine::Model* modelBullet_ = nullptr;
+
 };
