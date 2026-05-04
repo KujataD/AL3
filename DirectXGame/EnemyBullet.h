@@ -17,7 +17,7 @@ public:
 	struct Param {
 		static inline float lifeTime_ = 5.0f;
 		static inline float speed_ = 1.0f;
-		static inline float handlingPower = 0.05f;
+		static inline float handlingPower = 0.2f;
 	};
 
 public:

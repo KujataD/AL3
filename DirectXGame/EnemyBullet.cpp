@@ -20,6 +20,10 @@ void EnemyBullet::Initialize(KujakuEngine::Model* model, KujakuEngine::Camera* c
 
 	// デスタイマー
 	deathTimer_ = Param::lifeTime_;
+	
+	// 衝突設定
+	SetCollisionAttribute(kCollisionAttributeEnemy);
+	SetCollisionMask(~kCollisionAttributeEnemy);
 
 	// 向きを合わせる
 	ApplyRotationOfVelocity();

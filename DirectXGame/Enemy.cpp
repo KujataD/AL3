@@ -16,6 +16,10 @@ void Enemy::Initialize(KujakuEngine::Model* model, KujakuEngine::Model* modelBul
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 	worldTransform_.UpdateMatrix(*camera_);
+	
+	// 衝突設定
+	SetCollisionAttribute(kCollisionAttributeEnemy);
+	SetCollisionMask(~kCollisionAttributeEnemy);
 
 	ChangeState(std::make_unique<EnemyStateApproach>(this));
 }
@@ -78,7 +82,7 @@ void Enemy::Fire() {
 	// 弾を生成し、初期化
 	std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
 	newBullet->SetPlayer(player_);
-	newBullet->Initialize(modelBullet_, camera_, worldTransform_.translation_, direction);
+	newBullet->Initialize(modelBullet_, camera_, worldTransform_.translation_, direction, false);
 
 	// 弾を登録する
 	bullets_.push_back(std::move(newBullet));

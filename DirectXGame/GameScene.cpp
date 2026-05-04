@@ -80,39 +80,48 @@ void GameScene::RegisterAllVariables() {
 }
 
 void GameScene::CheckAllCollisions() {
-	Sphere sphereA, sphereB;
-	sphereA.radius = 1.0f;
-	sphereB.radius = 1.0f;
-
 	// 自弾リスト取得
 	const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player_->GetBullets();
 	// 敵弾リスト取得
 	const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets = enemy_->GetBullets();
 
-#pragma region 自キャラと敵弾の当たり判定
-	sphereA.center = player_->GetWorldPosition();
+	// コライダー
+	std::list<Collider*> colliders_;
+
+	// コライダーをリストに登録
+	colliders_.push_back(player_.get());
+	colliders_.push_back(enemy_.get());
+
 	for (auto& enemyBullet : enemyBullets) {
-		CheckCollisionPair(player_.get(), enemyBullet.get());
+		colliders_.push_back(enemyBullet.get());
 	}
-#pragma endregion
 
-#pragma region 自弾と敵キャラの当たり判定
-	sphereA.center = enemy_->GetWorldPosition();
 	for (auto& playerBullet : playerBullets) {
-		CheckCollisionPair(playerBullet.get(), enemy_.get());
+		colliders_.push_back(playerBullet.get());
 	}
-#pragma endregion
 
-#pragma region 自弾と敵弾の当たり判定
-	for (auto& playerBullet : playerBullets) {
-		for (auto& enemyBullet : enemyBullets) {
-			CheckCollisionPair(playerBullet.get(), enemyBullet.get());
+	std::list<Collider*>::iterator itrA = colliders_.begin();
+	for (; itrA != colliders_.end(); ++itrA) {
+		Collider* colA = *itrA;
+		// イテレータBはイテレータAの次の要素から回す(重複判定を回避)
+		std ::list<Collider*>::iterator itrB = itrA;
+		itrB++;
+
+		for (; itrB != colliders_.end(); ++itrB) {
+			Collider* colB = *itrB;
+
+			CheckCollisionPair(colA, colB);
 		}
 	}
-#pragma endregion
 }
 
 void GameScene::CheckCollisionPair(Collider* colliderA, Collider* colliderB) {
+	if (!(colliderA->GetCollisionAttribute() & colliderB->GetCollisionMask()) ||
+		!(colliderB->GetCollisionAttribute() & colliderA->GetCollisionMask()) 
+		) {
+		return;
+	}
+
 	if (IsCollision(colliderA->GetSphere(), colliderB->GetSphere())) {
 		colliderA->OnCollision();
 		colliderB->OnCollision();

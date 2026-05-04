@@ -15,6 +15,10 @@ void PlayerBullet::Initialize(KujakuEngine::Model* model, KujakuEngine::Camera* 
 	model_->SetColor({Param::colorRGB_.x, Param::colorRGB_.y, Param::colorRGB_.z, 1.0f});
 	velocity_ = velocity;
 	deathTimer_ = Param::lifeTime_;
+
+	// 衝突設定
+	SetCollisionAttribute(kCollisionAttributePlayer);
+	SetCollisionMask(~kCollisionAttributePlayer);
 }
 
 void PlayerBullet::Update() {

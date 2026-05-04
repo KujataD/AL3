@@ -19,6 +19,10 @@ void Player::Initialize(KujakuEngine::Model* model, KujakuEngine::Model* modelBu
 	worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
 	worldTransform_.rotation_.y = std::numbers::pi_v<float>;
 	worldTransform_.UpdateMatrix(*camera_);
+
+	// 衝突設定
+	SetCollisionAttribute(kCollisionAttributePlayer);
+	SetCollisionMask(~kCollisionAttributePlayer);
 }
 
 void Player::Update() {
