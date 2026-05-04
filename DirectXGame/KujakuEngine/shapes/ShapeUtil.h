@@ -98,6 +98,8 @@ bool IsCollision(const OBB& obb, const Ray& ray);
 
 bool IsCollision(const OBB& obb1, const OBB& obb2);
 
+bool IsCollision(const Sphere& a, const Sphere& b);
+
 /// <summary>
 /// 軸が重なっているかどうか
 /// </summary>

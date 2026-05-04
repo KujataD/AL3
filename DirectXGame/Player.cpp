@@ -71,6 +71,8 @@ void Player::ApplyGlobalVariables() {
 	Param::bulletSpeed_ = gv->GetValue<float>(ParamKey::kGroupKey, ParamKey::kBulletSpeed);
 }
 
+void Player::OnCollision() {}
+
 void Player::Move() { // 移動ベクトル
 	Vector3 move = {0, 0, 0};
 

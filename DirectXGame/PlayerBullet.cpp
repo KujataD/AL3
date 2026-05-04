@@ -40,3 +40,5 @@ void PlayerBullet::ApplyGlobalVariables() {
 	Param::colorRGB_ = gv->GetValue<Vector3>(ParamKey::kGroup, ParamKey::kColorRGB);
 	Param::lifeTime_ = gv->GetValue<float>(ParamKey::kGroup, ParamKey::kLifeTime);
 }
+
+void PlayerBullet::OnCollision() { isDead_ = true; }

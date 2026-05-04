@@ -41,8 +41,13 @@ public:
 	static void RegisterGlobalVariables();
 	static void ApplyGlobalVariables();
 
+	void OnCollision();
+	
 	// -- set --
 	bool IsDead() const { return isDead_; }
+	
+	// -- get --
+	const KujakuEngine::Vector3& GetWorldPos() const { return worldTransform_.GetWorldPosition(); }
 
 private:
 	KujakuEngine::Model* model_;

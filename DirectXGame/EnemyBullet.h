@@ -39,14 +39,18 @@ public:
 	/// </summary>
 	void Draw();
 
-	static void RegisterGlobalVariables();
-	static void ApplyGlobalVariables();
-
 	// -- get --
 	bool IsDead() const { return isDead_; }
+	KujakuEngine::Vector3 GetWorldPos() { return worldTransform_.GetWorldPosition(); }
 
 	// -- set --
 	void SetPlayer(Player* player) { player_ = player; }
+
+	// --- 外部API ---
+	static void RegisterGlobalVariables();
+	static void ApplyGlobalVariables();
+
+	void OnCollision();
 
 private:
 	/// <summary>

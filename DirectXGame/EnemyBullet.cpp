@@ -50,6 +50,8 @@ void EnemyBullet::RegisterGlobalVariables() {}
 
 void EnemyBullet::ApplyGlobalVariables() {}
 
+void EnemyBullet::OnCollision() { isDead_ = true; }
+
 void EnemyBullet::ApplyRotationOfVelocity() {
 	// Y軸周り角度(θy) ...atan2(高さ, 底辺)
 	worldTransform_.rotation_.y = std::atan2(velocity_.x, velocity_.z);

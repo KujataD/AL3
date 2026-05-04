@@ -37,12 +37,15 @@ public:
 
 	// --- get ---
 	KujakuEngine::Vector3 GetWorldPosition() const { return worldTransform_.GetWorldPosition(); }
-	
-	// --- 外部API ---
+	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
 
-	static void RegisterGlobalVariables();
+	    // --- 外部API ---
+
+	    static void RegisterGlobalVariables();
 
 	static void ApplyGlobalVariables();
+
+	void OnCollision();
 
 private:
 	/// <summary>

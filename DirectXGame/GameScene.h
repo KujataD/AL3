@@ -18,7 +18,10 @@ private:
 	void UpdateCamera();
 
 	void ApplyAllVariables();
+
 	void RegisterAllVariables();
+
+	void CheckAllCollisions();
 
 private:
 	// カメラ

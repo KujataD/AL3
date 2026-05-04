@@ -52,16 +52,36 @@ public:
 	bool IsDead() const { return isDead_; }
 	const KujakuEngine::Vector3& GetPosition() const { return worldTransform_.translation_; }
 	KujakuEngine::Vector3 GetWorldPosition() const { return worldTransform_.GetWorldPosition(); }
-	
+	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() const { return bullets_; }
+
 	// --- 外部API ---
+	
+	void OnCollision();
+
+	/// <summary>
+	/// 近接ステート
+	/// </summary>
 	void Approach();
 
+	/// <summary>
+	/// 近接初期化
+	/// </summary>
 	void InitApproach();
 
+	/// <summary>
+	/// 離れるステート
+	/// </summary>
 	void Leave();
 
+	/// <summary>
+	/// 発射
+	/// </summary>
 	void Fire();
 
+	/// <summary>
+	/// ステートの変更
+	/// </summary>
+	/// <param name="state"></param>
 	void ChangeState(std::unique_ptr<BaseEnemyState> state);
 
 	/// <summary>
@@ -69,6 +89,9 @@ public:
 	/// </summary>
 	void FireAndTimerReset();
 
+	/// <summary>
+	/// 予約している関数を削除
+	/// </summary>
 	void ClearFireTimer();
 
 private:

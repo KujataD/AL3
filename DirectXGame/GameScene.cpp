@@ -1,6 +1,7 @@
 #include "GameScene.h"
 
 using namespace KujakuEngine;
+using namespace ShapeUtil;
 
 GameScene::~GameScene() {}
 
@@ -32,6 +33,7 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 	ApplyAllVariables();
+	CheckAllCollisions();
 
 	UpdateCamera();
 	player_->Update();
@@ -75,4 +77,52 @@ void GameScene::RegisterAllVariables() {
 	Player::RegisterGlobalVariables();
 	PlayerBullet::RegisterGlobalVariables();
 	Enemy::RegisterGlobalVariables();
+}
+
+void GameScene::CheckAllCollisions() {
+	Sphere sphereA, sphereB;
+	sphereA.radius = 1.0f;
+	sphereB.radius = 1.0f;
+
+	// 自弾リスト取得
+	const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player_->GetBullets();
+	// 敵弾リスト取得
+	const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets = enemy_->GetBullets();
+
+#pragma region 自キャラと敵弾の当たり判定
+	sphereA.center = player_->GetWorldPosition();
+	for (auto& enemyBullet : enemyBullets) {
+		sphereB.center = enemyBullet->GetWorldPos();
+		if (IsCollision(sphereA, sphereB)) {
+			player_->OnCollision();
+			enemyBullet->OnCollision();
+		}
+	}
+#pragma endregion
+
+#pragma region 自弾と敵キャラの当たり判定
+	sphereA.center = enemy_->GetWorldPosition();
+	for (auto& playerBullet : playerBullets) {
+		sphereB.center = playerBullet->GetWorldPos();
+		if (IsCollision(sphereA, sphereB)) {
+			playerBullet->OnCollision();
+			enemy_->OnCollision();
+		}
+	}
+#pragma endregion
+
+#pragma region 自弾と敵弾の当たり判定
+
+	for (auto& playerBullet : playerBullets) {
+		for (auto& enemyBullet : enemyBullets) {
+			sphereA.center = playerBullet->GetWorldPos();
+			sphereB.center = enemyBullet->GetWorldPos();
+			if (IsCollision(sphereA, sphereB)) {
+				playerBullet->OnCollision();
+				enemyBullet->OnCollision();
+			}
+		}
+	}
+
+#pragma endregion
 }

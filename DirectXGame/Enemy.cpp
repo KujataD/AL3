@@ -59,6 +59,8 @@ void Enemy::ApplyGlobalVariables() {
 	Param::bulletFireDuration_ = gv->GetValue<float>(ParamKey::kGroup, ParamKey::kBulletFireDuration);
 }
 
+void Enemy::OnCollision() {}
+
 void Enemy::Approach() { worldTransform_.translation_ += Param::approachVelocity_; }
 
 void Enemy::InitApproach() { FireAndTimerReset(); }

@@ -239,8 +239,7 @@ bool IsOverlappingOnAxis(const OBB& obb1, const OBB& obb2, const Vector3& axis) 
 	// 全てワールド座標からの Dot で統一する
 	auto GetProjection = [&](const OBB& obb) {
 		float center = Dot(obb.center, L);
-		float extent =
-		    std::abs(Dot(obb.orientations[0], L)) * obb.size.x + std::abs(Dot(obb.orientations[1], L)) * obb.size.y + std::abs(Dot(obb.orientations[2], L)) * obb.size.z;
+		float extent = std::abs(Dot(obb.orientations[0], L)) * obb.size.x + std::abs(Dot(obb.orientations[1], L)) * obb.size.y + std::abs(Dot(obb.orientations[2], L)) * obb.size.z;
 		return std::make_pair(center - extent, center + extent);
 	};
 
@@ -323,6 +322,8 @@ bool IsCollision(const OBB& obb1, const OBB& obb2) {
 
 	return true;
 }
+
+bool IsCollision(const Sphere& a, const Sphere& b) { return powf(b.center.x - a.center.x, 2) + powf(b.center.y - a.center.y, 2) + powf(b.center.z - a.center.z, 2) <= powf(b.radius + a.radius, 2); }
 
 Vector3 Reflect(const Vector3& input, const Vector3& normal) { return input - normal * (2.0f * Dot(input, normal)); }
 
