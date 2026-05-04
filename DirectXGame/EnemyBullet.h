@@ -6,7 +6,7 @@ class Player;
 /// <summary>
 /// 敵の弾
 /// </summary>
-class EnemyBullet {
+class EnemyBullet : public KujakuEngine::Collider {
 public:
 	struct ParamKey {
 		static inline const std::string kGroup = "Enemy Bullet";
@@ -39,9 +39,9 @@ public:
 	/// </summary>
 	void Draw();
 
-	// -- get --
+	// --- get ---
 	bool IsDead() const { return isDead_; }
-	KujakuEngine::Vector3 GetWorldPos() { return worldTransform_.GetWorldPosition(); }
+	const KujakuEngine::Vector3& GetWorldPosition() const override { return worldTransform_.GetWorldPosition(); }
 
 	// -- set --
 	void SetPlayer(Player* player) { player_ = player; }
@@ -50,7 +50,7 @@ public:
 	static void RegisterGlobalVariables();
 	static void ApplyGlobalVariables();
 
-	void OnCollision();
+	void OnCollision() override;
 
 private:
 	/// <summary>

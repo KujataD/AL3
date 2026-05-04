@@ -216,6 +216,9 @@
     <ClCompile Include="TimedCall.cpp">
       <Filter>ソース ファイル\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="KujakuEngine\shapes\Collider.cpp">
+      <Filter>KujakuEngine\shapes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -364,6 +367,9 @@
     </ClInclude>
     <ClInclude Include="TimedCall.h">
       <Filter>ソース ファイル\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\shapes\Collider.h">
+      <Filter>KujakuEngine\shapes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

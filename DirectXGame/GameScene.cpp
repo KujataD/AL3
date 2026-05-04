@@ -92,37 +92,29 @@ void GameScene::CheckAllCollisions() {
 #pragma region 自キャラと敵弾の当たり判定
 	sphereA.center = player_->GetWorldPosition();
 	for (auto& enemyBullet : enemyBullets) {
-		sphereB.center = enemyBullet->GetWorldPos();
-		if (IsCollision(sphereA, sphereB)) {
-			player_->OnCollision();
-			enemyBullet->OnCollision();
-		}
+		CheckCollisionPair(player_.get(), enemyBullet.get());
 	}
 #pragma endregion
 
 #pragma region 自弾と敵キャラの当たり判定
 	sphereA.center = enemy_->GetWorldPosition();
 	for (auto& playerBullet : playerBullets) {
-		sphereB.center = playerBullet->GetWorldPos();
-		if (IsCollision(sphereA, sphereB)) {
-			playerBullet->OnCollision();
-			enemy_->OnCollision();
-		}
+		CheckCollisionPair(playerBullet.get(), enemy_.get());
 	}
 #pragma endregion
 
 #pragma region 自弾と敵弾の当たり判定
-
 	for (auto& playerBullet : playerBullets) {
 		for (auto& enemyBullet : enemyBullets) {
-			sphereA.center = playerBullet->GetWorldPos();
-			sphereB.center = enemyBullet->GetWorldPos();
-			if (IsCollision(sphereA, sphereB)) {
-				playerBullet->OnCollision();
-				enemyBullet->OnCollision();
-			}
+			CheckCollisionPair(playerBullet.get(), enemyBullet.get());
 		}
 	}
-
 #pragma endregion
+}
+
+void GameScene::CheckCollisionPair(Collider* colliderA, Collider* colliderB) {
+	if (IsCollision(colliderA->GetSphere(), colliderB->GetSphere())) {
+		colliderA->OnCollision();
+		colliderB->OnCollision();
+	}
 }

@@ -4,7 +4,7 @@
 /// <summary>
 /// 自キャラの弾
 /// </summary>
-class PlayerBullet {
+class PlayerBullet : public KujakuEngine::Collider {
 public:
 	struct ParamKey {
 		static inline const std::string kGroup = "PlayerBullet";
@@ -16,7 +16,6 @@ public:
 	struct Param {
 		static inline KujakuEngine::Vector3 colorRGB_ = {0.0f, 1.0f, 0.0f};
 		static inline float lifeTime_ = 5.0f;
-
 	};
 
 public:
@@ -41,13 +40,13 @@ public:
 	static void RegisterGlobalVariables();
 	static void ApplyGlobalVariables();
 
-	void OnCollision();
-	
+	void OnCollision() override;
+
 	// -- set --
 	bool IsDead() const { return isDead_; }
-	
+
 	// -- get --
-	const KujakuEngine::Vector3& GetWorldPos() const { return worldTransform_.GetWorldPosition(); }
+	const KujakuEngine::Vector3& GetWorldPosition() const override { return worldTransform_.GetWorldPosition(); }
 
 private:
 	KujakuEngine::Model* model_;

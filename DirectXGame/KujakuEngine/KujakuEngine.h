@@ -42,6 +42,7 @@
 #include "shapes/AABB.h"
 #include "shapes/Rect.h"
 #include "shapes/ShapeUtil.h"
+#include "shapes/Collider.h"
 
 #include "input/Input.h"
 

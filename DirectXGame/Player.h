@@ -3,7 +3,7 @@
 #include <KujakuEngine.h>
 #include <list>
 
-class Player {
+class Player : public KujakuEngine::Collider {
 public:
 	struct ParamKey {
 		static inline const std::string kGroupKey = "Player";
@@ -36,16 +36,13 @@ public:
 	}
 
 	// --- get ---
-	KujakuEngine::Vector3 GetWorldPosition() const { return worldTransform_.GetWorldPosition(); }
+	const KujakuEngine::Vector3& GetWorldPosition() const override { return worldTransform_.GetWorldPosition(); }
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
 
-	    // --- 外部API ---
-
-	    static void RegisterGlobalVariables();
-
+	// --- 外部API ---
+	static void RegisterGlobalVariables();
 	static void ApplyGlobalVariables();
-
-	void OnCollision();
+	void OnCollision() override;
 
 private:
 	/// <summary>

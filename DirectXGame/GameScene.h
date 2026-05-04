@@ -23,6 +23,8 @@ private:
 
 	void CheckAllCollisions();
 
+	void CheckCollisionPair(KujakuEngine::Collider* colliderA, KujakuEngine::Collider* colliderB);
+
 private:
 	// カメラ
 	KujakuEngine::Camera camera_;

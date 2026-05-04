@@ -6,7 +6,7 @@
 
 class Player;
 
-class Enemy {
+class Enemy : public KujakuEngine::Collider {
 public:
 	enum class Phase {
 		Approach, // 接近
@@ -51,12 +51,11 @@ public:
 	// - get -
 	bool IsDead() const { return isDead_; }
 	const KujakuEngine::Vector3& GetPosition() const { return worldTransform_.translation_; }
-	KujakuEngine::Vector3 GetWorldPosition() const { return worldTransform_.GetWorldPosition(); }
+	const KujakuEngine::Vector3& GetWorldPosition() const override { return worldTransform_.GetWorldPosition(); }
 	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() const { return bullets_; }
 
 	// --- 外部API ---
-	
-	void OnCollision();
+	void OnCollision() override;
 
 	/// <summary>
 	/// 近接ステート
