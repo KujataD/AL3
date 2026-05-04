@@ -14,12 +14,20 @@ void Enemy::Initialize(KujakuEngine::Model* model, KujakuEngine::Model* modelBul
 
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
+	worldTransform_.UpdateMatrix(*camera_);
 
 	ChangeState(std::make_unique<EnemyStateApproach>(this));
-	InitApproach();
 }
 
 void Enemy::Update() {
+
+	// 終了イベント削除
+	timedCalls_.remove_if([](const std::unique_ptr<TimedCall>& timedCall) { return timedCall->IsFinished(); });
+	
+	// 更新イテレータ
+	for(auto& timedCall : timedCalls_){
+		timedCall->Update();
+	}
 
 	// 各フェーズの関数を呼び出す
 	state_->Update();
@@ -52,18 +60,9 @@ void Enemy::ApplyGlobalVariables() {
 	Param::bulletFireDuration_ = gv->GetValue<float>(ParamKey::kGroup, ParamKey::kBulletFireDuration);
 }
 
-void Enemy::Approach() {
-	worldTransform_.translation_ += Param::approachVelocity_;
-	fireTimer -= kDT;
-	if (fireTimer <= 0.0f) {
-		// 弾発射
-		Fire();
-		// タイマー初期化
-		fireTimer = Param::bulletFireDuration_;
-	}
-}
+void Enemy::Approach() { worldTransform_.translation_ += Param::approachVelocity_; }
 
-void Enemy::InitApproach() { fireTimer = Param::bulletFireDuration_; }
+void Enemy::InitApproach() { FireAndTimerReset(); }
 
 void Enemy::Leave() { worldTransform_.translation_ += Param::leaveVelocity_; }
 
@@ -87,6 +86,20 @@ void Enemy::ChangeState(std::unique_ptr<BaseEnemyState> state) {
 	state_ = std::move(state);
 	state_->DebugLog();
 }
+
+void Enemy::FireAndTimerReset() {
+	// 弾を発射する
+	Fire();
+
+	// メンバ関数と呼び出し元をbindしてstd::functionに代入
+	std::function<void(void)> callback = std::bind(&Enemy::FireAndTimerReset, this);
+	// 時限発動イベントを生成
+	std::unique_ptr<TimedCall> timedCall = std::make_unique<TimedCall>(callback, Param::bulletFireDuration_);
+	// 時限発動イベントを時限発動イベントリストに追加
+	timedCalls_.push_back(std::move(timedCall));
+}
+
+void Enemy::ClearFireTimer() { timedCalls_.clear(); }
 
 void Enemy::UpdateBullets() {
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseEnemyState.h"
 #include "EnemyBullet.h"
+#include "TimedCall.h"
 #include <KujakuEngine.h>
 
 class Enemy {
@@ -59,6 +60,13 @@ public:
 
 	void ChangeState(std::unique_ptr<BaseEnemyState> state);
 
+	/// <summary>
+	/// 弾発射のち、タイマーリセット
+	/// </summary>
+	void FireAndTimerReset();
+
+	void ClearFireTimer();
+
 private:
 	void UpdateBullets();
 
@@ -77,4 +85,5 @@ private:
 	// 弾
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
 	float fireTimer = 0.0f;
+	std::list<std::unique_ptr<TimedCall>> timedCalls_;
 };

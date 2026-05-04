@@ -1,8 +1,8 @@
 #include "EnemyStateApproach.h"
-#include "EnemyStateLeave.h"
 #include "Enemy.h"
+#include "EnemyStateLeave.h"
 
-EnemyStateApproach::EnemyStateApproach(Enemy* enemy) : BaseEnemyState("State Approach", enemy) {}
+EnemyStateApproach::EnemyStateApproach(Enemy* enemy) : BaseEnemyState("State Approach", enemy) { enemy->InitApproach(); }
 
 void EnemyStateApproach::Update() {
 	enemy_->Approach();

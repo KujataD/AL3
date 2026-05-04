@@ -70,6 +70,9 @@
     <Filter Include="ソース ファイル\GameObject\Enemy\Phase">
       <UniqueIdentifier>{9a936e35-8e80-4b4a-a9f7-b949f9877042}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Utility">
+      <UniqueIdentifier>{3bb95d3d-442f-463e-8cc0-c37ec830f66d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -209,6 +212,9 @@
     </ClCompile>
     <ClCompile Include="EnemyBullet.cpp">
       <Filter>ソース ファイル\GameObject\Enemy\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="TimedCall.cpp">
+      <Filter>ソース ファイル\Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -355,6 +361,9 @@
     </ClInclude>
     <ClInclude Include="EnemyBullet.h">
       <Filter>ソース ファイル\GameObject\Enemy\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="TimedCall.h">
+      <Filter>ソース ファイル\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
