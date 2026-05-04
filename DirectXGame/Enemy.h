@@ -25,7 +25,7 @@ public:
 		static inline KujakuEngine::Vector3 approachVelocity_ = {0.0f, 0.0f, -0.4f};
 		static inline KujakuEngine::Vector3 leaveVelocity_ = {-0.35f, 0.35f, -0.1f};
 
-		static inline float bulletFireDuration_ = 1.0f;
+		static inline float bulletFireDuration_ = 0.5f;
 	};
 
 public:
