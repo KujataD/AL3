@@ -18,7 +18,6 @@ public:
 
 		static inline const std::string kApproachVelocity = "ApproachVelocity";
 		static inline const std::string kLeaveVelocity = "LeaveVelocity";
-		static inline const std::string kBulletSpeed = "BulletSpeed";
 		static inline const std::string kBulletFireDuration = "BulletFireDuration";
 	};
 
@@ -26,7 +25,6 @@ public:
 		static inline KujakuEngine::Vector3 approachVelocity_ = {0.0f, 0.0f, -0.4f};
 		static inline KujakuEngine::Vector3 leaveVelocity_ = {-0.35f, 0.35f, -0.1f};
 
-		static inline float bulletSpeed_ = 1.0f;
 		static inline float bulletFireDuration_ = 1.0f;
 	};
 

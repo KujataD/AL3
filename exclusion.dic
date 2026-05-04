@@ -11,3 +11,6 @@ texcoords
 texcoord
 Anim
 Initializ
+cosθ
+sinθ
+Slerp

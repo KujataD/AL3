@@ -49,7 +49,6 @@ void Enemy::RegisterGlobalVariables() {
 	GlobalVariables* gv = GlobalVariables::GetInstance();
 	gv->AddItem(ParamKey::kGroup, ParamKey::kApproachVelocity, Param::approachVelocity_);
 	gv->AddItem(ParamKey::kGroup, ParamKey::kLeaveVelocity, Param::leaveVelocity_);
-	gv->AddItem(ParamKey::kGroup, ParamKey::kBulletSpeed, Param::bulletSpeed_);
 	gv->AddItem(ParamKey::kGroup, ParamKey::kBulletFireDuration, Param::bulletFireDuration_);
 }
 
@@ -57,7 +56,6 @@ void Enemy::ApplyGlobalVariables() {
 	GlobalVariables* gv = GlobalVariables::GetInstance();
 	Param::approachVelocity_ = gv->GetValue<Vector3>(ParamKey::kGroup, ParamKey::kApproachVelocity);
 	Param::leaveVelocity_ = gv->GetValue<Vector3>(ParamKey::kGroup, ParamKey::kLeaveVelocity);
-	Param::bulletSpeed_ = gv->GetValue<float>(ParamKey::kGroup, ParamKey::kBulletSpeed);
 	Param::bulletFireDuration_ = gv->GetValue<float>(ParamKey::kGroup, ParamKey::kBulletFireDuration);
 }
 
@@ -72,12 +70,13 @@ void Enemy::Fire() {
 	assert(player_);
 
 	// 弾の速度
-	Vector3 velocity = player_->GetWorldPosition() - GetWorldPosition();
-	velocity = Normalize(velocity) * Param::bulletSpeed_;
+	Vector3 direction = player_->GetWorldPosition() - GetWorldPosition();
+	direction = Normalize(direction);
 
 	// 弾を生成し、初期化
 	std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
-	newBullet->Initialize(modelBullet_, camera_, worldTransform_.translation_, velocity);
+	newBullet->SetPlayer(player_);
+	newBullet->Initialize(modelBullet_, camera_, worldTransform_.translation_, direction, true);
 
 	// 弾を登録する
 	bullets_.push_back(std::move(newBullet));

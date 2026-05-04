@@ -16,7 +16,7 @@ Vector3 Normalize(const Vector3& v) {
 	return v / len;
 }
 
-  Vector3 Lerp(const Vector3& v1, const Vector3 v2, float t) {
+Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t) {
 	return {
 	    v1.x + (v2.x - v1.x) * t,
 	    v1.y + (v2.y - v1.y) * t,
@@ -24,15 +24,43 @@ Vector3 Normalize(const Vector3& v) {
 	};
 }
 
-  Vector3 Bezier(const Vector3& p0, const Vector3& p1, const Vector3& p2, float t) {
+Vector3 Slerp(const Vector3& a, const Vector3& b, float t) {
+	Vector3 na = Normalize(a);
+	Vector3 nb = Normalize(b);
+
+	// cosθを求める
+	float dot = Dot(na, nb);
+
+	// 範囲外阻止
+	dot = std::clamp(dot, -1.0f, 1.0f);
+
+	// na->nbの角度θ
+	float theta = std::acos(dot);
+
+    // 角度がほぼ0（同じ方向）ならLerpで代用
+	if (theta < 0.0001f) {
+		return Normalize(Lerp(na, nb, t));
+	}
+
+	float sinTheta = std::sin(theta);
+
+	// naのウェイト
+	float w1 = std::sin((1.0f - t) * theta) / sinTheta;
+	// nbのウェイト
+	float w2 = std::sin(t * theta) / sinTheta;
+
+	return na * w1 + nb * w2;
+}
+
+Vector3 Bezier(const Vector3& p0, const Vector3& p1, const Vector3& p2, float t) {
 	Vector3 a = Lerp(p0, p1, t);
 	Vector3 b = Lerp(p1, p2, t);
 	return Lerp(a, b, t);
 }
 
-  Vector3 Reflect(const Vector3& input, const Vector3& normal) { return input - normal * (2.0f * Dot(input, normal)); }
+Vector3 Reflect(const Vector3& input, const Vector3& normal) { return input - normal * (2.0f * Dot(input, normal)); }
 
-  Vector3 Transform(const Vector3& v, const Matrix4x4& m) {
+Vector3 Transform(const Vector3& v, const Matrix4x4& m) {
 	Vector3 result;
 	result.x = v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0] + 1.0f * m.m[3][0];
 	result.y = v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1] + 1.0f * m.m[3][1];
@@ -45,7 +73,7 @@ Vector3 Normalize(const Vector3& v) {
 	return result;
 }
 
-  Vector3 Project(const Vector3& a, const Vector3& b) {
+Vector3 Project(const Vector3& a, const Vector3& b) {
 	float dotAB = Dot(a, b);
 	float fieldNormB = std::powf(Length(b), 2);
 	float dotNormAB = dotAB / fieldNormB;
@@ -53,7 +81,7 @@ Vector3 Normalize(const Vector3& v) {
 	return result;
 }
 
-  Vector3 ClosestPoint(const Vector3& point, const Segment& segment) {
+Vector3 ClosestPoint(const Vector3& point, const Segment& segment) {
 	Vector3 a = point - segment.origin;
 	float t = Dot(a, segment.diff) / std::powf(Length(segment.diff), 2);
 	t = std::clamp(t, 0.0f, 1.0f);
@@ -61,18 +89,15 @@ Vector3 Normalize(const Vector3& v) {
 	return cp;
 }
 
-  Vector3 Perpendicular(const Vector3& vector) {
+Vector3 Perpendicular(const Vector3& vector) {
 	if (vector.x != 0.0f || vector.y != 0.0f) {
 		return {-vector.y, vector.x, 0.0f};
 	}
 	return {0.0f, -vector.z, vector.y};
 }
 
-  Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
-	Vector3 result{
-		v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0],
-		v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1],
-		v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2]};
+Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
+	Vector3 result{v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0], v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1], v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2]};
 
 	return result;
 }
