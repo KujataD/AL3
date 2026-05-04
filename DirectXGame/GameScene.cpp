@@ -24,6 +24,7 @@ void GameScene::Initialize() {
 	modelEnemy_ = std::unique_ptr<Model>(Model::CreateFromOBJ("enemy_airship", ShaderModel::kHalfLambert));
 	modelEnemyBullet_ = std::unique_ptr<Model>(Model::CreateCube("resources/white1x1.png"));
 	enemy_ = std::make_unique<Enemy>();
+	enemy_->SetPlayer(player_.get());
 	enemy_->Initialize(modelEnemy_.get(), modelEnemyBullet_.get(), &camera_, {20.0f, 0.0f, 200.0f});
 
 	RegisterAllVariables();

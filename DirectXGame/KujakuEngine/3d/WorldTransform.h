@@ -1,8 +1,8 @@
 #pragma once
 
 #include <d3d12.h>
-#include <wrl.h>
 #include <numbers>
+#include <wrl.h>
 
 #include "../math/Matrix4x4.h"
 #include "../math/Vector3.h"
@@ -13,8 +13,8 @@ namespace KujakuEngine {
 /// 定数バッファ用データ構造体（ワールド変換）
 /// </summary>
 struct TransformationMatrix {
-	Matrix4x4 WVP;   // ワールド・ビュー・プロジェクション合成行列
-	Matrix4x4 World; // ワールド行列（法線変換などに使用）
+	Matrix4x4 WVP;                   // ワールド・ビュー・プロジェクション合成行列
+	Matrix4x4 World;                 // ワールド行列（法線変換などに使用）
 	Matrix4x4 WorldInverseTranspose; // worldの逆転置行列
 };
 
@@ -47,7 +47,7 @@ public:
 	/// </summary>
 	/// <param name="camera">カメラ（ビュー・プロジェクション行列を取得）</param>
 	void UpdateMatrix(const class Camera& camera);
-	
+
 	/// <summary>
 	/// ワールド行列を更新してGPUに転送する
 	/// </summary>
@@ -64,7 +64,7 @@ public:
 	/// </summary>
 	const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return transformationMatrixResource_; }
 
-private:
+	Vector3 GetWorldPosition() const { return {matWorld_.m[3][0], matWorld_.m[3][1], matWorld_.m[3][2]}; }
 
 private:
 	// 定数バッファ

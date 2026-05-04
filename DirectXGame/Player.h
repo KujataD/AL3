@@ -28,10 +28,17 @@ public:
 	void Update();
 	void Draw();
 
+	// --- set ---
+
 	void SetCamera(KujakuEngine::Camera* camera) {
 		camera_ = camera;
 		worldTransform_.UpdateMatrix(*camera_);
 	}
+
+	// --- get ---
+	KujakuEngine::Vector3 GetWorldPosition() const { return worldTransform_.GetWorldPosition(); }
+	
+	// --- 外部API ---
 
 	static void RegisterGlobalVariables();
 

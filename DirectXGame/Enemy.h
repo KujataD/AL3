@@ -4,6 +4,8 @@
 #include "TimedCall.h"
 #include <KujakuEngine.h>
 
+class Player;
+
 class Enemy {
 public:
 	enum class Phase {
@@ -45,14 +47,18 @@ public:
 	/// </summary>
 	static void ApplyGlobalVariables();
 
+	// - set -
+	void SetPlayer(Player* player) { player_ = player; }
+
 	// - get -
 	bool IsDead() const { return isDead_; }
 	const KujakuEngine::Vector3& GetPosition() const { return worldTransform_.translation_; }
-
+	KujakuEngine::Vector3 GetWorldPosition() const { return worldTransform_.GetWorldPosition(); }
+	
 	// --- 外部API ---
 	void Approach();
+
 	void InitApproach();
-	
 
 	void Leave();
 
@@ -74,6 +80,7 @@ private:
 	KujakuEngine::Model* model_;
 	KujakuEngine::Model* modelBullet_;
 	KujakuEngine::Camera* camera_;
+	Player* player_ = nullptr;
 
 	// 内部プロパティ
 	KujakuEngine::WorldTransform worldTransform_;

@@ -4,8 +4,7 @@
 
 using namespace KujakuEngine;
 
-Player::~Player() {
-}
+Player::~Player() {}
 
 void Player::Initialize(KujakuEngine::Model* model, KujakuEngine::Model* modelBullet, KujakuEngine::Camera* camera) {
 	assert(model);
@@ -142,5 +141,4 @@ void Player::UpdateBullets() {
 		}
 		return false;
 	});
-
 }

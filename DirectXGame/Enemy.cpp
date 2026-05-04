@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "Player.h"
 #include "EnemyStateApproach.h"
 
 using namespace KujakuEngine;
@@ -68,11 +69,11 @@ void Enemy::Leave() { worldTransform_.translation_ += Param::leaveVelocity_; }
 
 void Enemy::Fire() {
 
-	// 弾の速度
-	Vector3 velocity(0, 0, -Param::bulletSpeed_);
+	assert(player_);
 
-	// 速度ベクトルを自機の向きに合わせて回転させる
-	velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+	// 弾の速度
+	Vector3 velocity = player_->GetWorldPosition() - GetWorldPosition();
+	velocity = Normalize(velocity) * Param::bulletSpeed_;
 
 	// 弾を生成し、初期化
 	std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
