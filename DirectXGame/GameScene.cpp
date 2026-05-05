@@ -28,6 +28,9 @@ void GameScene::Initialize() {
 	enemy_->SetPlayer(player_.get());
 	enemy_->Initialize(modelEnemy_.get(), modelEnemyBullet_.get(), &camera_, {20.0f, 0.0f, 200.0f});
 
+	// 当たり判定
+	collisionManager_ = std::make_unique<CollisionManager>();
+
 	RegisterAllVariables();
 }
 
@@ -80,50 +83,24 @@ void GameScene::RegisterAllVariables() {
 }
 
 void GameScene::CheckAllCollisions() {
+	collisionManager_->Clear();
+
 	// 自弾リスト取得
 	const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player_->GetBullets();
 	// 敵弾リスト取得
 	const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets = enemy_->GetBullets();
 
-	// コライダー
-	std::list<Collider*> colliders_;
-
 	// コライダーをリストに登録
-	colliders_.push_back(player_.get());
-	colliders_.push_back(enemy_.get());
+	collisionManager_->AddCollider(player_.get());
+	collisionManager_->AddCollider(enemy_.get());
 
 	for (auto& enemyBullet : enemyBullets) {
-		colliders_.push_back(enemyBullet.get());
+		collisionManager_->AddCollider(enemyBullet.get());
 	}
 
 	for (auto& playerBullet : playerBullets) {
-		colliders_.push_back(playerBullet.get());
+		collisionManager_->AddCollider(playerBullet.get());
 	}
 
-	std::list<Collider*>::iterator itrA = colliders_.begin();
-	for (; itrA != colliders_.end(); ++itrA) {
-		Collider* colA = *itrA;
-		// イテレータBはイテレータAの次の要素から回す(重複判定を回避)
-		std ::list<Collider*>::iterator itrB = itrA;
-		itrB++;
-
-		for (; itrB != colliders_.end(); ++itrB) {
-			Collider* colB = *itrB;
-
-			CheckCollisionPair(colA, colB);
-		}
-	}
-}
-
-void GameScene::CheckCollisionPair(Collider* colliderA, Collider* colliderB) {
-	if (!(colliderA->GetCollisionAttribute() & colliderB->GetCollisionMask()) ||
-		!(colliderB->GetCollisionAttribute() & colliderA->GetCollisionMask()) 
-		) {
-		return;
-	}
-
-	if (IsCollision(colliderA->GetSphere(), colliderB->GetSphere())) {
-		colliderA->OnCollision();
-		colliderB->OnCollision();
-	}
+	collisionManager_->Update();
 }

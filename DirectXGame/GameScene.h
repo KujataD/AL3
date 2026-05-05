@@ -23,8 +23,6 @@ private:
 
 	void CheckAllCollisions();
 
-	void CheckCollisionPair(KujakuEngine::Collider* colliderA, KujakuEngine::Collider* colliderB);
-
 private:
 	// カメラ
 	KujakuEngine::Camera camera_;
@@ -44,5 +42,6 @@ private:
 	std::unique_ptr<KujakuEngine::Model> modelEnemy_;
 	std::unique_ptr<KujakuEngine::Model> modelEnemyBullet_;
 
-
+	//当たり判定
+	std::unique_ptr<KujakuEngine::CollisionManager> collisionManager_;
 };

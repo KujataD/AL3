@@ -43,6 +43,7 @@
 #include "shapes/Rect.h"
 #include "shapes/ShapeUtil.h"
 #include "shapes/Collider.h"
+#include "shapes/CollisionManager.h"
 
 #include "input/Input.h"
 

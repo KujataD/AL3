@@ -146,6 +146,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="KujakuEngine\param\GlobalVariables.cpp" />
     <ClCompile Include="KujakuEngine\shapes\AABB.cpp" />
     <ClCompile Include="KujakuEngine\shapes\Collider.cpp" />
+    <ClCompile Include="KujakuEngine\shapes\CollisionManager.cpp" />
     <ClCompile Include="KujakuEngine\shapes\Rect.cpp" />
     <ClCompile Include="KujakuEngine\shapes\ShapeUtil.cpp" />
     <ClCompile Include="KujakuEngine\vfx\ParticleEmitter.cpp" />
@@ -198,6 +199,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="KujakuEngine\param\GlobalVariables.h" />
     <ClInclude Include="KujakuEngine\shapes\AABB.h" />
     <ClInclude Include="KujakuEngine\shapes\Collider.h" />
+    <ClInclude Include="KujakuEngine\shapes\CollisionManager.h" />
     <ClInclude Include="KujakuEngine\shapes\Rect.h" />
     <ClInclude Include="KujakuEngine\shapes\ShapeUtil.h" />
     <ClInclude Include="KujakuEngine\vfx\Particle.h" />

@@ -219,6 +219,9 @@
     <ClCompile Include="KujakuEngine\shapes\Collider.cpp">
       <Filter>KujakuEngine\shapes</Filter>
     </ClCompile>
+    <ClCompile Include="KujakuEngine\shapes\CollisionManager.cpp">
+      <Filter>KujakuEngine\shapes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -369,6 +372,9 @@
       <Filter>ソース ファイル\Utility</Filter>
     </ClInclude>
     <ClInclude Include="KujakuEngine\shapes\Collider.h">
+      <Filter>KujakuEngine\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\shapes\CollisionManager.h">
       <Filter>KujakuEngine\shapes</Filter>
     </ClInclude>
   </ItemGroup>
