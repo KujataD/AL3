@@ -15,8 +15,6 @@ public:
 
 	Vector3 operator+(const Vector3& v) const { return {x + v.x, y + v.y, z + v.z}; }
 	Vector3 operator-(const Vector3& v) const { return {x - v.x, y - v.y, z - v.z}; }
-	Vector3 operator*(float scalar) const { return {x * scalar, y * scalar, z * scalar}; }
-	Vector3 operator/(float scalar) const { return {x / scalar, y / scalar, z / scalar}; }
 	Vector3 operator-() const { return {-x, -y, -z}; }
 
 	void operator+=(const Vector3& v) {
@@ -40,6 +38,15 @@ public:
 		z /= scalar;
 	}
 };
+
+Vector3 operator+(Vector3 v, float f) { return {v.x + f, v.y + f, v.z + f}; }
+Vector3 operator-(Vector3 v, float f) { return {v.x - f, v.y - f, v.z - f}; }
+Vector3 operator*(Vector3 v, float f) { return {v.x * f, v.y * f, v.z * f}; }
+Vector3 operator/(Vector3 v, float f) { return {v.x / f, v.y / f, v.z / f}; }
+
+Vector3 operator+(float f, Vector3 v) { return {v.x + f, v.y + f, v.z + f}; }
+Vector3 operator-(float f, Vector3 v) { return {v.x - f, v.y - f, v.z - f}; }
+Vector3 operator*(float f, Vector3 v) { return {v.x * f, v.y * f, v.z * f}; }
 
 float Dot(const Vector3& v1, const Vector3& v2);
 Vector3 Cross(const Vector3& a, const Vector3& b);
