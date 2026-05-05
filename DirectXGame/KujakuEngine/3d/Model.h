@@ -17,6 +17,8 @@
 
 namespace KujakuEngine {
 
+enum FillMode { kFillModeSolid, kFillModeWireframe };
+
 /// <summary>
 /// 3Dモデル
 /// </summary>
@@ -51,7 +53,7 @@ public:
 	/// <summary>
 	/// 描画（PreDraw の後に呼ぶ）
 	/// </summary>
-	void Draw(const WorldTransform& worldTransform, const Camera& camera);
+	void Draw(const WorldTransform& worldTransform, const Camera& camera, FillMode fillMode = kFillModeSolid);
 
 	// --- set ---
 	void SetColor(const Vector4& color) { materialMap_->color = color; }

@@ -232,11 +232,15 @@ void Model::PostDraw() {
 	// 将来的にここで描画状態のリセットなどを行う
 }
 
-void Model::Draw(const WorldTransform& worldTransform, const Camera& camera) {
+void Model::Draw(const WorldTransform& worldTransform, const Camera& camera, FillMode fillMode) {
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 
 	// RootSignature と PSO をセット
-	GraphicsPipeline::GetInstance()->SetCommandList(PipelineType::kObject3d, blendMode_);
+	if (fillMode == kFillModeSolid) {
+		GraphicsPipeline::GetInstance()->SetCommandList(PipelineType::kObject3d, blendMode_);
+	} else if (fillMode == kFillModeWireframe) {
+		GraphicsPipeline::GetInstance()->SetCommandList(PipelineType::kObject3dWireframe, blendMode_);
+	}
 
 	// VBVを設定
 	commandList->IASetVertexBuffers(0, 1, &vertexBufferView_);
@@ -376,4 +380,3 @@ void Model::CreateMaterialBuffer(const MaterialData& material) {
 	textureIndex_ = material.textureIndex;
 }
 } // namespace KujakuEngine
-

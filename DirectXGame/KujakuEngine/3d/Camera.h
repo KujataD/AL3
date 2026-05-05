@@ -35,10 +35,10 @@ public:
 	Vector3 translation_ = {0.0f, 0.0f, -10.0f};
 
 	// 射影行列の設定
-	float fovAngleY = 0.45f;                                                                                  // 垂直方向視野角（ラジアン）
+	float fovAngleY = 0.60f;                                                                                  // 垂直方向視野角（ラジアン）
 	float aspectRatio = static_cast<float>(WinApp::kWindowWidth) / static_cast<float>(WinApp::kWindowHeight); // アスペクト比
 	float nearZ = 0.1f;                                                                                       // 深度限界（手前側）
-	float farZ = 300.0f;                                                                                      // 深度限界（奥側）
+	float farZ = 1000.0f;                                                                                      // 深度限界（奥側）
 
 	// ビュー・射影行列
 	Matrix4x4 matView;

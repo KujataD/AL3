@@ -10,7 +10,7 @@ void GameScene::Initialize() {
 	// カメラ
 	// ------------------------------------------
 	camera_.Initialize();
-	camera_.translation_ = {0.0f, 0.0f, -100.0f};
+	camera_.translation_ = {0.0f, 0.0f, -50.0f};
 	debugCamera_.Initialize(camera_.rotation_, camera_.translation_);
 	railCamera_.Initialize(camera_.rotation_, camera_.translation_);
 
@@ -67,6 +67,9 @@ void GameScene::UpdateCamera() {
 #ifdef _DEBUG
 	if (Input::GetKeyTrigger(DIK_P)) {
 		isActiveDebugCamera_ = !isActiveDebugCamera_;
+	}
+	if (Input::GetKeyTrigger(DIK_L)) {
+		Initialize();
 	}
 
 #endif // _DEBUG

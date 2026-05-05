@@ -52,6 +52,7 @@ enum class BlendMode {
 enum class PipelineType {
 	kObject3d,
 	kParticle,
+	kObject3dWireframe,
 	kCountOfPipeLineType,
 };
 

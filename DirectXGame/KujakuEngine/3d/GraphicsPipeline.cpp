@@ -155,8 +155,8 @@ void GraphicsPipeline::CreateObject3dRootSignature() {
 	rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL; // PixelShaderで使う
 	rootParameters[6].Descriptor.ShaderRegister = 4;                    // レジスタ番号4を使う
 
-	descriptionRootSignature.pParameters = rootParameters;              // ルートパラメータ配列へのポインタ
-	descriptionRootSignature.NumParameters = _countof(rootParameters);  // 配列の長さ
+	descriptionRootSignature.pParameters = rootParameters;             // ルートパラメータ配列へのポインタ
+	descriptionRootSignature.NumParameters = _countof(rootParameters); // 配列の長さ
 
 	// Samplerの設定
 	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
@@ -182,6 +182,8 @@ void GraphicsPipeline::CreateObject3dRootSignature() {
 
 	// バイナリを元に生成
 	hr = device->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature_[static_cast<int32_t>(PipelineType::kObject3d)]));
+	assert(SUCCEEDED(hr));
+	hr = device->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature_[static_cast<int32_t>(PipelineType::kObject3dWireframe)]));
 	assert(SUCCEEDED(hr));
 
 	signatureBlob->Release();
@@ -321,6 +323,34 @@ void GraphicsPipeline::CreateObject3dPipelineStateObject() {
 	graphicsPipelineStateDesc.SampleDesc.Count = 1;
 	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
 
+	// --- ワイヤーフレーム ---
+	// 4. RasterizerStateの設定
+	D3D12_RASTERIZER_DESC rasterizerDescWireframe{};
+	rasterizerDescWireframe.CullMode = D3D12_CULL_MODE_NONE;      // 裏面は表示する
+	rasterizerDescWireframe.FillMode = D3D12_FILL_MODE_WIREFRAME; // ワイヤーフレーム表示
+	rasterizerDescWireframe.DepthClipEnable = true;               // far範囲外の頂点は描画しない
+
+	D3D12_DEPTH_STENCIL_DESC depthStencilDescWireframe{};
+	depthStencilDescWireframe.DepthEnable = true;
+	depthStencilDescWireframe.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	depthStencilDescWireframe.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+
+	// PSOの生成
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDescWireframe{};
+	graphicsPipelineStateDescWireframe.pRootSignature = rootSignature_[static_cast<int32_t>(PipelineType::kObject3dWireframe)].Get();
+	graphicsPipelineStateDescWireframe.InputLayout = inputLayoutDesc;
+	graphicsPipelineStateDescWireframe.BlendState = blendDesc;
+	graphicsPipelineStateDescWireframe.RasterizerState = rasterizerDescWireframe;
+	graphicsPipelineStateDescWireframe.VS = {vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize()};
+	graphicsPipelineStateDescWireframe.PS = {pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize()};
+	graphicsPipelineStateDescWireframe.DepthStencilState = depthStencilDescWireframe;
+	graphicsPipelineStateDescWireframe.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	graphicsPipelineStateDescWireframe.NumRenderTargets = 1;
+	graphicsPipelineStateDescWireframe.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	graphicsPipelineStateDescWireframe.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	graphicsPipelineStateDescWireframe.SampleDesc.Count = 1;
+	graphicsPipelineStateDescWireframe.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
+
 	for (int32_t i = 0; i < static_cast<int32_t>(BlendMode::kCountOfBlendMode); i++) {
 		D3D12_BLEND_DESC blendDesc{};
 		auto& renderTarget = blendDesc.RenderTarget[0];
@@ -384,6 +414,9 @@ void GraphicsPipeline::CreateObject3dPipelineStateObject() {
 
 		graphicsPipelineStateDesc.BlendState = blendDesc;
 		HRESULT hr = device->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&pipelineStates_[static_cast<int32_t>(PipelineType::kObject3d)][i]));
+
+		graphicsPipelineStateDescWireframe.BlendState = blendDesc;
+		hr = device->CreateGraphicsPipelineState(&graphicsPipelineStateDescWireframe, IID_PPV_ARGS(&pipelineStates_[static_cast<int32_t>(PipelineType::kObject3dWireframe)][i]));
 		assert(SUCCEEDED(hr));
 	}
 
