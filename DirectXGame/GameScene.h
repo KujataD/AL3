@@ -1,6 +1,7 @@
 #pragma once
 #include "Enemy.h"
 #include "Player.h"
+#include "Skydome.h"
 #include <KujakuEngine.h>
 
 class GameScene {
@@ -42,6 +43,10 @@ private:
 	std::unique_ptr<KujakuEngine::Model> modelEnemy_;
 	std::unique_ptr<KujakuEngine::Model> modelEnemyBullet_;
 
-	//当たり判定
+	// 当たり判定
 	std::unique_ptr<KujakuEngine::CollisionManager> collisionManager_;
+
+	// --- スカイドーム ---
+	std::unique_ptr<Skydome> skydome_;
+	std::unique_ptr<KujakuEngine::Model> modelSkydome_;
 };

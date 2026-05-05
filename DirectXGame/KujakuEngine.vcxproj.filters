@@ -73,6 +73,9 @@
     <Filter Include="ソース ファイル\Utility">
       <UniqueIdentifier>{3bb95d3d-442f-463e-8cc0-c37ec830f66d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameObject\Skydome">
+      <UniqueIdentifier>{59c6c1e9-8743-4843-9316-d4fc6ec0ed49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -221,6 +224,9 @@
     </ClCompile>
     <ClCompile Include="KujakuEngine\shapes\CollisionManager.cpp">
       <Filter>KujakuEngine\shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Skydome.cpp">
+      <Filter>ソース ファイル\GameObject\Skydome</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -376,6 +382,9 @@
     </ClInclude>
     <ClInclude Include="KujakuEngine\shapes\CollisionManager.h">
       <Filter>KujakuEngine\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Skydome.h">
+      <Filter>ソース ファイル\GameObject\Skydome</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

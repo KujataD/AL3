@@ -16,14 +16,14 @@ void GameScene::Initialize() {
 	// プレイヤー
 	// ------------------------------------------
 	modelPlayer_ = std::unique_ptr<Model>(Model::CreateFromOBJ("airship", ShaderModel::kHalfLambert));
-	modelBullet_ = std::unique_ptr<Model>(Model::CreateCube("resources/white1x1.png"));
+	modelBullet_ = std::unique_ptr<Model>(Model::CreateFromOBJ("player_bullet"));
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get(), modelBullet_.get(), &camera_);
 
 	// エネミー
 	// ------------------------------------------
-	modelEnemy_ = std::unique_ptr<Model>(Model::CreateFromOBJ("enemy_airship", ShaderModel::kHalfLambert));
-	modelEnemyBullet_ = std::unique_ptr<Model>(Model::CreateCube("resources/white1x1.png"));
+	modelEnemy_ = std::unique_ptr<Model>(Model::CreateFromOBJ("enemy_ship", ShaderModel::kHalfLambert));
+	modelEnemyBullet_ = std::unique_ptr<Model>(Model::CreateFromOBJ("enemy_bullet"));
 	enemy_ = std::make_unique<Enemy>();
 	enemy_->SetPlayer(player_.get());
 	enemy_->Initialize(modelEnemy_.get(), modelEnemyBullet_.get(), &camera_, {20.0f, 0.0f, 200.0f});
@@ -31,22 +31,34 @@ void GameScene::Initialize() {
 	// 当たり判定
 	collisionManager_ = std::make_unique<CollisionManager>();
 
+	// スカイドーム
+	// ------------------------------------------
+	modelSkydome_ = std::unique_ptr<Model>(Model::CreateFromOBJ("sky_sphere"));
+	skydome_ = std::make_unique<Skydome>();
+	skydome_->Initialize(modelSkydome_.get(), &camera_);
+
+	// 調整項目を登録
 	RegisterAllVariables();
 }
 
 void GameScene::Update() {
+	// 調整項目を適応
 	ApplyAllVariables();
+
+	// 当たり判定更新
 	CheckAllCollisions();
 
 	UpdateCamera();
 	player_->Update();
 	enemy_->Update();
+	skydome_->Update();
 }
 
 void GameScene::Draw() {
 	Model::PreDraw();
 	player_->Draw();
 	enemy_->Draw();
+	skydome_->Draw();
 }
 
 void GameScene::UpdateCamera() {
