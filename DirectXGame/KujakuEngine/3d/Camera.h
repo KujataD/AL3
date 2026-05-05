@@ -63,7 +63,7 @@ public:
 	const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return constBuffer_; }
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	/// <returns></returns>
 	const Microsoft::WRL::ComPtr<ID3D12Resource>& GetCameraForGPUResource() const { return cameraForGPUResource_; }
@@ -78,7 +78,12 @@ public:
 	/// <summary>
 	/// カメラが映っている範囲を求める(回転固定)
 	/// </summary>
-	Rect GetVisibleRect(float posZ);
+	Rect GetVisibleRect(float posZ) const;
+
+	/// <summary>
+	/// カメラが映っている範囲を求める(親子関係である前提)
+	/// </summary>
+	Rect GetVisibleRect(float distance, float blank) const;
 
 private:
 	// 定数バッファ

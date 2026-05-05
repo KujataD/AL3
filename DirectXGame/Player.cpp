@@ -16,7 +16,7 @@ void Player::Initialize(KujakuEngine::Model* model, KujakuEngine::Model* modelBu
 	modelBullet_ = modelBullet;
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
+	worldTransform_.translation_ = {0.0f, 0.0f, 50.0f};
 	worldTransform_.rotation_.y = std::numbers::pi_v<float>;
 	worldTransform_.UpdateMatrix(*camera_);
 
@@ -36,7 +36,7 @@ void Player::Update() {
 	Rotate();
 
 	// アタック
-	Attack();
+	Fire();
 
 	// 弾
 	UpdateBullets();
@@ -111,12 +111,13 @@ void Player::ManageImGui() {
 }
 
 void Player::ClampInWindow() {
-	Rect cameraVisible = camera_->GetVisibleRect(worldTransform_.translation_.z);
-	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, cameraVisible.left + Param::moveLimitBlank_, cameraVisible.right - Param::moveLimitBlank_);
-	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, cameraVisible.bottom + Param::moveLimitBlank_, cameraVisible.top - Param::moveLimitBlank_);
+	Rect bounds = camera_->GetVisibleRect(worldTransform_.translation_.z, Param::moveLimitBlank_);
+
+	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, bounds.left, bounds.right);
+	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, bounds.bottom, bounds.top);
 }
 
-void Player::Attack() {
+void Player::Fire() {
 	if (Input::GetKeyTrigger(DIK_SPACE)) {
 		// 弾の速度
 		Vector3 velocity(0, 0, -Param::bulletSpeed_);
@@ -126,7 +127,7 @@ void Player::Attack() {
 
 		// 弾を生成し、初期化
 		std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
-		newBullet->Initialize(modelBullet_, camera_, worldTransform_.translation_, velocity);
+		newBullet->Initialize(modelBullet_, camera_, worldTransform_.GetWorldPosition(), velocity);
 
 		// 弾を登録する
 		bullets_.push_back(std::move(newBullet));

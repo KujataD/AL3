@@ -29,6 +29,7 @@
 #include "3d/SpotLight.h"
 #include "3d/GraphicsPipeline.h"
 #include "3d/Model.h"
+#include "3d/RailCameraController.h"
 #include "3d/WorldTransform.h"
 
 #include "math/Easing.h"

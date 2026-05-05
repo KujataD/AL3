@@ -29,6 +29,7 @@ private:
 	KujakuEngine::Camera camera_;
 	KujakuEngine::DebugCamera debugCamera_;
 	bool isActiveDebugCamera_ = false;
+	KujakuEngine::RailCameraController railCamera_;
 
 	// --- プレイヤー ---
 	std::unique_ptr<Player> player_;

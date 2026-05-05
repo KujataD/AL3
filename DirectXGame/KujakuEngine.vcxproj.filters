@@ -228,6 +228,9 @@
     <ClCompile Include="Skydome.cpp">
       <Filter>ソース ファイル\GameObject\Skydome</Filter>
     </ClCompile>
+    <ClCompile Include="KujakuEngine\3d\RailCameraController.cpp">
+      <Filter>KujakuEngine\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -385,6 +388,9 @@
     </ClInclude>
     <ClInclude Include="Skydome.h">
       <Filter>ソース ファイル\GameObject\Skydome</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\3d\RailCameraController.h">
+      <Filter>KujakuEngine\3d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

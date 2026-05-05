@@ -35,6 +35,8 @@ public:
 		worldTransform_.UpdateMatrix(*camera_);
 	}
 
+	void SetParent(const KujakuEngine::WorldTransform* parent) { worldTransform_.parent_ = parent; }
+
 	// --- get ---
 	const KujakuEngine::Vector3& GetWorldPosition() const override { return worldTransform_.GetWorldPosition(); }
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
@@ -68,7 +70,7 @@ private:
 	/// <summary>
 	/// 攻撃処理
 	/// </summary>
-	void Attack();
+	void Fire();
 
 	/// <summary>
 	/// 弾の更新

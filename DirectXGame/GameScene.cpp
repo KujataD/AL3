@@ -12,6 +12,7 @@ void GameScene::Initialize() {
 	camera_.Initialize();
 	camera_.translation_ = {0.0f, 0.0f, -100.0f};
 	debugCamera_.Initialize(camera_.rotation_, camera_.translation_);
+	railCamera_.Initialize(camera_.rotation_, camera_.translation_);
 
 	// プレイヤー
 	// ------------------------------------------
@@ -19,6 +20,7 @@ void GameScene::Initialize() {
 	modelBullet_ = std::unique_ptr<Model>(Model::CreateFromOBJ("player_bullet"));
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get(), modelBullet_.get(), &camera_);
+	player_->SetParent(railCamera_.GetWorldTransform());
 
 	// エネミー
 	// ------------------------------------------
@@ -68,6 +70,10 @@ void GameScene::UpdateCamera() {
 	}
 
 #endif // _DEBUG
+		
+	// カメラコントローラー操作
+	railCamera_.Update();
+	
 	// カメラの処理
 	if (isActiveDebugCamera_) {
 		debugCamera_.Update();
@@ -77,8 +83,9 @@ void GameScene::UpdateCamera() {
 		camera_.TransferConstBuffer();
 
 	} else {
-		// ビュープロジェクション行列の更新と転送
-		camera_.UpdateMatrix();
+		camera_.matView = railCamera_.GetViewMatrix();
+		camera_.UpdateProjectionMatrix();
+		camera_.TransferConstBuffer();
 	}
 }
 
