@@ -14,7 +14,6 @@ void EnemyBullet::Initialize(KujakuEngine::Model* model, KujakuEngine::Camera* c
 
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
-	worldTransform_.scale_ = {0.5f, 0.5f, 3.0f};
 
 	model_->SetColor({1.0f, 0.0f, 0.0f, 1.0f});
 
