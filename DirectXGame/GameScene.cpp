@@ -73,21 +73,22 @@ void GameScene::Update() {
 	// 当たり判定更新
 	CheckAllCollisions();
 
-	UpdateCamera();
 	player_->Update();
 	enemy_->Update();
 	skydome_->Update();
 
 	timer_ -= kDT;
 	float t = std::clamp((1.0f - timer_ / 10.0f), 0.0f, 0.99f);
-	float t1 = std::clamp((1.0f - timer_ / 10.0f) + 0.1f, 0.0f, 1.0f);
+	float t1 = std::clamp((1.0f - timer_ / 10.0f) + 0.05f, 0.0f, 1.0f);
 	railFirstCube_.translation_ = CatmullRomPosition(railControlPoints_, t);
 	railSecondSphere_.translation_ = CatmullRomPosition(railControlPoints_, t1);
 
 	railFirstCube_.ApplyRotationOfVelocity(railSecondSphere_.translation_ - railFirstCube_.translation_);
 
+
 	railFirstCube_.UpdateMatrix(camera_);
 	railSecondSphere_.UpdateMatrix(camera_);
+	UpdateCamera();
 }
 
 void GameScene::Draw() {
@@ -99,7 +100,7 @@ void GameScene::Draw() {
 	modelCube_->Draw(railFirstCube_, camera_, kFillModeWireframe);
 	//modelSphere_->Draw(railSecondSphere_, camera_, kFillModeWireframe);
 	ParticleModel::PreDraw();
-	//DrawSplineParticles(modelSpline_.get(), railControlPoints_, camera_);
+	DrawSplineParticles(modelSpline_.get(), railControlPoints_, camera_);
 	ParticleModel::PostDraw();
 }
 

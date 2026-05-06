@@ -18,7 +18,7 @@ void RailCameraController::Update() {
 #ifdef USE_IMGUI
 	ImGui::Begin("Camera");
 	ImGui::SliderFloat3("translation", &worldTransform_.translation_.x, -150.0f, 50.0f);
-	ImGui::SliderFloat3("rotation", &worldTransform_.rotation_.x, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
+	ImGui::DragFloat3("rotation", &worldTransform_.rotation_.x, 0.001f);
 	ImGui::End();
 #endif // USE_IMGUI
 	worldTransform_.UpdateMatrix(camera_);

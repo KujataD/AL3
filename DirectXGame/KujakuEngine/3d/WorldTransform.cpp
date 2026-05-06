@@ -2,6 +2,7 @@
 #include "../base/DirectXCommon.h"
 #include "Camera.h"
 #include <cassert>
+#include <numbers>
 
 namespace KujakuEngine {
 
@@ -72,15 +73,16 @@ TransformationMatrix WorldTransform::GetMatrixData(const Camera& camera) const {
 TransformationMatrix WorldTransform::GetBillboardMatrixData(const Camera& camera) const { return TransformationMatrix(); }
 
 void WorldTransform::ApplyRotationOfVelocity(const Vector3& velocity, const Vector3& deltaAngle) {
+
 	// Y軸周り角度(θy) ...atan2(高さ, 底辺)
 	float targetY = std::atan2(velocity.x, velocity.z);
 	// 横軸方向の長さを求める
 	float velocityXZ = Length({velocity.x, 0.0f, velocity.z});
 	// X軸周り角度(θx)
 	float targetX = std::atan2(-velocity.y, velocityXZ);
-	
-	rotation_.y = NearAngle(rotation_.y, targetY);
-	rotation_.x = NearAngle(rotation_.x, targetX);
+
+	rotation_.x = targetX;
+	rotation_.y = targetY;
 
 	rotation_.z = 0.0f;
 	rotation_ += deltaAngle;

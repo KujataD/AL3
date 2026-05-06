@@ -406,7 +406,7 @@ void DrawSplineParticles(ParticleModel* model, const std::vector<Vector3>& contr
 
 		TransformationMatrix mat = MakeBillboardMatrix(scale, rotation, pos, camera);
 
-		Vector4 color = {1.0f, 0.0f, 0.0f, 1.0f};
+		Vector4 color = {1.0f, 0.0f, 0.0f, 0.5f};
 
 		model->AddInstanceParticle(mat, color);
 	}
