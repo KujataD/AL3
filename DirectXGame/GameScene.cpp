@@ -52,14 +52,15 @@ void GameScene::Initialize() {
 	railFirstCube_.scale_ = {0.5f, 0.5f, 3.0f};
 
 	railSecondSphere_.Initialize();
+	railSecondSphere_.scale_ = {0.1f, 0.1f, 0.1f};
 
 	railControlPoints_ = {
 	    {0,  0,  0},
         {10, 10, 0},
         {10, 15, 0},
         {20, 15, 0},
-        {20, 0,  0},
-        {30, 0,  0},
+        {20, 10,  0},
+        {30, 5,  0},
 	};
 
 	// 調整項目を登録
@@ -98,7 +99,7 @@ void GameScene::Draw() {
 	skydome_->Draw();
 
 	modelCube_->Draw(railFirstCube_, camera_, kFillModeWireframe);
-	//modelSphere_->Draw(railSecondSphere_, camera_, kFillModeWireframe);
+	modelSphere_->Draw(railSecondSphere_, camera_, kFillModeWireframe);
 	ParticleModel::PreDraw();
 	DrawSplineParticles(modelSpline_.get(), railControlPoints_, camera_);
 	ParticleModel::PostDraw();
