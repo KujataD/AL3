@@ -83,11 +83,11 @@ void WorldTransform::ApplyRotationOfVelocity(const Vector3& velocity, const Vect
 
 		// 真上/真下付近ではYawが不定になり、+π/2と-π/2がフレーム毎に反転しやすい。
 	// そのため水平成分がほぼ0のときは、前フレームのYawを維持して反転を防ぐ。
-	constexpr float kYawStableEpsilon = 1.0e-4f;
+	constexpr float kYawStableEpsilon = 1.0e-2f;
 	if (velocityXZ > kYawStableEpsilon) {
 		// Y軸周り角度(θy) ...atan2(高さ, 底辺)
 		float targetY = std::atan2(velocity.x, velocity.z);
-		rotation_.y = targetY;
+		rotation_.y = NearAngle(rotation_.y, targetY);
 	}
 
 	rotation_.x = targetX;
