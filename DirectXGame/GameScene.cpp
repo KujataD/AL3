@@ -84,8 +84,15 @@ void GameScene::Update() {
 	railFirstCube_.translation_ = CatmullRomPosition(railControlPoints_, t);
 	railSecondSphere_.translation_ = CatmullRomPosition(railControlPoints_, t1);
 
-	railFirstCube_.ApplyRotationOfVelocity(railSecondSphere_.translation_ - railFirstCube_.translation_);
-
+	//railFirstCube_.CalcRotationOfVelocity(railSecondSphere_.GetWorldPosition() - railFirstCube_.GetWorldPosition());
+	
+	//railFirstCube_.rotation_ = CalcRotationOfVelocity(railSecondSphere_.GetWorldPosition() - railFirstCube_.GetWorldPosition());
+	Vector3 nextRotation = CalcRotationOfVelocity(railSecondSphere_.GetWorldPosition() - railFirstCube_.GetWorldPosition());
+	railFirstCube_.rotation_ = nextRotation;
+	//railFirstCube_.rotation_.y = nextRotation.y;
+	//if (abs(railFirstCube_.rotation_.y - nextRotation.y) < std::numbers::pi_v<float>)  {
+		//railFirstCube_.rotation_.y = nextRotation.y;
+	//}
 
 	railFirstCube_.UpdateMatrix(camera_);
 	railSecondSphere_.UpdateMatrix(camera_);

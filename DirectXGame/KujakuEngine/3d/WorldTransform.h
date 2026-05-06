@@ -59,6 +59,8 @@ public:
 	TransformationMatrix GetMatrixData(const Camera& camera) const;
 	TransformationMatrix GetBillboardMatrixData(const Camera& camera) const;
 
+	void CalcRotationOfVelocity(const Vector3& velocity, const Vector3& deltaAngle = {0,0,0});
+
 	/// <summary>
 	/// 定数バッファの取得
 	/// </summary>
@@ -75,12 +77,6 @@ public:
 			translation_ = worldPos;
 		}
 	}
-
-	/// <summary>
-	/// 速度の方向を向くようになります。
-	/// </summary>
-	/// <param name="velocity_"></param>
-	void ApplyRotationOfVelocity(const Vector3& velocity, const Vector3& deltaAngle = {0, 0, 0});
 
 private:
 	// 定数バッファ

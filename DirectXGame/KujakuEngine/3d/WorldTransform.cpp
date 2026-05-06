@@ -72,7 +72,8 @@ TransformationMatrix WorldTransform::GetMatrixData(const Camera& camera) const {
 
 TransformationMatrix WorldTransform::GetBillboardMatrixData(const Camera& camera) const { return TransformationMatrix(); }
 
-void WorldTransform::ApplyRotationOfVelocity(const Vector3& velocity, const Vector3& deltaAngle) {
+void WorldTransform::CalcRotationOfVelocity(const Vector3& velocity, const Vector3& deltaAngle) {
+
 	// Y軸周り角度(θy) ...atan2(高さ, 底辺)
 	float targetY = std::atan2(velocity.x, velocity.z);
 	// 横軸方向の長さを求める

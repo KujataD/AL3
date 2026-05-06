@@ -62,4 +62,5 @@ Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
 Vector3 Perpendicular(const Vector3& vector);
 Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
+Vector3 CalcRotationOfVelocity(const Vector3& velocity);
 } // namespace KujakuEngine

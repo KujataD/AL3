@@ -102,4 +102,20 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
 	return result;
 }
 
+Vector3 CalcRotationOfVelocity(const Vector3& velocity){
+	Vector3 rotation{};
+
+	// Y軸周り角度(θy) ...atan2(高さ, 底辺)
+	float targetY = std::atan2(velocity.x, velocity.z);
+	// 横軸方向の長さを求める
+	float velocityXZ = Length({velocity.x, 0.0f, velocity.z});
+	// X軸周り角度(θx)
+	float targetX = std::atan2(-velocity.y, velocityXZ);
+
+	rotation.x = targetX;
+	rotation.y = targetY;
+
+
+	return rotation;
+}
 } // namespace KujakuEngine
