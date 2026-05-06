@@ -13,6 +13,8 @@ public:
 
 	const Matrix4x4& GetViewMatrix() const { return camera_.matView; }
 	const WorldTransform* GetWorldTransform() const { return &worldTransform_; }
+	void SetPosition(const Vector3& position) { worldTransform_.translation_ = position; }
+	void SetRotation(const Vector3& rotation) { worldTransform_.rotation_ = rotation; }
 
 private:
 	Camera camera_;

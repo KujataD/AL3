@@ -338,9 +338,6 @@
     <ClInclude Include="KujakuEngine\base\TextureManager.h">
       <Filter>KujakuEngine\base</Filter>
     </ClInclude>
-    <ClInclude Include="KujakuEngine\vfx\Particle.h">
-      <Filter>KujakuEngine\shapes</Filter>
-    </ClInclude>
     <ClInclude Include="KujakuEngine\vfx\ParticleModel.h">
       <Filter>KujakuEngine\vfx</Filter>
     </ClInclude>
@@ -391,6 +388,9 @@
     </ClInclude>
     <ClInclude Include="KujakuEngine\3d\RailCameraController.h">
       <Filter>KujakuEngine\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\vfx\Particle.h">
+      <Filter>KujakuEngine\vfx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

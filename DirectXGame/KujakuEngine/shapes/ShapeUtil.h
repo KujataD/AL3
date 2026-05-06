@@ -2,6 +2,8 @@
 #include "AABB.h"
 #include "Rect.h"
 #include <vector>
+#include "../vfx/ParticleModel.h"
+#include "../3d/Camera.h"
 
 namespace KujakuEngine {
 
@@ -124,6 +126,8 @@ Vector3 CatmullRomInterpolation(const Vector3& p0, const Vector3& p1, const Vect
 /// <param name="t">スプラインの全区間の中での割合指定[0,1]</param>
 ///< returns>座標</returns>
 Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t);
+
+void DrawSplineParticles(ParticleModel* model, const std::vector<Vector3>& controlPoints, const Camera& camera);
 
 } // namespace ShapeUtil
 

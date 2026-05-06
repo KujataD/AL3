@@ -67,6 +67,7 @@ ParticleModel* ParticleModel::CreateFromOBJ(const std::string& objname, bool ena
 	}
 	particle->CreateVertexBuffer(rawData.vertices);
 	particle->CreateMaterialBuffer(rawData.material);
+	particle->Initialize();
 	return particle;
 }
 
@@ -130,7 +131,7 @@ ParticleModel* ParticleModel::CreateCube(const std::string& textureFilePath, boo
 
 	particle->CreateVertexBuffer(vertices);
 	particle->CreateMaterialBuffer(defaultMaterial);
-
+	particle->Initialize();
 	return particle;
 }
 
@@ -177,7 +178,7 @@ ParticleModel* ParticleModel::CreatePlane(const std::string& textureFilePath, bo
 
 	particle->CreateVertexBuffer(vertices);
 	particle->CreateMaterialBuffer(defaultMaterial);
-
+	particle->Initialize();
 	return particle;
 }
 

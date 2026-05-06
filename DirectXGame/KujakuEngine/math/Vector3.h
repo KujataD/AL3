@@ -1,6 +1,7 @@
 #pragma once
 #include <assert.h>
 #include <cmath>
+#include <numbers>
 
 namespace KujakuEngine {
 
@@ -39,14 +40,13 @@ public:
 	}
 };
 
-Vector3 operator+(Vector3 v, float f) { return {v.x + f, v.y + f, v.z + f}; }
-Vector3 operator-(Vector3 v, float f) { return {v.x - f, v.y - f, v.z - f}; }
-Vector3 operator*(Vector3 v, float f) { return {v.x * f, v.y * f, v.z * f}; }
-Vector3 operator/(Vector3 v, float f) { return {v.x / f, v.y / f, v.z / f}; }
-
-Vector3 operator+(float f, Vector3 v) { return {v.x + f, v.y + f, v.z + f}; }
-Vector3 operator-(float f, Vector3 v) { return {v.x - f, v.y - f, v.z - f}; }
-Vector3 operator*(float f, Vector3 v) { return {v.x * f, v.y * f, v.z * f}; }
+inline Vector3 operator+(Vector3 v, float f) { return {v.x + f, v.y + f, v.z + f}; }
+inline Vector3 operator-(Vector3 v, float f) { return {v.x - f, v.y - f, v.z - f}; }
+inline Vector3 operator*(Vector3 v, float f) { return {v.x * f, v.y * f, v.z * f}; }
+inline Vector3 operator/(Vector3 v, float f) { return {v.x / f, v.y / f, v.z / f}; }
+inline Vector3 operator+(float f, Vector3 v) { return {v.x + f, v.y + f, v.z + f}; }
+inline Vector3 operator-(float f, Vector3 v) { return {v.x - f, v.y - f, v.z - f}; }
+inline Vector3 operator*(float f, Vector3 v) { return {v.x * f, v.y * f, v.z * f}; }
 
 float Dot(const Vector3& v1, const Vector3& v2);
 Vector3 Cross(const Vector3& a, const Vector3& b);
@@ -61,5 +61,20 @@ Vector3 Project(const Vector3& a, const Vector3& b);
 Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
 Vector3 Perpendicular(const Vector3& vector);
 Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
+
+inline float NormalizeAngle(float angle) {
+	while (angle > std::numbers::pi_v<float>) {
+		angle -= 2.0f * std::numbers::pi_v<float>;
+	}
+	while (angle < -std::numbers::pi_v<float>) {
+		angle += 2.0f * std::numbers::pi_v<float>;
+	}
+	return angle;
+}
+
+inline float NearAngle(float current, float target) {
+	float diff = NormalizeAngle(target - current);
+	return current + diff;
+}
 
 } // namespace KujakuEngine

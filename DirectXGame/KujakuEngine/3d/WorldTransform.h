@@ -76,6 +76,12 @@ public:
 		}
 	}
 
+	/// <summary>
+	/// 速度の方向を向くようになります。
+	/// </summary>
+	/// <param name="velocity_"></param>
+	void ApplyRotationOfVelocity(const Vector3& velocity, const Vector3& deltaAngle = {0, 0, 0});
+
 private:
 	// 定数バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixResource_;

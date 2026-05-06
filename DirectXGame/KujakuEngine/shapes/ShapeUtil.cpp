@@ -359,7 +359,7 @@ Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t) {
 	// 区間番号
 	size_t index = static_cast<size_t>(t / areaWidth);
 	// 区間番号が上限を超えないように収める
-	index = std::min<size_t>(index, division);
+	index = std::min<size_t>(index, division - 1);
 
 	// 4点分のインデックス
 	size_t index0 = index - 1;
@@ -385,6 +385,35 @@ Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t) {
 
 	// 4点を指定してCatmull-Rom補間
 	return CatmullRomInterpolation(p0, p1, p2, p3, t_2);
+}
+
+void DrawSplineParticles(ParticleModel* model, const std::vector<Vector3>& controlPoints, const Camera& camera) {
+	const size_t particleCount = 20;
+
+	model->ClearInstanceParticles();
+
+	for (size_t i = 0; i < particleCount; ++i) {
+		float t = 0.0f;
+
+		if (particleCount > 1) {
+			t = static_cast<float>(i) / static_cast<float>(particleCount - 1);
+		}
+
+		Vector3 pos = CatmullRomPosition(controlPoints, t);
+
+		Vector3 scale = {0.1f, 0.1f, 0.1f};
+		Vector3 rotation = {0.0f, 0.0f, 0.0f};
+
+		TransformationMatrix mat = MakeBillboardMatrix(scale, rotation, pos, camera);
+
+		Vector4 color = {1.0f, 0.0f, 0.0f, 1.0f};
+
+		model->AddInstanceParticle(mat, color);
+	}
+
+	model->UpdateBuffer();
+
+	model->Draw();
 }
 
 } // namespace ShapeUtil

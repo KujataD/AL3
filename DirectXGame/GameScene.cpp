@@ -39,6 +39,29 @@ void GameScene::Initialize() {
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelSkydome_.get(), &camera_);
 
+	// スプライン曲線
+	modelSpline_ = std::unique_ptr<ParticleModel>(ParticleModel::CreatePlane("resources/white1x1.png", false));
+
+	modelSphere_ = std::unique_ptr<Model>(Model::CreateSphere("resources/white1x1.png"));
+	modelSphere_->SetColor({0.0f, 0.0f, 1.0f, 1.0f});
+
+	modelCube_ = std::unique_ptr<Model>(Model::CreateCube("resources/white1x1.png"));
+	modelCube_->SetColor({1.0f, 0.0f, 0.0f, 1.0f});
+
+	railFirstCube_.Initialize();
+	railFirstCube_.scale_ = {0.5f, 0.5f, 3.0f};
+
+	railSecondSphere_.Initialize();
+
+	railControlPoints_ = {
+	    {0,  0,  0},
+        {10, 10, 0},
+        {10, 15, 0},
+        {20, 15, 0},
+        {20, 0,  0},
+        {30, 0,  0},
+	};
+
 	// 調整項目を登録
 	RegisterAllVariables();
 }
@@ -54,6 +77,17 @@ void GameScene::Update() {
 	player_->Update();
 	enemy_->Update();
 	skydome_->Update();
+
+	timer_ -= kDT;
+	float t = std::clamp((1.0f - timer_ / 10.0f), 0.0f, 0.99f);
+	float t1 = std::clamp((1.0f - timer_ / 10.0f) + 0.1f, 0.0f, 1.0f);
+	railFirstCube_.translation_ = CatmullRomPosition(railControlPoints_, t);
+	railSecondSphere_.translation_ = CatmullRomPosition(railControlPoints_, t1);
+
+	railFirstCube_.ApplyRotationOfVelocity(railSecondSphere_.translation_ - railFirstCube_.translation_);
+
+	railFirstCube_.UpdateMatrix(camera_);
+	railSecondSphere_.UpdateMatrix(camera_);
 }
 
 void GameScene::Draw() {
@@ -61,6 +95,12 @@ void GameScene::Draw() {
 	player_->Draw();
 	enemy_->Draw();
 	skydome_->Draw();
+
+	modelCube_->Draw(railFirstCube_, camera_, kFillModeWireframe);
+	//modelSphere_->Draw(railSecondSphere_, camera_, kFillModeWireframe);
+	ParticleModel::PreDraw();
+	//DrawSplineParticles(modelSpline_.get(), railControlPoints_, camera_);
+	ParticleModel::PostDraw();
 }
 
 void GameScene::UpdateCamera() {
@@ -71,12 +111,17 @@ void GameScene::UpdateCamera() {
 	if (Input::GetKeyTrigger(DIK_L)) {
 		Initialize();
 	}
+	if (Input::GetKeyTrigger(DIK_RETURN)) {
+		timer_ = 10.0f;
+	}
 
 #endif // _DEBUG
-		
+
 	// カメラコントローラー操作
+	railCamera_.SetPosition(railFirstCube_.translation_);
+	railCamera_.SetRotation(railFirstCube_.rotation_);
 	railCamera_.Update();
-	
+
 	// カメラの処理
 	if (isActiveDebugCamera_) {
 		debugCamera_.Update();

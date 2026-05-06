@@ -50,4 +50,14 @@ private:
 	// --- スカイドーム ---
 	std::unique_ptr<Skydome> skydome_;
 	std::unique_ptr<KujakuEngine::Model> modelSkydome_;
+
+	// --- スプライン曲線 ---
+	std::unique_ptr<KujakuEngine::ParticleModel> modelSpline_;
+	std::unique_ptr<KujakuEngine::Model> modelSphere_;
+	std::unique_ptr<KujakuEngine::Model> modelCube_;
+	
+	std::vector<KujakuEngine::Vector3> railControlPoints_;
+	KujakuEngine::WorldTransform railFirstCube_;
+	KujakuEngine::WorldTransform railSecondSphere_;
+	float timer_ = 10.0f;
 };

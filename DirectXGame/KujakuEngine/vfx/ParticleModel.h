@@ -39,7 +39,7 @@ public:
 
 	static ParticleModel* CreateCube(const std::string& textureFilePath, bool enableLighting = false);
 
-	static ParticleModel* CreatePlane(const std::string& textureFilePath, bool enableLighting);
+	static ParticleModel* CreatePlane(const std::string& textureFilePath, bool enableLighting = false);
 
 	/// <summary>
 	/// 描画前処理（全モデル共通・フレームに1回）
@@ -73,6 +73,7 @@ public:
 		instanceParticles_.push_back(particleForGPU);
 		return true;
 	}
+	void ClearInstanceParticles() { instanceParticles_.clear(); }
 
 	// --- get ---
 	uint32_t GetMaxInstance() const { return kMaxInstance; }
@@ -115,4 +116,3 @@ private:
 };
 
 } // namespace KujakuEngine
-
