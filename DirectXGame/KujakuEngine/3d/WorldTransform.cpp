@@ -81,10 +81,8 @@ void WorldTransform::ApplyRotationOfVelocity(const Vector3& velocity, const Vect
 	float targetX = std::atan2(-velocity.y, velocityXZ);
 
 	rotation_.x = targetX;
-	if (abs(rotation_.y - targetY) < std::numbers::pi_v<float>) {
-		rotation_.y = targetY;
-	}
-	rotation_.z = 0.0f;
+	rotation_.y = targetY;
+
 	rotation_ += deltaAngle;
 }
 
