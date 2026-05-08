@@ -3,7 +3,11 @@ using namespace KujakuEngine;
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+GameScene::~GameScene() {
+	delete player_;
+	delete mapChipField_;
+	delete skydome_;
+}
 
 void GameScene::Init() {
 
@@ -38,7 +42,7 @@ void GameScene::Update() {
 
 	// スカイドーム更新
 	skydome_->Update();
-	
+
 	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -60,7 +64,7 @@ void GameScene::Update() {
 		isDebugCameraActive_ = !isDebugCameraActive_;
 	}
 #endif // _DEBUG
-	
+
 	// カメラの処理
 	if (isDebugCameraActive_) {
 		debugCamera_.Update();

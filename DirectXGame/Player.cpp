@@ -2,6 +2,7 @@
 
 void Player::Init(KujakuEngine::Model* model, KujakuEngine::Camera* camera) { // nullptr check
 	assert(model);
+	assert(camera);
 
 	// 引数の記録
 	model_ = model;
