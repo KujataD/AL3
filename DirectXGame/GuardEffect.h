@@ -1,29 +1,23 @@
 #pragma once
 #include  "KujakuEngine/KujakuEngine.h"
+#include "BaseEffect.h"
 #include <vector>
 
 /// <summary>
 /// ヒット演出用エフェクト
 /// </summary>
-class GuardEffect {
+class GuardEffect final : public BaseEffect {
 public:
-	enum class State{
-		kAnim,
-		kDead,
-	};
-public:
-	void Init(const KujakuEngine::Vector3 spawnPos);
+	void Init(const KujakuEngine::Vector3 spawnPos) override;
 
-	void Update();
+	void Update() override;
 
-	void Draw();
+	void Draw() override;
 
 	static GuardEffect* Create(const KujakuEngine::Vector3 spawnPos);
-
+	
 	static void SetModel(KujakuEngine::Model* model) { model_ = model; }
 	static void SetCamera(KujakuEngine::Camera* camera) { camera_ = camera; }
-
-	bool IsDead() const { return state_ == State::kDead; }
 
 public:
 	// --- 定数 ---
@@ -36,7 +30,7 @@ public:
 	static inline const float kAnimDuration = 0.25f;
 
 private:
-
+	
 	// --- 外部依存 ---
 
 	// モデル
@@ -46,10 +40,7 @@ private:
 	static KujakuEngine::Camera* camera_;
 
 	// --- インスタンスプロパティ ---
-
-	// 状態
-	State state_;
-
+	
 	// 全サイズ
 	float allShapeSize_ = 1.0f;
 

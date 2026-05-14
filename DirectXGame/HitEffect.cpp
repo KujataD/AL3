@@ -8,7 +8,7 @@ KujakuEngine::Camera* HitEffect::camera_ = nullptr;
 using namespace KujakuEngine;
 using namespace EaseUtil;
 
-void HitEffect::Init(const KujakuEngine::Vector3 spawnPos, const KujakuEngine::Vector4 color) {
+void HitEffect::Init(const KujakuEngine::Vector3 spawnPos) {
 	// トランスフォーム初期化
 	circleWorldTransform_.Initialize();
 	circleWorldTransform_.translation_ = spawnPos;
@@ -23,7 +23,6 @@ void HitEffect::Init(const KujakuEngine::Vector3 spawnPos, const KujakuEngine::V
 	}
 
 	state_ = State::kAnim;
-	color_ = color;
 }
 
 void HitEffect::Update() {
@@ -74,13 +73,13 @@ void HitEffect::Draw() {
 	}
 }
 
-HitEffect* HitEffect::Create(const KujakuEngine::Vector3 spawnPos, const KujakuEngine::Vector4 color) {
+HitEffect* HitEffect::Create(const KujakuEngine::Vector3 spawnPos) {
 	// インスタンス作成
 	HitEffect* instance = new HitEffect();
 	// newの失敗を検出
 	assert(instance);
 	// インスタンスの初期化
-	instance->Init(spawnPos, color);
+	instance->Init(spawnPos);
 	// 初期化したインスタンスを返す
 	return instance;
 }

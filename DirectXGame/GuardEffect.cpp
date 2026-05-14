@@ -1,10 +1,6 @@
 #include "GuardEffect.h"
 #include <algorithm>
 
-// 生定期メンバの実体
-KujakuEngine::Model* GuardEffect::model_ = nullptr;
-KujakuEngine::Camera* GuardEffect::camera_ = nullptr;
-
 using namespace KujakuEngine;
 using namespace EaseUtil;
 

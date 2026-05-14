@@ -97,6 +97,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseEffect.cpp" />
     <ClCompile Include="BaseEnemy.cpp" />
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="DeathParticles.cpp" />
@@ -165,6 +166,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseEffect.h" />
     <ClInclude Include="BaseEnemy.h" />
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="DeathParticles.h" />

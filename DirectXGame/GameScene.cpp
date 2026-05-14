@@ -362,7 +362,8 @@ void GameScene::GenerateFieldObjects() {
 }
 
 void GameScene::CreateHitEffect(const KujakuEngine::Vector3 spawnPos, const KujakuEngine::Vector4 color) {
-	HitEffect* newHitEffect = HitEffect::Create(spawnPos, color);
+	HitEffect* newHitEffect = HitEffect::Create(spawnPos);
+	newHitEffect->SetColor(color);
 	hitEffects_.push_back(newHitEffect);
 }
 

@@ -38,7 +38,6 @@ protected:
 	GameScene* gameScene_ = nullptr;
 	// マップチップ
 	MapChipField* mapChipField_ = nullptr;
-
 	// デス状態
 	bool isDead_ = false;
 	// コリジョン無効にするかどうか
