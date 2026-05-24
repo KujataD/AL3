@@ -294,8 +294,14 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 	std::vector<Vector2> texcoords;
 	std::string line;
 
-	std::ifstream file(directoryPath + "/" + filename);
-	assert(file.is_open());
+	std::string fullPath = directoryPath + "/" + filename;
+
+	std::ifstream file(fullPath);
+
+	if (!file.is_open()) {
+		OutputDebugStringA(("Failed Open File : " + fullPath + "\n").c_str());
+		assert(false);
+	}
 
 	while (std::getline(file, line)) {
 		std::string identifier;

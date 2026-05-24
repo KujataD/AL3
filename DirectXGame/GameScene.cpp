@@ -21,7 +21,7 @@ void GameScene::Initialize() {
 
 	// エネミー
 	// ------------------------------------------
-	modelEnemy_ = std::unique_ptr<Model>(Model::CreateFromOBJ("enemy_airship", ShaderModel::kHalfLambert));
+	modelEnemy_ = std::unique_ptr<Model>(Model::CreateFromOBJ("enemy_ship", ShaderModel::kHalfLambert));
 	modelEnemyBullet_ = std::unique_ptr<Model>(Model::CreateCube("resources/white1x1.png"));
 	enemy_ = std::make_unique<Enemy>();
 	enemy_->SetPlayer(player_.get());
@@ -69,10 +69,12 @@ void GameScene::ApplyAllVariables() {
 	Player::ApplyGlobalVariables();
 	PlayerBullet::ApplyGlobalVariables();
 	Enemy::ApplyGlobalVariables();
+	EnemyBullet::ApplyGlobalVariables();
 }
 
 void GameScene::RegisterAllVariables() {
 	Player::RegisterGlobalVariables();
 	PlayerBullet::RegisterGlobalVariables();
 	Enemy::RegisterGlobalVariables();
+	EnemyBullet::RegisterGlobalVariables();
 }

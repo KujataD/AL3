@@ -12,12 +12,13 @@ public:
 		static inline const std::string kGroup = "Enemy Bullet";
 		static inline const std::string kSpeed = "Speed";
 		static inline const std::string kHandlingPower = "HandlingPower";
+		static inline const std::string kLifeTime = "LifeTime";
 	};
 
 	struct Param {
 		static inline float lifeTime_ = 5.0f;
 		static inline float speed_ = 1.0f;
-		static inline float handlingPower = 0.05f;
+		static inline float handlingPower_ = 0.05f;
 	};
 
 public:

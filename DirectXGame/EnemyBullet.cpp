@@ -14,9 +14,9 @@ void EnemyBullet::Initialize(KujakuEngine::Model* model, KujakuEngine::Camera* c
 
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
-	worldTransform_.scale_ = {0.5f, 0.5f, 3.0f};
+	worldTransform_.scale_ = { 0.5f, 0.5f, 3.0f };
 
-	model_->SetColor({1.0f, 0.0f, 0.0f, 1.0f});
+	model_->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
 
 	// デスタイマー
 	deathTimer_ = Param::lifeTime_;
@@ -34,7 +34,7 @@ void EnemyBullet::Update() {
 	if (isHoming_) {
 		Vector3 toPlayer = player_->GetWorldPosition() - worldTransform_.GetWorldPosition();
 
-		velocity_ = Slerp(velocity_, toPlayer, Param::handlingPower) * Param::speed_;
+		velocity_ = Slerp(velocity_, toPlayer, Param::handlingPower_) * Param::speed_;
 
 		// 向きを合わせる
 		ApplyRotationOfVelocity();
@@ -46,15 +46,26 @@ void EnemyBullet::Update() {
 
 void EnemyBullet::Draw() { model_->Draw(worldTransform_, *camera_); }
 
-void EnemyBullet::RegisterGlobalVariables() {}
+void EnemyBullet::RegisterGlobalVariables() {
+	GlobalVariables* gv = GlobalVariables::GetInstance();
+	gv->AddItem(ParamKey::kGroup, ParamKey::kHandlingPower, Param::handlingPower_);
+	gv->AddItem(ParamKey::kGroup, ParamKey::kLifeTime, Param::lifeTime_);
+	gv->AddItem(ParamKey::kGroup, ParamKey::kSpeed, Param::speed_);
 
-void EnemyBullet::ApplyGlobalVariables() {}
+}
+
+void EnemyBullet::ApplyGlobalVariables() {
+	GlobalVariables* gv = GlobalVariables::GetInstance();
+	Param::handlingPower_ = gv->GetValue<float>(ParamKey::kGroup, ParamKey::kHandlingPower);
+	Param::speed_ = gv->GetValue<float>(ParamKey::kGroup, ParamKey::kSpeed);
+	Param::lifeTime_ = gv->GetValue<float>(ParamKey::kGroup, ParamKey::kLifeTime);
+}
 
 void EnemyBullet::ApplyRotationOfVelocity() {
 	// Y軸周り角度(θy) ...atan2(高さ, 底辺)
 	worldTransform_.rotation_.y = std::atan2(velocity_.x, velocity_.z);
 	// 横軸方向の長さを求める
-	float velocityXZ = Length({velocity_.x, 0.0f, velocity_.z});
+	float velocityXZ = Length({ velocity_.x, 0.0f, velocity_.z });
 	// X軸周り角度(θx)
 	worldTransform_.rotation_.x = std::atan2(-velocity_.y, velocityXZ);
 }
