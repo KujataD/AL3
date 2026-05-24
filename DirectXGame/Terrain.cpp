@@ -12,6 +12,7 @@ void Terrain::Initialize(KujakuEngine::Model* model, KujakuEngine::Camera* camer
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = {1.5f, 1.5f, 1.5f};
 	worldTransform_.translation_ = {0.0f, -50.0f, 50.0f};
+	worldTransform_.rotation_.y = std::numbers::pi_v<float> * 0.5f;
 }
 
 void Terrain::Update() { worldTransform_.UpdateMatrix(*camera_); }
