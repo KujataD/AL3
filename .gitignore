@@ -98,6 +98,9 @@ StyleCopReport.xml
 *.svclog
 *.scc
 
+# ただし Resources 以下のモデルは除外しない
+!DirectXGame/Resources/**/*.obj
+
 # Chutzpah Test files
 _Chutzpah*
 
