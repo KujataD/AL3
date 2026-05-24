@@ -31,11 +31,18 @@ void GameScene::Initialize() {
 	// 当たり判定
 	collisionManager_ = std::make_unique<CollisionManager>();
 
-	// スカイドーム
+	// 環境
 	// ------------------------------------------
+
+	// スカイドーム
 	modelSkydome_ = std::unique_ptr<Model>(Model::CreateFromOBJ("sky_sphere"));
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelSkydome_.get(), &camera_);
+
+	// 地形
+	modelTerrain_ = std::unique_ptr<Model>(Model::CreateFromOBJ("terrain"));
+	terrain_ = std::make_unique<Terrain>();
+	terrain_->Initialize(modelTerrain_.get(), &camera_);
 
 	// 調整項目を登録
 	RegisterAllVariables();
@@ -52,6 +59,7 @@ void GameScene::Update() {
 	player_->Update();
 	enemy_->Update();
 	skydome_->Update();
+	terrain_->Update();
 }
 
 void GameScene::Draw() {
@@ -59,6 +67,7 @@ void GameScene::Draw() {
 	player_->Draw();
 	enemy_->Draw();
 	skydome_->Draw();
+	terrain_->Draw();
 }
 
 void GameScene::UpdateCamera() {

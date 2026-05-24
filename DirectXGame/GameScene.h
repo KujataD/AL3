@@ -2,6 +2,7 @@
 #include "Enemy.h"
 #include "Player.h"
 #include "Skydome.h"
+#include "Terrain.h"
 #include <KujakuEngine.h>
 
 class GameScene {
@@ -46,7 +47,9 @@ private:
 	// 当たり判定
 	std::unique_ptr<KujakuEngine::CollisionManager> collisionManager_;
 
-	// --- スカイドーム ---
+	// --- 環境 ---
 	std::unique_ptr<Skydome> skydome_;
 	std::unique_ptr<KujakuEngine::Model> modelSkydome_;
+	std::unique_ptr<Terrain> terrain_;
+	std::unique_ptr<KujakuEngine::Model> modelTerrain_;
 };
