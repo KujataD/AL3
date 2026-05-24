@@ -2,8 +2,9 @@
 #include "AABB.h"
 #include "Rect.h"
 #include <vector>
-#include "../vfx/ParticleModel.h"
+#include "../vfx/InstancingModel.h"
 #include "../3d/Camera.h"
+#include <math/MathUtil.h>
 
 namespace KujakuEngine {
 
@@ -127,7 +128,7 @@ Vector3 CatmullRomInterpolation(const Vector3& p0, const Vector3& p1, const Vect
 ///< returns>座標</returns>
 Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t);
 
-void DrawSplineParticles(ParticleModel* model, const std::vector<Vector3>& controlPoints, const Camera& camera);
+void DrawSplineParticles(InstancingModel* model, const std::vector<Vector3>& controlPoints, const Camera& camera);
 
 } // namespace ShapeUtil
 

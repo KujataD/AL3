@@ -5,7 +5,8 @@
 #include "WinApp.h"
 
 namespace KujakuEngine {
-void TextureManager::Initialize() { defaultWhiteTextureIndex_ = LoadTexture("resources/white1x1.png"); }
+void TextureManager::Initialize() { defaultWhiteTextureIndex_ = LoadTexture("Resources/white1x1.png"); }
+
 TextureManager* TextureManager::GetInstance() {
 	static TextureManager instance;
 	return &instance;

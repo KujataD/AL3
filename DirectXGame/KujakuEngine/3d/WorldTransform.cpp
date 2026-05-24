@@ -19,7 +19,27 @@ void WorldTransform::Initialize() {
 	constMap_->World = MakeIdentity();
 }
 
-void WorldTransform::UpdateMatrix(const Camera& camera) {
+void WorldTransform::UpdateMatrix(const Camera& camera, bool isBillboard) {
+	if (isBillboard) {
+		// ワールド行列の生成
+		Matrix4x4 billboardMatrix = kBackToFrontMatrix * Inverse(camera.matView);
+		billboardMatrix.m[3][0] = 0.0f; // 平行移動成分は要らない
+		billboardMatrix.m[3][1] = 0.0f;
+		billboardMatrix.m[3][2] = 0.0f;
+
+		// 回転対応
+		Matrix4x4 rotateZMatrix = MakeRotateZMatrix(rotation_.z);
+
+		Matrix4x4 rotateMatrix = rotateZMatrix * billboardMatrix;
+		Matrix4x4 scaleMatrix = MakeScaleMatrix(scale_);
+		Matrix4x4 translateMatrix = MakeTranslateMatrix(translation_);
+
+		matWorld_ = scaleMatrix * rotateMatrix * translateMatrix;
+
+		TransferMatrix(camera);
+		return;
+	}
+
 	// ワールド行列の生成
 	matWorld_ = MakeAffineMatrix(scale_, rotation_, translation_);
 
@@ -27,25 +47,6 @@ void WorldTransform::UpdateMatrix(const Camera& camera) {
 	if (parent_) {
 		matWorld_ = matWorld_ * parent_->matWorld_;
 	}
-
-	TransferMatrix(camera);
-}
-
-void WorldTransform::UpdateBillboardMatrix(const Camera& camera) {
-	// ワールド行列の生成
-	Matrix4x4 billboardMatrix = kBackToFrontMatrix * Inverse(camera.matView);
-	billboardMatrix.m[3][0] = 0.0f; // 平行移動成分は要らない
-	billboardMatrix.m[3][1] = 0.0f;
-	billboardMatrix.m[3][2] = 0.0f;
-
-	// 回転対応
-	Matrix4x4 rotateZMatrix = MakeRotateZMatrix(rotation_.z);
-
-	Matrix4x4 rotateMatrix = rotateZMatrix * billboardMatrix;
-	Matrix4x4 scaleMatrix = MakeScaleMatrix(scale_);
-	Matrix4x4 translateMatrix = MakeTranslateMatrix(translation_);
-
-	matWorld_ = scaleMatrix * rotateMatrix * translateMatrix;
 
 	TransferMatrix(camera);
 }
@@ -72,7 +73,7 @@ TransformationMatrix WorldTransform::GetMatrixData(const Camera& camera) const {
 
 TransformationMatrix WorldTransform::GetBillboardMatrixData(const Camera& camera) const { return TransformationMatrix(); }
 
-void WorldTransform::CalcRotationOfVelocity(const Vector3& velocity, const Vector3& deltaAngle) {
+void WorldTransform::CalcRotationOfVelocity(const Vector3& velocity, const Vector3& deltaAngle, float maxRotationSpeed) {
 
 	// Y軸周り角度(θy) ...atan2(高さ, 底辺)
 	float targetY = std::atan2(velocity.x, velocity.z);
@@ -81,10 +82,15 @@ void WorldTransform::CalcRotationOfVelocity(const Vector3& velocity, const Vecto
 	// X軸周り角度(θx)
 	float targetX = std::atan2(-velocity.y, velocityXZ);
 
+	if (std::abs(rotation_.x - targetX) > maxRotationSpeed) {
+		rotation_.x += maxRotationSpeed;
+	}
+
 	rotation_.x = targetX;
 	rotation_.y = targetY;
 
 	rotation_ += deltaAngle;
 }
+
 
 } // namespace KujakuEngine

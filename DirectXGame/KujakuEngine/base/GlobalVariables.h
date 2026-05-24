@@ -1,6 +1,6 @@
 #pragma once
 #include "../externals/nlohmann/json.hpp"
-#include <KujakuEngine.h>
+#include "../math/Vector3.h"
 #include <filesystem>
 #include <fstream>
 #include <map>

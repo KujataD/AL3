@@ -46,9 +46,6 @@
     <Filter Include="KujakuEngine\vfx">
       <UniqueIdentifier>{4f5860bd-f6c6-4cf0-a8b9-9e10e489908f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="KujakuEngine\debug">
-      <UniqueIdentifier>{803e7b32-b964-49e0-bdfd-d9fe3d93bf2c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\GameObject">
       <UniqueIdentifier>{2ed25e23-2846-4f5d-b6fe-1c18f85ad2cd}</UniqueIdentifier>
     </Filter>
@@ -78,9 +75,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="externals\imgui\imgui.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
@@ -192,9 +186,6 @@
     <ClCompile Include="GameScene.cpp">
       <Filter>ソース ファイル\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="KujakuEngine\param\GlobalVariables.cpp">
-      <Filter>KujakuEngine\debug</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル\GameObject\Player</Filter>
     </ClCompile>
@@ -233,6 +224,57 @@
     </ClCompile>
     <ClCompile Include="Terrain.cpp">
       <Filter>ソース ファイル\GameObject\Enviroment</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\navigation\steer\AligmentBehavior.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\navigation\steer\ArriveBehavior.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\navigation\pathfinding\AStar.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\navigation\steer\AvoidanceBehavior.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\navigation\steer\CohesionBehavior.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\base\GlobalVariables.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\navigation\Grid.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\vfx\InstancingModel.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\navigation\steer\ISteeringBehavior.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\math\MathUtil.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\navigation\NavigationUtil.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\navigation\steer\SeekBehavior.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\navigation\steer\SeparationBehavior.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\navigation\pathfinding\ThetaStar.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\base\Time.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\navigation\steer\WanderBehavior.cpp">
+      <Filter>KujakuEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -353,9 +395,6 @@
     <ClInclude Include="GameScene.h">
       <Filter>ソース ファイル\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="KujakuEngine\param\GlobalVariables.h">
-      <Filter>KujakuEngine\debug</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>ソース ファイル\GameObject\Player</Filter>
     </ClInclude>
@@ -397,6 +436,57 @@
     </ClInclude>
     <ClInclude Include="Terrain.h">
       <Filter>ソース ファイル\GameObject\Enviroment</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\navigation\steer\WanderBehavior.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\navigation\steer\AligmentBehavior.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\navigation\steer\ArriveBehavior.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\navigation\pathfinding\AStar.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\navigation\steer\AvoidanceBehavior.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\navigation\steer\CohesionBehavior.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\base\GlobalVariables.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\navigation\Grid.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\vfx\InstancingModel.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\navigation\steer\ISteeringBehavior.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\math\MathUtil.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\navigation\NavigationUtil.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\navigation\SearchNode.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\navigation\steer\SeekBehavior.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\navigation\steer\SeparationBehavior.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\navigation\pathfinding\ThetaStar.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\base\Time.h">
+      <Filter>KujakuEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

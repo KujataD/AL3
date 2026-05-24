@@ -14,8 +14,13 @@ DirectXCommon* DirectXCommon::GetInstance() {
 	return &instance;
 }
 
-void DirectXCommon::Initialize(WinApp* winApp, int32_t backBufferWidth, int32_t backBufferHeight, bool enableDebugLayer) {
+void DirectXCommon::Initialize(WinApp* winApp, Vector4 color , int32_t backBufferWidth, int32_t backBufferHeight, bool enableDebugLayer) {
 	assert(winApp);
+
+	clearColor_[0] = color.x;
+	clearColor_[1] = color.y;
+	clearColor_[2] = color.z;
+	clearColor_[3] = color.w;
 
 	winApp_ = winApp;
 	backBufferWidth_ = backBufferWidth;
@@ -368,8 +373,7 @@ void DirectXCommon::ClearRenderTarget() {
 	commandList_->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
 
 	// 指定した色で画面全体をクリアする
-	float clearColor[] = {0.1f, 0.25f, 0.5f, 1.0f}; // 青っぽい色。RGBAの順
-	commandList_->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+	commandList_->ClearRenderTargetView(rtvHandle, clearColor_, 0, nullptr);
 }
 
 void DirectXCommon::ClearDepthBuffer() {

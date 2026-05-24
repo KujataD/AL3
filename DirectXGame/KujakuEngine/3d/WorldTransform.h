@@ -4,8 +4,7 @@
 #include <numbers>
 #include <wrl.h>
 
-#include "../math/Matrix4x4.h"
-#include "../math/Vector3.h"
+#include <math/MathUtil.h>
 
 namespace KujakuEngine {
 
@@ -46,27 +45,22 @@ public:
 	/// ワールド行列を更新してGPUに転送する
 	/// </summary>
 	/// <param name="camera">カメラ（ビュー・プロジェクション行列を取得）</param>
-	void UpdateMatrix(const class Camera& camera);
+	void UpdateMatrix(const class Camera& camera, bool isBillboard = false);
 
-	/// <summary>
-	/// ワールド行列を更新してGPUに転送する
-	/// </summary>
-	/// <param name="camera">カメラ（ビュー・プロジェクション行列を取得）</param>
-	void UpdateBillboardMatrix(const class Camera& camera);
-
-	void TransferMatrix(const class Camera& camera);
+	void TransferMatrix(const Camera& camera);
 
 	TransformationMatrix GetMatrixData(const Camera& camera) const;
 	TransformationMatrix GetBillboardMatrixData(const Camera& camera) const;
 
-	void CalcRotationOfVelocity(const Vector3& velocity, const Vector3& deltaAngle = {0,0,0});
+	void CalcRotationOfVelocity(const Vector3& velocity, const Vector3& deltaAngle = {0, 0, 0}, float maxRotationSpeed = 1.0f);
+
 
 	/// <summary>
 	/// 定数バッファの取得
 	/// </summary>
 	const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return transformationMatrixResource_; }
 
-	Vector3 GetWorldPosition() const { return {matWorld_.m[3][0], matWorld_.m[3][1], matWorld_.m[3][2]}; }
+	const Vector3& GetWorldPosition() const { return {matWorld_.m[3][0], matWorld_.m[3][1], matWorld_.m[3][2]}; }
 	void SetWorldPosition(Vector3 worldPos) {
 		if (parent_) {
 			Matrix4x4 inverseParent = Inverse(parent_->matWorld_);

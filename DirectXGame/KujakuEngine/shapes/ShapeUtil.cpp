@@ -387,7 +387,7 @@ Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t) {
 	return CatmullRomInterpolation(p0, p1, p2, p3, t_2);
 }
 
-void DrawSplineParticles(ParticleModel* model, const std::vector<Vector3>& controlPoints, const Camera& camera) {
+void DrawSplineParticles(InstancingModel* model, const std::vector<Vector3>& controlPoints, const Camera& camera) {
 	const size_t particleCount = 20;
 
 	model->ClearInstanceParticles();
@@ -408,7 +408,7 @@ void DrawSplineParticles(ParticleModel* model, const std::vector<Vector3>& contr
 
 		Vector4 color = {1.0f, 0.0f, 0.0f, 0.5f};
 
-		model->AddInstanceParticle(mat, color);
+		model->AddInstanceModel(mat, color);
 	}
 
 	model->UpdateBuffer();

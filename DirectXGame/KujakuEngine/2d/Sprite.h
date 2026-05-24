@@ -5,14 +5,11 @@
 #include <string>
 #include <wrl.h>
 
-#include "../3d/GraphicsPipeline.h"
-#include "../3d/Model.h"
+#include <3d/GraphicsPipeline.h>
+#include <3d/Model.h>
 
 #include "../../externals/DirectXTex/DirectXTex.h"
-#include "../math/Matrix4x4.h"
-#include "../math/Vector2.h"
-#include "../math/Vector3.h"
-#include "../math/Vector4.h"
+#include <math/MathUtil.h>
 
 namespace KujakuEngine {
 

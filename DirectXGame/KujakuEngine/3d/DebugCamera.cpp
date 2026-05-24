@@ -1,5 +1,6 @@
 #include "DebugCamera.h"
 #include "../input/Input.h"
+#include "../2d/ImGuiManager.h"
 
 namespace KujakuEngine{
 
@@ -44,6 +45,16 @@ void DebugCamera::Update() {
 	if (Input::GetKey(DIK_E)) {
 		translation_.y -= kMoveSpeed;
 	}
+
+#ifdef USE_IMGUI
+
+	ImGui::Begin("DebugCamera");
+	ImGui::DragFloat3("Translation", &translation_.x, 0.01f);
+	ImGui::DragFloat3("Rotation", &rotation_.x, 0.01f);
+	ImGui::End();
+
+#endif // USE_IMGUI
+
 
 	// ビュー行列の更新
 	UpdateViewMatrix();
