@@ -8,16 +8,13 @@
 /// </summary>
 class GuardEffect final : public BaseEffect {
 public:
-	void Init(const KujakuEngine::Vector3 spawnPos) override;
+	void Init(const KujakuEngine::Vector3& spawnPos, KujakuEngine::Model* model, KujakuEngine::Camera* camera) override;
 
 	void Update() override;
 
 	void Draw() override;
 
-	static GuardEffect* Create(const KujakuEngine::Vector3 spawnPos);
-	
-	static void SetModel(KujakuEngine::Model* model) { model_ = model; }
-	static void SetCamera(KujakuEngine::Camera* camera) { camera_ = camera; }
+	static GuardEffect* Create(const KujakuEngine::Vector3& spawnPos, KujakuEngine::Model* model, KujakuEngine::Camera* camera);
 
 public:
 	// --- 定数 ---
@@ -30,14 +27,6 @@ public:
 	static inline const float kAnimDuration = 0.25f;
 
 private:
-	
-	// --- 外部依存 ---
-
-	// モデル
-	static KujakuEngine::Model* model_;
-
-	// カメラ
-	static KujakuEngine::Camera* camera_;
 
 	// --- インスタンスプロパティ ---
 	

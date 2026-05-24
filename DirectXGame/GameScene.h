@@ -11,8 +11,7 @@
 #include "Skydome.h"
 #include <vector>
 
-class HitEffect;
-class GuardEffect;
+class BaseEffect;
 class StageManager;
 
 class GameScene {
@@ -147,9 +146,7 @@ private: // 変数
 	// ガードエフェクトモデル
 	KujakuEngine::Model* modelGuardEffect_ = nullptr;
 
-	std::list<HitEffect*> hitEffects_;
-
-	std::list<GuardEffect*> guardEffects_;
+	std::list<BaseEffect*> effects_;
 
 	// --- シーン ---
 

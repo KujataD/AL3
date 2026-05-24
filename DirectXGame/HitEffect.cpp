@@ -1,22 +1,25 @@
 #include "HitEffect.h"
 #include <algorithm>
 
-// 生定期メンバの実体
-KujakuEngine::Model* HitEffect::model_ = nullptr;
-KujakuEngine::Camera* HitEffect::camera_ = nullptr;
-
 using namespace KujakuEngine;
 using namespace EaseUtil;
 
-void HitEffect::Init(const KujakuEngine::Vector3 spawnPos) {
+void HitEffect::Init(const KujakuEngine::Vector3& spawnPos, KujakuEngine::Model* model, KujakuEngine::Camera* camera) {
+
+	assert(model);
+	assert(camera);
+
 	// トランスフォーム初期化
 	circleWorldTransform_.Initialize();
 	circleWorldTransform_.translation_ = spawnPos;
 
+	model_ = model;
+	camera_ = camera;
+
 	// 楕円エフェクト
 	for (WorldTransform& worldTransform : ellipseWorldTransforms_) {
-		worldTransform.scale_ = {kEllipseWidth * kSizeStart, kEllipseHeight * kSizeStart, 1.0f};
-		worldTransform.rotation_ = {0.0f, 0.0f, Random::GetRandom<float>(-1.0f, 1.0f) * std::numbers::pi_v<float>};
+		worldTransform.scale_ = { kEllipseWidth * kSizeStart, kEllipseHeight * kSizeStart, 1.0f };
+		worldTransform.rotation_ = { 0.0f, 0.0f, Random::GetRandom<float>(-1.0f, 1.0f) * std::numbers::pi_v<float> };
 		worldTransform.translation_ = spawnPos;
 
 		worldTransform.Initialize();
@@ -73,13 +76,13 @@ void HitEffect::Draw() {
 	}
 }
 
-HitEffect* HitEffect::Create(const KujakuEngine::Vector3 spawnPos) {
+HitEffect* HitEffect::Create(const KujakuEngine::Vector3& spawnPos, KujakuEngine::Model* model, KujakuEngine::Camera* camera) {
 	// インスタンス作成
 	HitEffect* instance = new HitEffect();
 	// newの失敗を検出
 	assert(instance);
 	// インスタンスの初期化
-	instance->Init(spawnPos);
+	instance->Init(spawnPos, model, camera);
 	// 初期化したインスタンスを返す
 	return instance;
 }

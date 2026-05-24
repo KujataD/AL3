@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include "GuardEffect.h"
 #include "HitEffect.h"
+#include "BaseEffect.h"
 #include "StageManager.h"
 
 using namespace KujakuEngine;
@@ -32,15 +33,11 @@ GameScene::~GameScene() {
 	}
 	enemies_.clear();
 
-	for (HitEffect* hitEffect : hitEffects_) {
-		delete hitEffect;
+	for (BaseEffect* effect : effects_) {
+		delete effect;
 	}
-	hitEffects_.clear();
+	effects_.clear();
 
-	for (GuardEffect* guardEffect : guardEffects_) {
-		delete guardEffect;
-	}
-	guardEffects_.clear();
 }
 
 void GameScene::Init(StageManager* stageDataManager) {
@@ -118,13 +115,9 @@ void GameScene::Init(StageManager* stageDataManager) {
 
 	// ヒットエフェクト
 	modelHitEffect_ = Model::CreateFromOBJ("particle");
-	HitEffect::SetModel(modelHitEffect_);
-	HitEffect::SetCamera(&camera_);
 
 	// ガードエフェクト
 	modelGuardEffect_ = Model::CreateFromOBJ("ring");
-	GuardEffect::SetModel(modelGuardEffect_);
-	GuardEffect::SetCamera(&camera_);
 }
 
 void GameScene::Update() {
@@ -271,13 +264,8 @@ void GameScene::Draw() {
 	}
 
 	// ヒットエフェクト描画
-	for (HitEffect* hitEffect : hitEffects_) {
-		hitEffect->Draw();
-	}
-
-	// ガードエフェクト描画
-	for (GuardEffect* guardEffect : guardEffects_) {
-		guardEffect->Draw();
+	for (BaseEffect* effect : effects_) {
+		effect->Draw();
 	}
 
 	// 3Dモデル描画後処理
@@ -362,14 +350,14 @@ void GameScene::GenerateFieldObjects() {
 }
 
 void GameScene::CreateHitEffect(const KujakuEngine::Vector3 spawnPos, const KujakuEngine::Vector4 color) {
-	HitEffect* newHitEffect = HitEffect::Create(spawnPos);
+	HitEffect* newHitEffect = HitEffect::Create(spawnPos, modelHitEffect_, &camera_);
 	newHitEffect->SetColor(color);
-	hitEffects_.push_back(newHitEffect);
+	effects_.push_back(newHitEffect);
 }
 
 void GameScene::CreateGuardEffect(const KujakuEngine::Vector3 spawnPos) {
-	GuardEffect* newGuardEffect = GuardEffect::Create(spawnPos);
-	guardEffects_.push_back(newGuardEffect);
+	GuardEffect* newGuardEffect = GuardEffect::Create(spawnPos, modelGuardEffect_, &camera_);
+	effects_.push_back(newGuardEffect);
 }
 
 void GameScene::CheckAkkCollisions() {
@@ -472,29 +460,17 @@ void GameScene::UpdateEnemies() { // エネミーの更新
 void GameScene::UpdateParticles() {
 	// パーティクル処理
 
-	for (HitEffect* hitEffect : hitEffects_) {
-		hitEffect->Update();
+	for (BaseEffect* effect : effects_) {
+		effect->Update();
 	}
 
 	// デスフラグの立ったヒットエフェクトを削除
-	hitEffects_.remove_if([](HitEffect* effect) {
+	effects_.remove_if([](BaseEffect* effect) {
 		if (effect->IsDead()) {
 			delete effect;
 			return true;
 		}
 		return false;
 	});
-
-	for (GuardEffect* hitEffect : guardEffects_) {
-		hitEffect->Update();
-	}
-
-	// デスフラグの立ったヒットエフェクトを削除
-	guardEffects_.remove_if([](GuardEffect* effect) {
-		if (effect->IsDead()) {
-			delete effect;
-			return true;
-		}
-		return false;
-	});
+	   
 }

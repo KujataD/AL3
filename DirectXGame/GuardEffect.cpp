@@ -4,9 +4,17 @@
 using namespace KujakuEngine;
 using namespace EaseUtil;
 
-void GuardEffect::Init(const KujakuEngine::Vector3 spawnPos) {
+
+void GuardEffect::Init(const KujakuEngine::Vector3& spawnPos, KujakuEngine::Model* model, KujakuEngine::Camera* camera)
+{
+	assert(model);
+	assert(camera);
+
 	circleWorldTransform_.translation_ = spawnPos;
 	circleWorldTransform_.Initialize();
+
+	model_ = model;
+	camera_ = camera;
 
 	state_ = State::kAnim;
 }
@@ -45,13 +53,13 @@ void GuardEffect::Draw() {
 	model_->Draw(circleWorldTransform_, *camera_);
 }
 
-GuardEffect* GuardEffect::Create(const KujakuEngine::Vector3 spawnPos) {
+GuardEffect* GuardEffect::Create(const KujakuEngine::Vector3& spawnPos, KujakuEngine::Model* model, KujakuEngine::Camera* camera) {
 	// インスタンス作成
 	GuardEffect* instance = new GuardEffect();
 	// newの失敗を検出
 	assert(instance);
 	// インスタンスの初期化
-	instance->Init(spawnPos);
+	instance->Init(spawnPos, model, camera);
 	// 初期化したインスタンスを返す
 	return instance;
 }

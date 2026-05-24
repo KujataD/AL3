@@ -9,18 +9,15 @@
 /// </summary>
 class HitEffect final : public BaseEffect{
 public:
-public:
-	void Init(const KujakuEngine::Vector3 spawnPos) override;
+	void Init(const KujakuEngine::Vector3& spawnPos, KujakuEngine::Model* model, KujakuEngine::Camera* camera) override;
 
 	void Update() override;
 
 	void Draw() override;
 
-	static HitEffect* Create(const KujakuEngine::Vector3 spawnPos);
+	static HitEffect* Create(const KujakuEngine::Vector3& spawnPos, KujakuEngine::Model* model, KujakuEngine::Camera* camera);
 	void SetColor(KujakuEngine::Vector4 color) { color_ = color; }
 	
-	static void SetModel(KujakuEngine::Model* model) { model_ = model; }
-	static void SetCamera(KujakuEngine::Camera* camera) { camera_ = camera; }
 public:
 	// --- 定数 ---
 	
@@ -42,14 +39,6 @@ public:
 
 private:
 	
-	// --- 外部依存 ---
-
-	// モデル
-	static KujakuEngine::Model* model_;
-
-	// カメラ
-	static KujakuEngine::Camera* camera_;
-
 	// --- インスタンスプロパティ ---
 
 	// Alpha値
