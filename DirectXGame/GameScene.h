@@ -1,6 +1,7 @@
 #pragma once
 #include "Enemy.h"
 #include "Player.h"
+#include "Terrain.h"
 #include "Skydome.h"
 #include <KujakuEngine.h>
 
@@ -29,7 +30,6 @@ private:
 	KujakuEngine::Camera camera_;
 	KujakuEngine::DebugCamera debugCamera_;
 	bool isActiveDebugCamera_ = false;
-	KujakuEngine::RailCameraController railCamera_;
 
 	// --- プレイヤー ---
 	std::unique_ptr<Player> player_;
@@ -51,13 +51,9 @@ private:
 	std::unique_ptr<Skydome> skydome_;
 	std::unique_ptr<KujakuEngine::Model> modelSkydome_;
 
-	// --- スプライン曲線 ---
-	std::unique_ptr<KujakuEngine::ParticleModel> modelSpline_;
-	std::unique_ptr<KujakuEngine::Model> modelSphere_;
-	std::unique_ptr<KujakuEngine::Model> modelCube_;
+	// 地形
+	std::unique_ptr<Terrain> terrain_;
+	std::unique_ptr<KujakuEngine::Model> modelTerrain_;
 	
-	std::vector<KujakuEngine::Vector3> railControlPoints_;
-	KujakuEngine::WorldTransform railFirstCube_;
-	KujakuEngine::WorldTransform railSecondSphere_;
 	float timer_ = 10.0f;
 };

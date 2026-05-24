@@ -111,7 +111,7 @@ void Player::ManageImGui() {
 }
 
 void Player::ClampInWindow() {
-	Rect bounds = camera_->GetVisibleRect(worldTransform_.translation_.z, Param::moveLimitBlank_);
+	Rect bounds = camera_->GetVisibleRect(worldTransform_.translation_.z - camera_->translation_.z, Param::moveLimitBlank_);
 
 	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, bounds.left, bounds.right);
 	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, bounds.bottom, bounds.top);

@@ -157,6 +157,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="Skydome.cpp" />
+    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TimedCall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -212,6 +213,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="Skydome.h" />
+    <ClInclude Include="Terrain.h" />
     <ClInclude Include="TimedCall.h" />
   </ItemGroup>
   <ItemGroup>

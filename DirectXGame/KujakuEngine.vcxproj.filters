@@ -73,7 +73,7 @@
     <Filter Include="ソース ファイル\Utility">
       <UniqueIdentifier>{3bb95d3d-442f-463e-8cc0-c37ec830f66d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\GameObject\Skydome">
+    <Filter Include="ソース ファイル\GameObject\Enviroment">
       <UniqueIdentifier>{59c6c1e9-8743-4843-9316-d4fc6ec0ed49}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -226,10 +226,13 @@
       <Filter>KujakuEngine\shapes</Filter>
     </ClCompile>
     <ClCompile Include="Skydome.cpp">
-      <Filter>ソース ファイル\GameObject\Skydome</Filter>
+      <Filter>ソース ファイル\GameObject\Enviroment</Filter>
     </ClCompile>
     <ClCompile Include="KujakuEngine\3d\RailCameraController.cpp">
       <Filter>KujakuEngine\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>ソース ファイル\GameObject\Enviroment</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -384,13 +387,16 @@
       <Filter>KujakuEngine\shapes</Filter>
     </ClInclude>
     <ClInclude Include="Skydome.h">
-      <Filter>ソース ファイル\GameObject\Skydome</Filter>
+      <Filter>ソース ファイル\GameObject\Enviroment</Filter>
     </ClInclude>
     <ClInclude Include="KujakuEngine\3d\RailCameraController.h">
       <Filter>KujakuEngine\3d</Filter>
     </ClInclude>
     <ClInclude Include="KujakuEngine\vfx\Particle.h">
       <Filter>KujakuEngine\vfx</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>ソース ファイル\GameObject\Enviroment</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
