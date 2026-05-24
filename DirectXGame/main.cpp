@@ -7,20 +7,14 @@ using namespace KujakuEngine;
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// エンジン初期化
-	KujakuEngine::Initialize(L"LC2B_04_オオツカ_ダイチ_AL3", false);
-
-	// ImGuiManagerインスタンスの取得
-	ImGuiManager* imguiManager = ImGuiManager::GetInstance();
-
+	KujakuEngine::Initialize(L"LC2B_04_オオツカ_ダイチ_AL3");
+	
 	// ゲームシーン
 	GameScene* gameScene = new GameScene;
 	gameScene->Initialize();
 
 	// ゲームループ
 	while (Update()) {
-		Input::Update();
-
-		imguiManager->Begin();
 
 		///
 		/// ↓↓↓ 更新処理ここから ↓↓↓

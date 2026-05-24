@@ -252,9 +252,6 @@
     <ClCompile Include="KujakuEngine\ai\navigation\steer\ISteeringBehavior.cpp">
       <Filter>KujakuEngine</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>KujakuEngine</Filter>
-    </ClCompile>
     <ClCompile Include="KujakuEngine\math\MathUtil.cpp">
       <Filter>KujakuEngine</Filter>
     </ClCompile>
@@ -275,6 +272,9 @@
     </ClCompile>
     <ClCompile Include="KujakuEngine\ai\navigation\steer\WanderBehavior.cpp">
       <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
