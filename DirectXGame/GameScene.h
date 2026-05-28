@@ -25,6 +25,11 @@ private:
 
 	void CheckAllCollisions();
 
+	/// <summary>
+	/// 敵弾を追加する
+	/// </summary>
+	void AddEnemyBullet();
+
 private:
 	// カメラ
 	KujakuEngine::Camera camera_;
