@@ -31,6 +31,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		PreDraw();
+
 		///
 		/// ↓↓↓ 描画処理ここから ↓↓↓
 		///

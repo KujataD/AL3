@@ -204,36 +204,25 @@ Model* Model::CreateTriangle(const std::string& textureFilePath, ShaderModel sha
 
 	std::vector<VertexData> vertices;
 
+	const float halfWidth = std::numbers::sqrt3_v<float> *0.5f;
+
 	vertices.push_back({
-	    .position = {1.0f, 1.0f, 0.0f, 1.0f},
-          .texcoord = {0.0f, 0.0f},
-          .normal = {0.0f, 0.0f, 1.0f}
-    }); // 左上
+		.position = {0.0f, 1.0f, 0.0f, 1.0f},
+		.texcoord = {0.5f, 0.0f},
+		.normal = {0.0f, 0.0f, 1.0f}
+		}); // 上
+
 	vertices.push_back({
-	    .position = {-1.0f, 1.0f, 0.0f, 1.0f},
-          .texcoord = {1.0f, 0.0f},
-          .normal = {0.0f, 0.0f, 1.0f}
-    }); // 右上
+		.position = {halfWidth, -0.5f, 0.0f, 1.0f},
+		.texcoord = {1.0f, 1.0f},
+		.normal = {0.0f, 0.0f, 1.0f}
+		}); // 右下
+
 	vertices.push_back({
-	    .position = {1.0f, -1.0f, 0.0f, 1.0f},
-          .texcoord = {0.0f, 1.0f},
-          .normal = {0.0f, 0.0f, 1.0f}
-    }); // 左下
-	vertices.push_back({
-	    .position = {1.0f, -1.0f, 0.0f, 1.0f},
-          .texcoord = {0.0f, 1.0f},
-          .normal = {0.0f, 0.0f, 1.0f}
-    }); // 左下
-	vertices.push_back({
-	    .position = {-1.0f, 1.0f, 0.0f, 1.0f},
-          .texcoord = {1.0f, 0.0f},
-          .normal = {0.0f, 0.0f, 1.0f}
-    }); // 右上
-	vertices.push_back({
-	    .position = {-1.0f, -1.0f, 0.0f, 1.0f},
-          .texcoord = {1.0f, 1.0f},
-          .normal = {0.0f, 0.0f, 1.0f}
-    }); // 右下
+		.position = {-halfWidth, -0.5f, 0.0f, 1.0f},
+		.texcoord = {0.0f, 1.0f},
+		.normal = {0.0f, 0.0f, 1.0f}
+		}); // 左下
 
 	// MaterialData
 	MaterialData defaultMaterial{};

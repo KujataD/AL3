@@ -188,8 +188,7 @@ ParticleModel* ParticleModel::CreateTriangle(const std::string& textureFilePath,
 
 	std::vector<VertexData> vertices;
 
-	const float sqrt3 = std::numbers::sqrt3_v<float>;
-	const float halfWidth = sqrt3 * 0.5f;
+	const float halfWidth = std::numbers::sqrt3_v<float> * 0.5f;
 
 	vertices.push_back({
 	    .position = {0.0f, 1.0f, 0.0f, 1.0f},

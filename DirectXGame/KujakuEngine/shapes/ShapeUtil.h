@@ -130,6 +130,16 @@ Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t);
 
 void DrawSplineParticles(InstancingModel* model, const std::vector<Vector3>& controlPoints, const Camera& camera);
 
+/// <summary>
+/// 始点と終点から大きさの制限された線分を返します。
+/// </summary>
+/// <param name="start"></param>
+/// <param name="end"></param>
+/// <param name="maxDistance"></param>
+/// <returns></returns>
+Segment MakeLimitedSegment(const Vector3& start, const Vector3& end, float maxDistance);
+Segment MakeNattoSegment(const Vector3& start, const Vector3& end, float maxDistance, float minDistance);
+
 } // namespace ShapeUtil
 
 } // namespace KujakuEngine

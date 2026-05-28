@@ -111,6 +111,9 @@
     <ClCompile Include="KujakuEngine\3d\Camera.cpp">
       <Filter>KujakuEngine\3d</Filter>
     </ClCompile>
+    <ClCompile Include="KujakuEngine\3d\AxisIndicator.cpp">
+      <Filter>KujakuEngine\3d</Filter>
+    </ClCompile>
     <ClCompile Include="KujakuEngine\3d\GraphicsPipeline.cpp">
       <Filter>KujakuEngine\3d</Filter>
     </ClCompile>
@@ -320,6 +323,9 @@
     <ClInclude Include="KujakuEngine\3d\Camera.h">
       <Filter>KujakuEngine\3d</Filter>
     </ClInclude>
+    <ClInclude Include="KujakuEngine\3d\AxisIndicator.h">
+      <Filter>KujakuEngine\3d</Filter>
+    </ClInclude>
     <ClInclude Include="KujakuEngine\3d\DirectionalLight.h">
       <Filter>KujakuEngine\3d</Filter>
     </ClInclude>
@@ -495,24 +501,24 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="KujakuEngine\shader\Object3d.hlsli">
+    <None Include="Resources\shader\Object3d.hlsli">
       <Filter>KujakuEngine\shader</Filter>
     </None>
-    <None Include="KujakuEngine\shader\Particle.hlsli">
+    <None Include="Resources\shader\Particle.hlsli">
       <Filter>KujakuEngine\shader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="KujakuEngine\shader\Object3d.PS.hlsl">
+    <FxCompile Include="Resources\shader\Object3d.PS.hlsl">
       <Filter>KujakuEngine\shader</Filter>
     </FxCompile>
-    <FxCompile Include="KujakuEngine\shader\Object3d.VS.hlsl">
+    <FxCompile Include="Resources\shader\Object3d.VS.hlsl">
       <Filter>KujakuEngine\shader</Filter>
     </FxCompile>
-    <FxCompile Include="KujakuEngine\shader\Particle.PS.hlsl">
+    <FxCompile Include="Resources\shader\Particle.PS.hlsl">
       <Filter>KujakuEngine\shader</Filter>
     </FxCompile>
-    <FxCompile Include="KujakuEngine\shader\Particle.VS.hlsl">
+    <FxCompile Include="Resources\shader\Particle.VS.hlsl">
       <Filter>KujakuEngine\shader</Filter>
     </FxCompile>
   </ItemGroup>

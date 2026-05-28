@@ -12,6 +12,9 @@ void GameScene::Initialize() {
 	camera_.Initialize();
 	camera_.translation_ = {0.0f, 0.0f, -50.0f};
 	debugCamera_.Initialize(camera_.rotation_, camera_.translation_);
+	AxisIndicator::GetInstance()->Initialize();
+	AxisIndicator::SetTargetCamera(&camera_);
+	AxisIndicator::SetVisible(true);
 
 	// プレイヤー
 	// ------------------------------------------
@@ -59,6 +62,7 @@ void GameScene::Update() {
 	terrain_->Update();
 
 	UpdateCamera();
+	AxisIndicator::GetInstance()->Update();
 }
 
 void GameScene::Draw() {
@@ -67,6 +71,7 @@ void GameScene::Draw() {
 	enemy_->Draw();
 	skydome_->Draw();
 	terrain_->Draw();
+	AxisIndicator::GetInstance()->Draw();
 	Model::PostDraw();
 }
 

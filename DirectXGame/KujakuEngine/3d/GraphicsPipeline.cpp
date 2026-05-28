@@ -266,10 +266,10 @@ void GraphicsPipeline::CreateObject3dPipelineStateObject() {
 	ID3D12Device* device = DirectXCommon::GetInstance()->GetDevice();
 
 	// シェーダーをコンパイルする
-	IDxcBlob* vertexShaderBlob = CompileShader(L"KujakuEngine/shader/Object3D.VS.hlsl", L"vs_6_0");
+	IDxcBlob* vertexShaderBlob = CompileShader(L"Resources/shader/Object3D.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 
-	IDxcBlob* pixelShaderBlob = CompileShader(L"KujakuEngine/shader/Object3D.PS.hlsl", L"ps_6_0");
+	IDxcBlob* pixelShaderBlob = CompileShader(L"Resources/shader/Object3D.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 
 	// 2. InputLayoutの設定
@@ -429,10 +429,10 @@ void GraphicsPipeline::CreateInstancingPipelineStateObject() {
 	ID3D12Device* device = DirectXCommon::GetInstance()->GetDevice();
 
 	// シェーダーをコンパイルする
-	IDxcBlob* vertexShaderBlob = CompileShader(L"KujakuEngine/shader/Particle.VS.hlsl", L"vs_6_0");
+	IDxcBlob* vertexShaderBlob = CompileShader(L"Resources/shader/Particle.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 
-	IDxcBlob* pixelShaderBlob = CompileShader(L"KujakuEngine/shader/Particle.PS.hlsl", L"ps_6_0");
+	IDxcBlob* pixelShaderBlob = CompileShader(L"Resources/shader/Particle.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 
 	// 2. InputLayoutの設定

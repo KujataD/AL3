@@ -34,7 +34,20 @@ Vector3 Bezier(const Vector3& p0, const Vector3& p1, const Vector3& p2, float t)
 Vector3 Reflect(const Vector3& input, const Vector3& normal);
 Vector3 Transform(const Vector3& v, const Matrix4x4& m);
 Vector3 Project(const Vector3& a, const Vector3& b);
+
+/// <summary>
+/// 最近接点
+/// </summary>
+/// <param name="point"></param>
+/// <param name="segment"></param>
+/// <returns></returns>
 Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
+
+/// <summary>
+/// 垂直
+/// </summary>
+/// <param name="vector"></param>
+/// <returns></returns>
 Vector3 Perpendicular(const Vector3& vector);
 Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 

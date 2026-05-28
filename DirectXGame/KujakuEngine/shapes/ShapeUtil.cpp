@@ -416,6 +416,38 @@ void DrawSplineParticles(InstancingModel* model, const std::vector<Vector3>& con
 	model->Draw();
 }
 
+Segment MakeLimitedSegment(const Vector3& start, const Vector3& end, float maxDistance) {
+	Vector3 toEnd = end - start;
+
+	Segment segment{};
+	segment.origin = start;
+
+	if (Length(toEnd) <= maxDistance) {
+		segment.diff = toEnd;
+	} else {
+		Vector3 direction = Normalize(toEnd);
+		segment.diff = direction * (maxDistance / (Length(toEnd))) * maxDistance;
+	}
+
+	return segment;
+}
+
+Segment MakeNattoSegment(const Vector3& start, const Vector3& end, float maxDistance, float minDistance) {
+	Vector3 toEnd = end - start;
+
+	Segment segment{};
+	segment.origin = start;
+
+	if (Length(toEnd) <= maxDistance) {
+		segment.diff = toEnd;
+	} else {
+		Vector3 direction = Normalize(toEnd);
+		segment.diff = direction * (maxDistance / Length(toEnd) * 4.0f);
+	}
+
+	return segment;
+}
+
 } // namespace ShapeUtil
 
 } // namespace KujakuEngine
