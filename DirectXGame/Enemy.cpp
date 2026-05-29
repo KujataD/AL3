@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "Player.h"
 #include "EnemyStateApproach.h"
+#include "GameScene.h"
 
 using namespace KujakuEngine;
 
@@ -37,16 +38,11 @@ void Enemy::Update() {
 	// 各フェーズの関数を呼び出す
 	state_->Update();
 
-	UpdateBullets();
-
 	worldTransform_.UpdateMatrix(*camera_);
 }
 
 void Enemy::Draw() {
 	model_->Draw(worldTransform_, *camera_);
-	for (auto& bullet : bullets_) {
-		bullet->Draw();
-	}
 }
 
 void Enemy::RegisterGlobalVariables() {
@@ -85,7 +81,7 @@ void Enemy::Fire() {
 	newBullet->Initialize(modelBullet_, camera_, spawnPosition, direction, false);
 
 	// 弾を登録する
-	bullets_.push_back(std::move(newBullet));
+	gameScene_->AddEnemyBullet(std::move(newBullet));
 }
 
 void Enemy::ChangeState(std::unique_ptr<BaseEnemyState> state) {
@@ -107,18 +103,3 @@ void Enemy::FireAndTimerReset() {
 
 void Enemy::ClearFireTimer() { timedCalls_.clear(); }
 
-void Enemy::UpdateBullets() {
-
-	// 更新
-	for (auto& bullet : bullets_) {
-		bullet->Update();
-	}
-
-	// デスフラグの立った弾を排除
-	bullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) {
-		if (bullet->IsDead()) {
-			return true;
-		}
-		return false;
-	});
-}

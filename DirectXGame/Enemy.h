@@ -5,6 +5,7 @@
 #include <KujakuEngine.h>
 
 class Player;
+class GameScene;
 
 class Enemy : public KujakuEngine::Collider {
 public:
@@ -47,13 +48,13 @@ public:
 
 	// - set -
 	void SetPlayer(Player* player) { player_ = player; }
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
 	// - get -
 	bool IsDead() const { return isDead_; }
 	const KujakuEngine::Vector3& GetPosition() const { return worldTransform_.translation_; }
 	const KujakuEngine::Vector3& GetWorldPosition() const override { return worldTransform_.GetWorldPosition(); }
-	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() const { return bullets_; }
-
+	
 	// --- 外部API ---
 	void OnCollision() override;
 
@@ -94,11 +95,11 @@ public:
 	void ClearFireTimer();
 
 private:
-	void UpdateBullets();
 
 private:
+	// 外部受け取り
+	GameScene* gameScene_ = nullptr;
 	KujakuEngine::Model* model_;
-	KujakuEngine::Model* modelBullet_;
 	KujakuEngine::Camera* camera_;
 	Player* player_ = nullptr;
 
@@ -110,7 +111,8 @@ private:
 	std::unique_ptr<BaseEnemyState> state_;
 
 	// 弾
-	std::list<std::unique_ptr<EnemyBullet>> bullets_;
+	KujakuEngine::Model* modelBullet_ = nullptr;
+	//std::list<std::unique_ptr<EnemyBullet>> bullets_;
 	float fireTimer = 0.0f;
 	std::list<std::unique_ptr<TimedCall>> timedCalls_;
 };

@@ -59,9 +59,10 @@ private:
 	void ApplyRotationOfVelocity();
 
 private:
-	KujakuEngine::Model* model_;
-	KujakuEngine::Camera* camera_;
-	Player* player_;
+	// 外部受け取り
+	KujakuEngine::Model* model_ = nullptr;
+	KujakuEngine::Camera* camera_ = nullptr;
+	Player* player_ = nullptr;
 
 	// 内部プロパティ
 	KujakuEngine::WorldTransform worldTransform_;
