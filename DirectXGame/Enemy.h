@@ -14,17 +14,32 @@ public:
 		Leave,    // 離脱
 	};
 
+	enum class LeaveState {
+		Left,
+		Right,
+		Forward,
+		Count,
+	};
+
+	struct CommandList {
+		static inline const std::string kSetLeave[] = { "LEAVE_LEFT", "LEAVE_RIGHT", "LEAVE_FORWARD" };
+	};
+
 	struct ParamKey {
 		static inline const std::string kGroup = "Enemy";
 
 		static inline const std::string kApproachVelocity = "ApproachVelocity";
-		static inline const std::string kLeaveVelocity = "LeaveVelocity";
+		static inline const std::string kLeaveVelocityLeft = "LeaveVelocityLeft";
+		static inline const std::string kLeaveVelocityRight = "LeaveVelocityRight";
+		static inline const std::string kLeaveVelocityForward = "LeaveVelocityForward";
 		static inline const std::string kBulletFireDuration = "BulletFireDuration";
 	};
 
 	struct Param {
-		static inline KujakuEngine::Vector3 approachVelocity_ = {0.0f, 0.0f, -0.4f};
-		static inline KujakuEngine::Vector3 leaveVelocity_ = {-0.35f, 0.35f, -0.1f};
+		static inline KujakuEngine::Vector3 approachVelocity_ = { 0.0f, 0.0f, -0.4f };
+		static inline KujakuEngine::Vector3 leaveVelocityLeft_ = { -0.35f, 0.35f, -0.1f };
+		static inline KujakuEngine::Vector3 leaveVelocityRight_ = { 0.35f, 0.35f, -0.1f };
+		static inline KujakuEngine::Vector3 leaveVelocityForward_ = { 0.0f,  0.35f, -0.1f };
 
 		static inline float bulletFireDuration_ = 0.5f;
 	};
@@ -49,12 +64,13 @@ public:
 	// - set -
 	void SetPlayer(Player* player) { player_ = player; }
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+	void SetLeaveState(LeaveState leaveState) { leaveState_ = leaveState; }
 
 	// - get -
 	bool IsDead() const { return isDead_; }
 	const KujakuEngine::Vector3& GetPosition() const { return worldTransform_.translation_; }
 	const KujakuEngine::Vector3& GetWorldPosition() const override { return worldTransform_.GetWorldPosition(); }
-	
+
 	// --- 外部API ---
 	void OnCollision() override;
 
@@ -97,6 +113,9 @@ public:
 private:
 
 private:
+	// 状態
+	LeaveState leaveState_ = LeaveState::Left;
+
 	// 外部受け取り
 	GameScene* gameScene_ = nullptr;
 	KujakuEngine::Model* model_;

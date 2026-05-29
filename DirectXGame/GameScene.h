@@ -58,7 +58,7 @@ private:
 	/// <summary>
 	/// 敵ベクタの更新
 	/// </summary>
-	void SpawnEnemy(KujakuEngine::Vector3 spawnPos);
+	void SpawnEnemy(KujakuEngine::Vector3 spawnPos, Enemy::LeaveState leaveState);
 
 	/// <summary>
 	/// 敵弾を追加する

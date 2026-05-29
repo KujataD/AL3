@@ -186,11 +186,12 @@ void GameScene::UpdateEnemies() {
 
 }
 
-void GameScene::SpawnEnemy(KujakuEngine::Vector3 spawnPos) {
+void GameScene::SpawnEnemy(KujakuEngine::Vector3 spawnPos, Enemy::LeaveState leaveState) {
 	std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>();
 	enemy->SetPlayer(player_.get());
 	enemy->SetGameScene(this);
 	enemy->Initialize(modelEnemy_.get(), modelEnemyBullet_.get(), &camera_, spawnPos);
+	enemy->SetLeaveState(leaveState);
 	enemies_.push_back(std::move(enemy));
 }
 
@@ -256,8 +257,19 @@ void GameScene::UpdateEnemyPopCommands() {
 			getline(line_stream, word, ',');
 			float z = (float)std::atof(word.c_str());
 
+			// 離脱コマンド
+			Enemy::LeaveState leaveState = Enemy::LeaveState::Left; // デフォルト左
+			getline(line_stream, word, ',');
+			for (int32_t i = 0; i < (int32_t)Enemy::LeaveState::Count; i++) {
+				if (word.find(Enemy::CommandList::kSetLeave[i]) == 0) {	
+					// コマンドに一致する処理を追加
+					leaveState = static_cast<Enemy::LeaveState>(i);
+					break;
+				}
+			}
+
 			// 敵を発生させる
-			SpawnEnemy(Vector3(x, y, z));
+			SpawnEnemy(Vector3(x, y, z), leaveState);
 		} else if (word.find("WAIT") == 0) {
 			getline(line_stream, word, ',');
 

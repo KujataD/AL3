@@ -48,14 +48,18 @@ void Enemy::Draw() {
 void Enemy::RegisterGlobalVariables() {
 	GlobalVariables* gv = GlobalVariables::GetInstance();
 	gv->AddItem(ParamKey::kGroup, ParamKey::kApproachVelocity, Param::approachVelocity_);
-	gv->AddItem(ParamKey::kGroup, ParamKey::kLeaveVelocity, Param::leaveVelocity_);
+	gv->AddItem(ParamKey::kGroup, ParamKey::kLeaveVelocityLeft, Param::leaveVelocityLeft_);
+	gv->AddItem(ParamKey::kGroup, ParamKey::kLeaveVelocityRight, Param::leaveVelocityRight_);
+	gv->AddItem(ParamKey::kGroup, ParamKey::kLeaveVelocityForward, Param::leaveVelocityForward_);
 	gv->AddItem(ParamKey::kGroup, ParamKey::kBulletFireDuration, Param::bulletFireDuration_);
 }
 
 void Enemy::ApplyGlobalVariables() {
 	GlobalVariables* gv = GlobalVariables::GetInstance();
 	Param::approachVelocity_ = gv->GetValue<Vector3>(ParamKey::kGroup, ParamKey::kApproachVelocity);
-	Param::leaveVelocity_ = gv->GetValue<Vector3>(ParamKey::kGroup, ParamKey::kLeaveVelocity);
+	Param::leaveVelocityLeft_ = gv->GetValue<Vector3>(ParamKey::kGroup, ParamKey::kLeaveVelocityLeft);
+	Param::leaveVelocityRight_ = gv->GetValue<Vector3>(ParamKey::kGroup, ParamKey::kLeaveVelocityRight);
+	Param::leaveVelocityForward_ = gv->GetValue<Vector3>(ParamKey::kGroup, ParamKey::kLeaveVelocityForward);
 	Param::bulletFireDuration_ = gv->GetValue<float>(ParamKey::kGroup, ParamKey::kBulletFireDuration);
 }
 
@@ -65,7 +69,25 @@ void Enemy::Approach() { worldTransform_.translation_ += Param::approachVelocity
 
 void Enemy::InitApproach() { FireAndTimerReset(); }
 
-void Enemy::Leave() { worldTransform_.translation_ += Param::leaveVelocity_; }
+void Enemy::Leave() { 
+	
+	switch (leaveState_) {
+	case Enemy::LeaveState::Left:
+	worldTransform_.translation_ += Param::leaveVelocityLeft_;
+		break;
+	case Enemy::LeaveState::Right:
+		worldTransform_.translation_ += Param::leaveVelocityRight_;
+		break;
+	case Enemy::LeaveState::Forward:
+	worldTransform_.translation_ += Param::leaveVelocityForward_;
+		break;
+	case Enemy::LeaveState::Count:
+	worldTransform_.translation_ += Param::leaveVelocityLeft_;
+		break;
+	default:
+		break;
+	}
+}
 
 void Enemy::Fire() {
 
