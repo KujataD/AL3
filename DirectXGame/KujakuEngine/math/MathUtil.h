@@ -23,6 +23,8 @@ inline Vector3 operator+(float f, Vector3 v) { return {v.x + f, v.y + f, v.z + f
 inline Vector3 operator-(float f, Vector3 v) { return {v.x - f, v.y - f, v.z - f}; }
 inline Vector3 operator*(float f, Vector3 v) { return {v.x * f, v.y * f, v.z * f}; }
 
+Vector3 Transform(const Vector3& v, const Matrix4x4& m);
+
 float Dot(const Vector3& v1, const Vector3& v2);
 Vector3 Cross(const Vector3& a, const Vector3& b);
 float Length(const Vector3& v);
@@ -32,7 +34,6 @@ Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t);
 Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t);
 Vector3 Bezier(const Vector3& p0, const Vector3& p1, const Vector3& p2, float t);
 Vector3 Reflect(const Vector3& input, const Vector3& normal);
-Vector3 Transform(const Vector3& v, const Matrix4x4& m);
 Vector3 Project(const Vector3& a, const Vector3& b);
 
 /// <summary>

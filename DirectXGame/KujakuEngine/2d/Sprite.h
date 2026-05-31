@@ -26,7 +26,7 @@ public:
 	/// <param name="position">左上の座標（スクリーン座標）</param>
 	/// <param name="size">表示サイズ（デフォルトはテクスチャサイズ相当）</param>
 	/// <param name="color">色（デフォルトは白・不透明）</param>
-	static Sprite* Create(uint32_t index, const Vector2& position = {0.0f, 0.0f}, float width = 360.0f, float height = 360.0f, const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
+	static Sprite* Create(uint32_t index, const Vector2& position = { 0.0f, 0.0f }, float width = 360.0f, float height = 360.0f, const Vector4& color = { 1.0f, 1.0f, 1.0f, 1.0f }, Vector2 anchorPoint = {0.5f, 0.5f});
 
 	/// <summary>
 	/// 描画前処理
@@ -51,7 +51,8 @@ public:
 	void SetUVTranslate(const Vector2& translate) { uvTranslate_ = translate; }
 	void SetUVScale(const Vector2& scale) { uvScale_ = scale; }
 	void SetUVRotation(float rotation) { uvRotation_ = rotation; }
-	void SetVertexMap(float width, float height);
+	void SetVertexMap(float width, float height, Vector2 anchorPoint);
+
 
 	void SetTexture(uint32_t index) { textureIndex_ = index; }
 	void SetBlendMode(BlendMode mode) { blendMode_ = mode; }
@@ -76,8 +77,9 @@ private:
 	/// </summary>
 	void UpdateUVTransform();
 
+
 	// --- GPU リソース生成 ---
-	void CreateVertexBuffer(float width, float height);
+	void CreateVertexBuffer(float width, float height, Vector2 anchorPoint);
 	void CreateIndexBuffer();
 	void CreateTransformationMatrixBuffer();
 	void CreateMaterialBuffer();

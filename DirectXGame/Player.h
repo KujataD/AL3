@@ -77,6 +77,11 @@ private:
 	/// </summary>
 	void UpdateBullets();
 
+	/// <summary>
+	/// 弾の更新
+	/// </summary>
+	void Update3DReticle();
+
 private:
 	// 外部受け取り
 	// ------------------------------------------
@@ -87,6 +92,14 @@ private:
 	// 内部プロパティ
 	// ------------------------------------------
 	KujakuEngine::WorldTransform worldTransform_;
+
+	// 3Dレティクル
+	// ------------------------------------------
+	// ワールドトランスフォーム
+	KujakuEngine::WorldTransform worldTransform3DReticle_;
+
+	// モデル
+	std::unique_ptr<KujakuEngine::Model> model3DReticle_ = nullptr;
 
 	// 弾
 	// ------------------------------------------

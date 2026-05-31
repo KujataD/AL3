@@ -15,10 +15,16 @@ void Player::Initialize(KujakuEngine::Model* model, KujakuEngine::Model* modelBu
 	model_ = model;
 	modelBullet_ = modelBullet;
 
+	// 各ワールドトランスフォームの初期化・設定
+	// ---------------------------------------------
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = {0.0f, 0.0f, 50.0f};
+	worldTransform_.translation_ = { 0.0f, 0.0f, 50.0f };
 	worldTransform_.rotation_.y = std::numbers::pi_v<float>;
 	worldTransform_.UpdateMatrix(*camera_);
+
+	// 3Dレティクル
+	worldTransform3DReticle_.Initialize();
+	model3DReticle_.reset(Model::CreateSphere("Resources/white1x1.png"));
 
 	// 衝突設定
 	SetCollisionAttribute(kCollisionAttributePlayer);
@@ -35,17 +41,20 @@ void Player::Update() {
 	// 回転処理
 	Rotate();
 
-	// アタック
-	Fire();
-
-	// 弾
-	UpdateBullets();
-
 	// クランプ処理
 	ClampInWindow();
 
 	// トランスフォーム更新
 	worldTransform_.UpdateMatrix(*camera_);
+
+	// レティクル
+	Update3DReticle();
+
+	// アタック
+	Fire();
+
+	// 弾
+	UpdateBullets();
 }
 
 void Player::Draw() {
@@ -55,6 +64,8 @@ void Player::Draw() {
 	for (auto& bullet : bullets_) {
 		bullet->Draw();
 	}
+
+	model3DReticle_->Draw(worldTransform3DReticle_, *camera_, kFillModeWireframe);
 }
 
 void Player::RegisterGlobalVariables() {
@@ -78,16 +89,18 @@ void Player::ApplyGlobalVariables() {
 void Player::OnCollision() {}
 
 void Player::Move() { // 移動ベクトル
-	Vector3 move = {0, 0, 0};
+	Vector3 move = { 0, 0, 0 };
 
 	if (Input::GetKey(DIK_LEFT)) {
 		move.x -= 1.0f;
-	} else if (Input::GetKey(DIK_RIGHT)) {
+	}
+	else if (Input::GetKey(DIK_RIGHT)) {
 		move.x += 1.0f;
 	}
 	if (Input::GetKey(DIK_DOWN)) {
 		move.y -= 1.0f;
-	} else if (Input::GetKey(DIK_UP)) {
+	}
+	else if (Input::GetKey(DIK_UP)) {
 		move.y += 1.0f;
 	}
 
@@ -97,17 +110,18 @@ void Player::Move() { // 移動ベクトル
 void Player::Rotate() {
 	if (Input::GetKey(DIK_A)) {
 		worldTransform_.rotation_.y -= Param::rotateSpeed_;
-	} else if (Input::GetKey(DIK_D)) {
+	}
+	else if (Input::GetKey(DIK_D)) {
 		worldTransform_.rotation_.y += Param::rotateSpeed_;
 	}
 }
 
 void Player::ManageImGui() {
-#ifdef USE_IMGUI
+	#ifdef USE_IMGUI
 	ImGui::Begin("Player");
 	ImGui::DragFloat3("Translate", &worldTransform_.translation_.x, 0.01f);
 	ImGui::End();
-#endif // USE_IMGUI
+	#endif // USE_IMGUI
 }
 
 void Player::ClampInWindow() {
@@ -120,10 +134,11 @@ void Player::ClampInWindow() {
 void Player::Fire() {
 	if (Input::GetKeyTrigger(DIK_SPACE)) {
 		// 弾の速度
-		Vector3 velocity(0, 0, -Param::bulletSpeed_);
+		Vector3 velocity;
 
-		// 速度ベクトルを自機の向きに合わせて回転させる
-		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+		// 時期から照準オブジェクトへのベクトル
+		velocity = worldTransform3DReticle_.GetWorldPosition() - worldTransform_.GetWorldPosition();
+		velocity = Normalize(velocity) * Param::bulletSpeed_;
 
 		// 弾を生成し、初期化
 		std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
@@ -148,4 +163,21 @@ void Player::UpdateBullets() {
 		}
 		return false;
 	});
+}
+
+void Player::Update3DReticle() {
+	//自機のワールド座標から3Dレティクルのワールド座標を計算
+	{
+		// 自機から3Dレティクルへの距離
+		const float kDistancePlayerTo3DReticle = 50.0f;
+		//自機から3Dレティクルへのオフセット(Z+向き)
+		Vector3 offset = { 0, 0, 1.0f };
+		// 自機のワールド行列の回転を反映
+		offset = TransformNormal(offset, worldTransform_.matWorld_);
+		// ベクトルの長さを整える
+		offset = Normalize(offset) * -kDistancePlayerTo3DReticle;
+		// 3Dレティクルの座標を設定
+		worldTransform3DReticle_.translation_ = worldTransform_.GetWorldPosition() + offset;
+		worldTransform3DReticle_.UpdateMatrix(*camera_);
+	}
 }

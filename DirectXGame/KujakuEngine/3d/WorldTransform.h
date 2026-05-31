@@ -60,7 +60,7 @@ public:
 	/// </summary>
 	const Microsoft::WRL::ComPtr<ID3D12Resource>& GetConstBuffer() const { return transformationMatrixResource_; }
 
-	const Vector3& GetWorldPosition() const { return {matWorld_.m[3][0], matWorld_.m[3][1], matWorld_.m[3][2]}; }
+	Vector3 GetWorldPosition() const { return {matWorld_.m[3][0], matWorld_.m[3][1], matWorld_.m[3][2]}; }
 	void SetWorldPosition(Vector3 worldPos) {
 		if (parent_) {
 			Matrix4x4 inverseParent = Inverse(parent_->matWorld_);
