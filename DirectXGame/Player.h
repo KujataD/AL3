@@ -24,9 +24,25 @@ public:
 public:
 	~Player();
 
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize(KujakuEngine::Model* model, KujakuEngine::Model* modelBullet, KujakuEngine::Camera* camera);
+
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update();
+
+	/// <summary>
+	/// 描画関数
+	/// </summary>
 	void Draw();
+
+	/// <summary>
+	/// UI描画
+	/// </summary>
+	void DrawUI();
 
 	// --- set ---
 
@@ -78,9 +94,15 @@ private:
 	void UpdateBullets();
 
 	/// <summary>
-	/// 弾の更新
+	///	レティクル更新
 	/// </summary>
 	void Update3DReticle();
+
+	/// <summary>
+	/// レティクルUI更新
+	/// </summary>
+	void Update2DReticle();
+
 
 private:
 	// 外部受け取り
@@ -101,7 +123,13 @@ private:
 	// モデル
 	std::unique_ptr<KujakuEngine::Model> model3DReticle_ = nullptr;
 
+	// 2Dレティクル
+	std::unique_ptr<KujakuEngine::Sprite> sprite2DReticle_ = nullptr;
+
+	bool isAcitiveDraw3dReticle = false;
+
 	// 弾
 	// ------------------------------------------
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
+	bool wasRightTriggerPressed_ = false;
 };

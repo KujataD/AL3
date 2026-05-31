@@ -1,8 +1,10 @@
 #include "Player.h"
 #include <algorithm>
+#include <cmath>
 #include <numbers>
 
 using namespace KujakuEngine;
+
 
 Player::~Player() {}
 
@@ -18,13 +20,16 @@ void Player::Initialize(KujakuEngine::Model* model, KujakuEngine::Model* modelBu
 	// 各ワールドトランスフォームの初期化・設定
 	// ---------------------------------------------
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = { 0.0f, 0.0f, 50.0f };
+	worldTransform_.translation_ = { 0.0f, 0.0f, 30.0f };
 	worldTransform_.rotation_.y = std::numbers::pi_v<float>;
 	worldTransform_.UpdateMatrix(*camera_);
 
 	// 3Dレティクル
 	worldTransform3DReticle_.Initialize();
 	model3DReticle_.reset(Model::CreateSphere("Resources/white1x1.png"));
+
+	uint32_t textureIndex2DReticle = TextureManager::GetInstance()->LoadTexture("Resources/reticle.png");
+	sprite2DReticle_.reset(Sprite::Create(textureIndex2DReticle, { 0.0f, 0.0f }, 128.0f, 128.0f, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f }));
 
 	// 衝突設定
 	SetCollisionAttribute(kCollisionAttributePlayer);
@@ -49,6 +54,7 @@ void Player::Update() {
 
 	// レティクル
 	Update3DReticle();
+	Update2DReticle();
 
 	// アタック
 	Fire();
@@ -65,7 +71,10 @@ void Player::Draw() {
 		bullet->Draw();
 	}
 
-	model3DReticle_->Draw(worldTransform3DReticle_, *camera_, kFillModeWireframe);
+	// 3Dレティクル
+	if (isAcitiveDraw3dReticle) {
+		model3DReticle_->Draw(worldTransform3DReticle_, *camera_, kFillModeWireframe);
+	}
 }
 
 void Player::RegisterGlobalVariables() {
@@ -104,7 +113,15 @@ void Player::Move() { // 移動ベクトル
 		move.y += 1.0f;
 	}
 
-	worldTransform_.translation_ += Normalize(move) * Param::speed_;
+	Vector2 leftStick = Input::GetLeftStick();
+	move.x += leftStick.x;
+	move.y += leftStick.y;
+
+	if (Length(move) > 1.0f) {
+		move = Normalize(move);
+	}
+
+	worldTransform_.translation_ += move * Param::speed_;
 }
 
 void Player::Rotate() {
@@ -132,7 +149,11 @@ void Player::ClampInWindow() {
 }
 
 void Player::Fire() {
-	if (Input::GetKeyTrigger(DIK_SPACE)) {
+	bool isRightTriggerPressed = Input::GetRightTrigger() > 0.5f;
+	bool isFireTriggered = Input::GetKeyTrigger(DIK_SPACE) || (isRightTriggerPressed && !wasRightTriggerPressed_);
+	wasRightTriggerPressed_ = isRightTriggerPressed;
+
+	if (isFireTriggered) {
 		// 弾の速度
 		Vector3 velocity;
 
@@ -171,13 +192,45 @@ void Player::Update3DReticle() {
 		// 自機から3Dレティクルへの距離
 		const float kDistancePlayerTo3DReticle = 50.0f;
 		//自機から3Dレティクルへのオフセット(Z+向き)
-		Vector3 offset = { 0, 0, 1.0f };
-		// 自機のワールド行列の回転を反映
-		offset = TransformNormal(offset, worldTransform_.matWorld_);
-		// ベクトルの長さを整える
-		offset = Normalize(offset) * -kDistancePlayerTo3DReticle;
+		Vector3 offset;
+		Vector2 rightStick = Input::GetRightStick();
+
+		if (Vector2::Length(rightStick) > 0.0f) {
+			offset = Normalize(Vector3{rightStick.x, rightStick.y, 1.0f}) * kDistancePlayerTo3DReticle;
+		} else {
+			offset = { 0, 0, 1.0f };
+			// 自機のワールド行列の回転を反映
+			offset = TransformNormal(offset, worldTransform_.matWorld_);
+			// ベクトルの長さを整える
+			offset = Normalize(offset) * -kDistancePlayerTo3DReticle;
+		}
+
 		// 3Dレティクルの座標を設定
 		worldTransform3DReticle_.translation_ = worldTransform_.GetWorldPosition() + offset;
 		worldTransform3DReticle_.UpdateMatrix(*camera_);
 	}
+}
+
+void Player::Update2DReticle() {
+
+	// 3Dレティクルのワールド座標から2Dレティクルのスクリーン座標を計算
+	{
+		Vector3 positionReticle = worldTransform3DReticle_.GetWorldPosition();
+
+		// ビューポート行列
+		Matrix4x4 matViewport = MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);
+
+		// ビュー行列とプロジェクション行列、ビューポート行列を合成する
+		Matrix4x4 matViewProjectionViewport = camera_->matView * camera_->matProjection * matViewport;
+
+		// ワールド>スクリーン座標変換(ここで3Dから2Dになる)
+		positionReticle = Transform(positionReticle, matViewProjectionViewport);
+
+		// スプライトのレティクルに座標設定
+		sprite2DReticle_->SetPosition(Vector2(positionReticle.x, positionReticle.y));
+	}
+}
+
+void Player::DrawUI() {
+	sprite2DReticle_->Draw();
 }

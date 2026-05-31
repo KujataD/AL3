@@ -7,6 +7,10 @@ GameScene::~GameScene() {}
 
 void GameScene::Initialize() {
 
+	// テクスチャ
+	// ------------------------------------------
+	TextureManager::GetInstance()->LoadTexture("Resources/reticle.png");
+
 	// カメラ
 	// ------------------------------------------
 	camera_.Initialize();
@@ -48,6 +52,9 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+	// カメラ更新
+	UpdateCamera();
+	
 	// 調整項目を適応
 	ApplyAllVariables();
 
@@ -65,8 +72,6 @@ void GameScene::Update() {
 	// --- 環境 ---
 	skydome_->Update();
 	terrain_->Update();
-
-	UpdateCamera();
 }
 
 void GameScene::Draw() {
@@ -86,6 +91,10 @@ void GameScene::Draw() {
 
 	AxisIndicator::GetInstance()->Draw();
 	Model::PostDraw();
+
+	Sprite::PreDraw();
+	player_->DrawUI();
+	Sprite::PostDraw();
 }
 
 void GameScene::UpdateCamera() {

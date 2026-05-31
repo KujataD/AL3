@@ -6,7 +6,7 @@ EnemyStateApproach::EnemyStateApproach(Enemy* enemy) : BaseEnemyState("State App
 
 void EnemyStateApproach::Update() {
 	enemy_->Approach();
-	if (enemy_->GetPosition().z <= 0.0f) {
+	if (enemy_->GetPosition().z <= 30.0f) {
 		enemy_->ChangeState(std::make_unique<EnemyStateLeave>(enemy_));
 	}
 }
