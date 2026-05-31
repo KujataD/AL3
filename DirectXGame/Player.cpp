@@ -197,6 +197,8 @@ void Player::Update3DReticle() {
 
 		if (Vector2::Length(rightStick) > 0.0f) {
 			offset = Normalize(Vector3{rightStick.x, rightStick.y, 1.0f}) * kDistancePlayerTo3DReticle;
+			offset.x *= 0.2f;
+			offset.y *= 0.2f;
 		} else {
 			offset = { 0, 0, 1.0f };
 			// 自機のワールド行列の回転を反映
