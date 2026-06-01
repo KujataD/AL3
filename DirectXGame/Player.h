@@ -21,6 +21,11 @@ public:
 		static inline float bulletSpeed_ = 0.03f;
 	};
 
+	enum class ControlType{
+		kControlTypeKeyboard,
+		kControlTypeGamepad,
+	};
+
 public:
 	~Player();
 
@@ -103,6 +108,15 @@ private:
 	/// </summary>
 	void Update2DReticle();
 
+	/// <summary>
+	/// レティクルUI更新
+	/// </summary>
+	void UpdateCursorReticle();
+
+	/// <summary>
+	/// コントローラー操作かキーボード操作かを判定して、レティクルの表示方法を切り替える
+	/// </summary>
+	void UpdateControlType();
 
 private:
 	// 外部受け取り
@@ -127,6 +141,10 @@ private:
 	std::unique_ptr<KujakuEngine::Sprite> sprite2DReticle_ = nullptr;
 
 	bool isAcitiveDraw3dReticle = false;
+
+	// 操作
+	// ------------------------------------------
+	ControlType controlType_ = ControlType::kControlTypeKeyboard;
 
 	// 弾
 	// ------------------------------------------

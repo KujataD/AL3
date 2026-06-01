@@ -12,7 +12,7 @@ void DebugCamera::Initialize(Vector3 rotation, Vector3 translation) {
 
 void DebugCamera::Update() {
 	prevMousePos_ = mousePos_;
-	mousePos_ = Input::GetMousePos();
+	mousePos_ = Input::GetMouseClientPos();
 
 	if (Input::GetClick(1)) {
 		Vector2 dPos = mousePos_ - prevMousePos_;

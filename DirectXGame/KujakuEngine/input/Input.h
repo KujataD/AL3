@@ -29,7 +29,17 @@ public:
 	static bool GetClickTrigger(int num) { return mouseState_.rgbButtons[num] && !preMouseState_.rgbButtons[num]; }
 	static bool GetClickRelease(int num) { return !mouseState_.rgbButtons[num] && preMouseState_.rgbButtons[num]; }
 
-	static Vector2 GetMousePos();
+	/// <summary>
+	/// クライアントエリア座標でのマウス座標を取得する
+	/// </summary>
+	/// <returns></returns>
+	static Vector2 GetMouseClientPos();
+
+	/// <summary>
+	/// クライアントエリア座標での1フレーム前のマウス座標を取得する
+	/// </summary>
+	/// <returns></returns>
+	static Vector2 GetMousePreClientPos();
 
 	// コントローラーが接続されているかを取得する。
 	static bool IsControllerConnected(int padNo = 0);
@@ -49,6 +59,13 @@ public:
 	static float GetRightTrigger(int padNo = 0);
 
 private:
+
+	/// <summary>
+	/// クライアントエリア座標でのマウス座標を取得する
+	/// </summary>
+	/// <returns></returns>
+	static Vector2 CalcMouseClientPos();
+private:
 	static HWND hwnd_;
 
 	static IDirectInput8* directInput_;
@@ -67,6 +84,9 @@ private:
 	static XINPUT_STATE controllerState_[XUSER_MAX_COUNT];
 	static XINPUT_STATE preControllerState_[XUSER_MAX_COUNT];
 	static bool isControllerConnected_[XUSER_MAX_COUNT];
+
+	static Vector2 mouseClientPos_;
+	static Vector2 mousePreClientPos_;
 };
 
 }; // namespace KujakuEngine

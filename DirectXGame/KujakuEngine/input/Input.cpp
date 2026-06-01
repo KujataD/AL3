@@ -19,6 +19,9 @@ bool Input::isControllerConnected_[XUSER_MAX_COUNT] = {};
 
 HWND Input::hwnd_;
 
+Vector2 Input::mouseClientPos_ = {};
+Vector2 Input::mousePreClientPos_ = {};
+
 namespace {
 
 // XInputで扱えるコントローラー番号かを確認する。
@@ -95,6 +98,10 @@ void Input::Update() {
 	preMouseState_ = mouseState_;
 	mouse_->GetDeviceState(sizeof(mouseState_), &mouseState_);
 
+	// マウス座標の更新
+	mousePreClientPos_ = mouseClientPos_;
+	mouseClientPos_ = CalcMouseClientPos();
+
 	// コントローラー入力を更新する。
 	// XInputは最大4台まで扱えるため、全てのスロットを毎フレーム確認する。
 	for (DWORD i = 0; i < XUSER_MAX_COUNT; ++i) {
@@ -111,16 +118,12 @@ void Input::Update() {
 	}
 }
 
-Vector2 Input::GetMousePos() {
-	POINT mousePoint;
+Vector2 Input::GetMouseClientPos() {
+	return mouseClientPos_;
+}
 
-	// マウスカーソルのスクリーン座標を取得する。
-	GetCursorPos(&mousePoint);
-
-	// スクリーン座標をウィンドウのクライアント座標へ変換する。
-	ScreenToClient(hwnd_, &mousePoint);
-
-	return Vector2{static_cast<float>(mousePoint.x), static_cast<float>(mousePoint.y)};
+Vector2 Input::GetMousePreClientPos() {
+	return mousePreClientPos_;
 }
 
 bool Input::IsControllerConnected(int padNo) {
@@ -191,6 +194,18 @@ float Input::GetRightTrigger(int padNo) {
 	}
 
 	return NormalizeTriggerValue(controllerState_[padNo].Gamepad.bRightTrigger);
+}
+
+Vector2 Input::CalcMouseClientPos() {
+	POINT mousePoint;
+
+	// マウスカーソルのスクリーン座標を取得する。
+	GetCursorPos(&mousePoint);
+
+	// スクリーン座標をウィンドウのクライアント座標へ変換する。
+	ScreenToClient(hwnd_, &mousePoint);
+
+	return Vector2{ static_cast<float>(mousePoint.x), static_cast<float>(mousePoint.y) };
 }
 
 }

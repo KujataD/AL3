@@ -40,8 +40,8 @@ public:
 	float farZ = 1000.0f;                                                                                      // 深度限界（奥側）
 
 	// ビュー・射影行列
-	Matrix4x4 matView;
-	Matrix4x4 matProjection;
+	Matrix4x4 matView; // ワールドからカメラへの変換行列
+	Matrix4x4 matProjection; // カメラから画面への変換行列
 
 	Camera() = default;
 	~Camera() = default;
