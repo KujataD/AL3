@@ -1,7 +1,10 @@
 #include "GlobalVariables.h"
+#include "../2d/ImGuiManager.h"
+#include <Windows.h>
 
-using namespace KujakuEngine;
 using json = nlohmann::json;
+
+namespace KujakuEngine {
 
 GlobalVariables* GlobalVariables::GetInstance() {
 	static GlobalVariables instance;
@@ -9,6 +12,10 @@ GlobalVariables* GlobalVariables::GetInstance() {
 }
 
 void GlobalVariables::Update() {
+	if ((int32_t)datas_.size() <= 0) {
+		return;
+	}
+
 	// メニューバーが使用可能な
 	if (!ImGui::Begin("Global Variables", nullptr, ImGuiWindowFlags_MenuBar)) {
 		ImGui::End();
@@ -39,15 +46,15 @@ void GlobalVariables::Update() {
 			// int32_t型の値を保持していれば
 			if (std::holds_alternative<int32_t>(item)) {
 				int32_t* ptr = std::get_if<int32_t>(&item);
-				ImGui::SliderInt(itemName.c_str(), ptr, 0, 100);
+				ImGui::DragInt(itemName.c_str(), ptr, 1, 0, 100);
 			} // float型の値を保持していれば
 			else if (std::holds_alternative<float>(item)) {
 				float* ptr = std::get_if<float>(&item);
-				ImGui::SliderFloat(itemName.c_str(), ptr, 0, 100);
+				ImGui::DragFloat(itemName.c_str(), ptr, 0.01f, 0.0f, 100.0f);
 			} // Vector3型の値を保持していれば
 			else if (std::holds_alternative<Vector3>(item)) {
 				Vector3* ptr = std::get_if<Vector3>(&item);
-				ImGui::SliderFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), -10.0f, 10.0f);
+				ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f, -10.0f, 10.0f);
 			}
 		}
 
@@ -219,7 +226,6 @@ void GlobalVariables::LoadFiles() {
 		// ファイル読み込み
 		// stem()で拡張子を除いたファイル名を抽出できる
 		LoadFile(filePath.stem().string());
-	
 	}
 }
 
@@ -261,13 +267,13 @@ void GlobalVariables::LoadFile(const std::string& groupName) {
 			// int型の値を登録
 			int32_t value = itItem->get<int32_t>();
 			SetValue(groupName, itemName, value);
-		} 
+		}
 		// float型の値を保持していれば
 		else if (itItem->is_number_float()) {
 			// float型の値を登録
 			float value = itItem->get<float>();
 			SetValue(groupName, itemName, static_cast<float>(value));
-		} 
+		}
 		// 要素数3の配列であれば
 		else if (itItem->is_array() && itItem->size() == 3) {
 			// int型の値を登録
@@ -276,3 +282,4 @@ void GlobalVariables::LoadFile(const std::string& groupName) {
 		}
 	}
 }
+} // namespace KujakuEngine

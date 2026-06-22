@@ -1,12 +1,14 @@
 #pragma once
-#include "externals/nlohmann/json.hpp"
-#include <KujakuEngine.h>
+#include "../externals/nlohmann/json.hpp"
+#include "../math/Vector3.h"
 #include <filesystem>
 #include <fstream>
 #include <map>
 #include <sstream>
 #include <string>
 #include <variant>
+
+namespace KujakuEngine {
 
 /// <summary>
 /// グローバル変数
@@ -55,8 +57,7 @@ public:
 	// 項目の追加(Vector3)
 	void AddItem(const std::string& groupName, const std::string& key, const KujakuEngine::Vector3& value);
 
-	template<typename T>
-	T GetValue(const std::string& groupName, const std::string& key) const{
+	template<typename T> T GetValue(const std::string& groupName, const std::string& key) const {
 		assert(datas_.find(groupName) != datas_.end());
 		// グループの参照を取得
 		const Group& group = datas_.at(groupName);
@@ -86,7 +87,7 @@ public:
 	void LoadFile(const std::string& groupName);
 
 private:
-	// シングルトン化
+	// シングルトン化a
 	GlobalVariables() = default;
 	~GlobalVariables() = default;
 	GlobalVariables(const GlobalVariables&) = delete;
@@ -99,3 +100,5 @@ private:
 	// グローバル変数の保存先ファイルパス
 	const std::string kDirectoryPath = "Resources/GlobalVariables/";
 };
+
+} // namespace KujakuEngine

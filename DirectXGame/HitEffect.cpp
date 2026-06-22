@@ -1,5 +1,4 @@
 #include "HitEffect.h"
-#include "GlobalVariables.h"
 #include <algorithm>
 
 // 生定期メンバの実体

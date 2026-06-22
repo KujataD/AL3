@@ -1,5 +1,4 @@
 #include "DeathParticles.h"
-#include "GlobalVariables.h"
 #include <algorithm>
 
 using namespace KujakuEngine;
@@ -48,9 +47,9 @@ void DeathParticles::Update() {
 		// 回転角を計算する
 		float angle = kAngleUnit * i;
 		// Z軸まわり回転行列
-		Matrix4x4 matrixRotation = Matrix4x4::MakeRotateZMatrix(angle);
+		Matrix4x4 matrixRotation = MakeRotateZMatrix(angle);
 		// 基本ベクトルを回転させて速度ベクトルを得る
-		velocity = Vector3::Transform(velocity, matrixRotation);
+		velocity = Transform(velocity, matrixRotation);
 		// 移動処理
 		worldTransforms_[i].translation_ += velocity;
 	}

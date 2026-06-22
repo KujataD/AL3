@@ -6,7 +6,6 @@
 #include "ShieldEnemyBehaviorDead.h"
 #include "ShieldEnemyBehaviorRoot.h"
 #include "ShieldEnemyBehaviorGuard.h"
-#include "GlobalVariables.h"
 #include <cassert>
 #include <numbers>
 

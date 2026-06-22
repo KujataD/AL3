@@ -3,7 +3,6 @@
 #include "EnemyBehaviorRoot.h"
 #include "GameScene.h"
 #include "KujakuEngine/KujakuEngine.h"
-#include "GlobalVariables.h"
 #include "MapChipField.h"
 #include "Player.h"
 #include <cassert>

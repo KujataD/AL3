@@ -7,9 +7,6 @@
 
 #include "GameScene.h"
 #include "TitleScene.h"
-
-#include "GlobalVariables.h"
-
 #include "StageManager.h"
 
 using namespace KujakuEngine;
@@ -44,7 +41,7 @@ void LoadDebugSettings();
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// エンジン初期化
-	KujakuEngine::Initialize(L"LC2B_04_オオツカ_ダイチ_AL3", false);
+	KujakuEngine::Initialize(L"LC2B_04_オオツカ_ダイチ_AL3");
 	
 	// グローバル変数の読み込み
 	GlobalVariables::GetInstance()->LoadFiles();

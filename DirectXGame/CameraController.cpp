@@ -2,7 +2,6 @@
 
 #include "Math.h"
 #include "Player.h"
-#include "GlobalVariables.h"
 #include "externals/imgui/imgui.h"
 #include <algorithm>
 
@@ -49,7 +48,7 @@ void CameraController::Follow() {
 	goalPosition_ = targetWorldTransform.translation_ + targetOffset_ + target_->GetVelocity() * kVelocityBias;
 
 	// 座標補間によりゆったり追従
-	camera_->translation_ = Vector3::Lerp(camera_->translation_, goalPosition_, kInterpolationRate);
+	camera_->translation_ = Lerp(camera_->translation_, goalPosition_, kInterpolationRate);
 
 	// 追従対象が画面外に出ないように補正
 	camera_->translation_.x = std::clamp(camera_->translation_.x, targetWorldTransform.translation_.x + kMarginArea.left, targetWorldTransform.translation_.x + kMarginArea.right);

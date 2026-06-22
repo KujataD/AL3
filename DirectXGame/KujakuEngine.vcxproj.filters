@@ -264,8 +264,29 @@
     <ClCompile Include="KujakuEngine\vfx\ParticleEmitter.cpp">
       <Filter>KujakuEngine\vfx</Filter>
     </ClCompile>
-    <ClCompile Include="GlobalVariables.cpp">
-      <Filter>ソース ファイル\GrobalManager</Filter>
+    <ClCompile Include="KujakuEngine\3d\AxisIndicator.cpp">
+      <Filter>KujakuEngine\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\3d\RailCameraController.cpp">
+      <Filter>KujakuEngine\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\base\GlobalVariables.cpp">
+      <Filter>KujakuEngine\base</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\base\Time.cpp">
+      <Filter>KujakuEngine\base</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\math\MathUtil.cpp">
+      <Filter>KujakuEngine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\shapes\Collider.cpp">
+      <Filter>KujakuEngine\shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\shapes\CollisionManager.cpp">
+      <Filter>KujakuEngine\shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\vfx\InstancingModel.cpp">
+      <Filter>KujakuEngine\vfx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -464,8 +485,29 @@
     <ClInclude Include="KujakuEngine\vfx\ParticleEmitter.h">
       <Filter>KujakuEngine\vfx</Filter>
     </ClInclude>
-    <ClInclude Include="GlobalVariables.h">
-      <Filter>ソース ファイル\GrobalManager</Filter>
+    <ClInclude Include="KujakuEngine\3d\AxisIndicator.h">
+      <Filter>KujakuEngine\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\3d\RailCameraController.h">
+      <Filter>KujakuEngine\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\base\GlobalVariables.h">
+      <Filter>KujakuEngine\base</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\base\Time.h">
+      <Filter>KujakuEngine\base</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\math\MathUtil.h">
+      <Filter>KujakuEngine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\shapes\Collider.h">
+      <Filter>KujakuEngine\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\shapes\CollisionManager.h">
+      <Filter>KujakuEngine\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\vfx\InstancingModel.h">
+      <Filter>KujakuEngine\vfx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

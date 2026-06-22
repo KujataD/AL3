@@ -461,7 +461,7 @@ void GameScene::UpdateBlocks() {
 				continue;
 
 			// アフィン変換行列の作成
-			Matrix4x4 affine = Matrix4x4::MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
+			Matrix4x4 affine = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
 
 			worldTransformBlock->matWorld_ = affine;
 
