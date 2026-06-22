@@ -97,6 +97,20 @@ void Player::ApplyGlobalVariables() {
 
 void Player::OnCollision() {}
 
+Vector3 Player::GetFirstPersonCameraPosition() const {
+	// The model faces local -Z. Place the camera just ahead of its nose.
+	constexpr float kNoseOffset = 2.0f;
+	const Vector3 forward = Normalize(TransformNormal({ 0.0f, 0.0f, -1.0f }, worldTransform_.matWorld_));
+	return worldTransform_.GetWorldPosition() + forward * kNoseOffset;
+}
+
+Vector3 Player::GetFirstPersonCameraRotation() const {
+	// The player model uses a pi-radian Y rotation to correct its imported orientation.
+	Vector3 rotation = worldTransform_.rotation_;
+	rotation.y -= std::numbers::pi_v<float>;
+	return rotation;
+}
+
 void Player::Move() { // 移動ベクトル
 	Vector3 move = { 0, 0, 0 };
 
@@ -142,7 +156,14 @@ void Player::ManageImGui() {
 }
 
 void Player::ClampInWindow() {
-	Rect bounds = camera_->GetVisibleRect(worldTransform_.translation_.z - camera_->translation_.z, Param::moveLimitBlank_);
+	const float distanceToCamera = worldTransform_.translation_.z - camera_->translation_.z;
+	// FPS view places the camera at or ahead of the player. Such a view has no
+	// meaningful screen-space movement bounds for the player model.
+	if (distanceToCamera <= camera_->nearZ) {
+		return;
+	}
+
+	Rect bounds = camera_->GetVisibleRect(distanceToCamera, Param::moveLimitBlank_);
 
 	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, bounds.left, bounds.right);
 	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, bounds.bottom, bounds.top);

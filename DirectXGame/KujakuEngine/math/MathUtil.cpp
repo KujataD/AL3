@@ -346,6 +346,7 @@ TransformationMatrix MakeBillboardMatrix(const Vector3& scale, const Vector3& ro
 	TransformationMatrix result;
 	result.World = worldMatrix;
 	result.WVP = worldMatrix * camera.matView * camera.matProjection;
+	result.WorldInverseTranspose = Transpose(Inverse(worldMatrix));
 
 	return result;
 }

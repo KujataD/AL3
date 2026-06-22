@@ -60,6 +60,8 @@ public:
 
 	// --- get ---
 	const KujakuEngine::Vector3& GetWorldPosition() const override { return worldTransform_.GetWorldPosition(); }
+	KujakuEngine::Vector3 GetFirstPersonCameraPosition() const;
+	KujakuEngine::Vector3 GetFirstPersonCameraRotation() const;
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
 
 	// --- 外部API ---

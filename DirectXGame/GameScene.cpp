@@ -63,6 +63,9 @@ void GameScene::Update() {
 
 	// --- プレイヤー ---
 	player_->Update();
+	if (isActiveFirstPersonCamera_) {
+		UpdateFirstPersonCamera();
+	}
 
 	// --- 敵 ---
 	UpdateEnemyPopCommands();
@@ -98,9 +101,15 @@ void GameScene::Draw() {
 }
 
 void GameScene::UpdateCamera() {
+	if (Input::GetKeyTrigger(DIK_F)) {
+		isActiveFirstPersonCamera_ = !isActiveFirstPersonCamera_;
+		isActiveDebugCamera_ = false;
+	}
+
 #ifdef _DEBUG
 	if (Input::GetKeyTrigger(DIK_P)) {
 		isActiveDebugCamera_ = !isActiveDebugCamera_;
+		isActiveFirstPersonCamera_ = false;
 	}
 	if (Input::GetKeyTrigger(DIK_L)) {
 		Initialize();
@@ -120,9 +129,17 @@ void GameScene::UpdateCamera() {
 		camera_.UpdateProjectionMatrix();
 		camera_.TransferConstBuffer();
 
+	} else if (isActiveFirstPersonCamera_) {
+		UpdateFirstPersonCamera();
 	} else {
 		camera_.UpdateMatrix();
 	}
+}
+
+void GameScene::UpdateFirstPersonCamera() {
+	camera_.translation_ = player_->GetFirstPersonCameraPosition();
+	camera_.rotation_ = player_->GetFirstPersonCameraRotation();
+	camera_.UpdateMatrix();
 }
 
 void GameScene::ApplyAllVariables() {

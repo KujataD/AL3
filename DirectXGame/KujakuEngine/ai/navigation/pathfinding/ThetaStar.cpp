@@ -1,6 +1,7 @@
 #include "ThetaStar.h"
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <queue>
 #include <unordered_set>
 
@@ -88,14 +89,14 @@ std::vector<GridIndex> ThetaStar::FindPath(GridIndex start, GridIndex goal) {
 		for (int i = 0; i < indexNum; i++) {
 
 			// 近接マス
-			uint32_t neighborX = currentPathNode->x + dx[i];
-			uint32_t neighborZ = currentPathNode->y + dz[i];
+			int32_t neighborX = currentPathNode->x + dx[i];
+			int32_t neighborZ = currentPathNode->y + dz[i];
 
 			// 範囲チェック
-			if (neighborX < 0 || neighborX >= grid_->width) {
+			if (neighborX < 0 || neighborX >= static_cast<int32_t>(grid_->width)) {
 				continue;
 			}
-			if (neighborZ < 0 || neighborZ >= grid_->height) {
+			if (neighborZ < 0 || neighborZ >= static_cast<int32_t>(grid_->height)) {
 				continue;
 			}
 
@@ -169,7 +170,44 @@ std::vector<GridIndex> ThetaStar::FindPath(GridIndex start, GridIndex goal) {
 
 	return {};
 }
+
+bool ThetaStar::IsWalkable(int32_t x, int32_t y) const {
+	if (x < 0 || y < 0) {
+		return false;
+	}
+
+	return grid_->IsWalkable(static_cast<uint32_t>(x), static_cast<uint32_t>(y));
+}
+
 bool ThetaStar::HasLineOfSight(const SearchNode* startNode, const SearchNode* endNode) {
+	if (!IsWalkable(startNode->x, startNode->y) || !IsWalkable(endNode->x, endNode->y)) {
+		return false;
+	}
+
+	const float startX = static_cast<float>(startNode->x) + 0.5f;
+	const float startY = static_cast<float>(startNode->y) + 0.5f;
+	const float endX = static_cast<float>(endNode->x) + 0.5f;
+	const float endY = static_cast<float>(endNode->y) + 0.5f;
+
+	const int32_t minCellX = std::max<int32_t>(0, static_cast<int32_t>(std::floor(std::min(startX, endX) - agentRadius_)) - 1);
+	const int32_t minCellY = std::max<int32_t>(0, static_cast<int32_t>(std::floor(std::min(startY, endY) - agentRadius_)) - 1);
+	const int32_t maxCellX = std::min<int32_t>(static_cast<int32_t>(grid_->width) - 1, static_cast<int32_t>(std::ceil(std::max(startX, endX) + agentRadius_)) + 1);
+	const int32_t maxCellY = std::min<int32_t>(static_cast<int32_t>(grid_->height) - 1, static_cast<int32_t>(std::ceil(std::max(startY, endY) + agentRadius_)) + 1);
+
+	for (int32_t y = minCellY; y <= maxCellY; ++y) {
+		for (int32_t x = minCellX; x <= maxCellX; ++x) {
+			if (IsWalkable(x, y)) {
+				continue;
+			}
+
+			if (!IsSegmentClearOfBlockedCell(startX, startY, endX, endY, x, y)) {
+				return false;
+			}
+		}
+	}
+
+	return true;
+
 	int currentX = static_cast<int>(startNode->x);
 	int currentY = static_cast<int>(startNode->y);
 	int targetX = static_cast<int>(endNode->x);
@@ -209,6 +247,53 @@ bool ThetaStar::HasLineOfSight(const SearchNode* startNode, const SearchNode* en
 	}
 
 	return true;
+}
+
+bool ThetaStar::IsSegmentClearOfBlockedCell(float startX, float startY, float endX, float endY, int32_t cellX, int32_t cellY) const {
+	const float minX = static_cast<float>(cellX) - agentRadius_;
+	const float minY = static_cast<float>(cellY) - agentRadius_;
+	const float maxX = static_cast<float>(cellX + 1) + agentRadius_;
+	const float maxY = static_cast<float>(cellY + 1) + agentRadius_;
+
+	return !SegmentIntersectsAABB(startX, startY, endX, endY, minX, minY, maxX, maxY);
+}
+
+bool ThetaStar::SegmentIntersectsAABB(float startX, float startY, float endX, float endY, float minX, float minY, float maxX, float maxY) const {
+	const float diffX = endX - startX;
+	const float diffY = endY - startY;
+	float tMin = 0.0f;
+	float tMax = 1.0f;
+
+	auto clip = [](float denominator, float numerator, float& inOutMin, float& inOutMax) {
+		constexpr float kEpsilon = 0.0001f;
+		if (std::abs(denominator) < kEpsilon) {
+			return numerator >= 0.0f;
+		}
+
+		const float t = numerator / denominator;
+		if (denominator < 0.0f) {
+			if (t > inOutMax) {
+				return false;
+			}
+			if (t > inOutMin) {
+				inOutMin = t;
+			}
+		} else {
+			if (t < inOutMin) {
+				return false;
+			}
+			if (t < inOutMax) {
+				inOutMax = t;
+			}
+		}
+
+		return true;
+	};
+
+	return clip(-diffX, startX - minX, tMin, tMax) &&
+	       clip(diffX, maxX - startX, tMin, tMax) &&
+	       clip(-diffY, startY - minY, tMin, tMax) &&
+	       clip(diffY, maxY - startY, tMin, tMax);
 }
 
 float ThetaStar::Distance(const SearchNode* a, const SearchNode* b) {

@@ -17,26 +17,15 @@ void WorldTransform::Initialize() {
 	// 単位行列で初期化
 	constMap_->WVP = MakeIdentity();
 	constMap_->World = MakeIdentity();
+	constMap_->WorldInverseTranspose = MakeIdentity();
 }
 
 void WorldTransform::UpdateMatrix(const Camera& camera, bool isBillboard) {
 	if (isBillboard) {
 		// ワールド行列の生成
-		Matrix4x4 billboardMatrix = kBackToFrontMatrix * Inverse(camera.matView);
-		billboardMatrix.m[3][0] = 0.0f; // 平行移動成分は要らない
-		billboardMatrix.m[3][1] = 0.0f;
-		billboardMatrix.m[3][2] = 0.0f;
-
-		// 回転対応
-		Matrix4x4 rotateZMatrix = MakeRotateZMatrix(rotation_.z);
-
-		Matrix4x4 rotateMatrix = rotateZMatrix * billboardMatrix;
-		Matrix4x4 scaleMatrix = MakeScaleMatrix(scale_);
-		Matrix4x4 translateMatrix = MakeTranslateMatrix(translation_);
-
-		matWorld_ = scaleMatrix * rotateMatrix * translateMatrix;
-
-		TransferMatrix(camera);
+		TransformationMatrix data = MakeBillboardMatrix(scale_, rotation_, translation_, camera);
+		matWorld_ = data.World;
+		*constMap_ = data;
 		return;
 	}
 
@@ -67,14 +56,16 @@ TransformationMatrix WorldTransform::GetMatrixData(const Camera& camera) const {
 
 	data.WVP = matWVP;
 	data.World = matWorld_;
+	data.WorldInverseTranspose = Transpose(Inverse(matWorld_));
 
 	return data;
 }
 
-TransformationMatrix WorldTransform::GetBillboardMatrixData(const Camera& camera) const { return TransformationMatrix(); }
+TransformationMatrix WorldTransform::GetBillboardMatrixData(const Camera& camera) const {
+	return MakeBillboardMatrix(scale_, rotation_, translation_, camera);
+}
 
 void WorldTransform::CalcRotationOfVelocity(const Vector3& velocity, const Vector3& deltaAngle, float maxRotationSpeed) {
-
 	// Y軸周り角度(θy) ...atan2(高さ, 底辺)
 	float targetY = std::atan2(velocity.x, velocity.z);
 	// 横軸方向の長さを求める
@@ -91,6 +82,5 @@ void WorldTransform::CalcRotationOfVelocity(const Vector3& velocity, const Vecto
 
 	rotation_ += deltaAngle;
 }
-
 
 } // namespace KujakuEngine

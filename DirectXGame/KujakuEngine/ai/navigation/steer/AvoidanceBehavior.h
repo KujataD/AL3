@@ -13,7 +13,7 @@ namespace SteeringBehaviors {
 class AvoidanceBehavior : public ISteeringBehavior {
 public:
 	
-	struct Param {
+	struct AvoidanceContext {
 		Vector3 rotation;
 
 		// 障害物
@@ -28,12 +28,12 @@ public:
 
 public:
 
-	void SetParam(const Param& param) { param_ = param; }
+	void SetContext(const AvoidanceContext& param) { context_ = param; }
 
 	Vector3 Calculate(const SteeringContext& context) const override;
 
 private:
-	Param param_;
+	AvoidanceContext context_;
 };
 
 } // namespace SteeringBehaviors

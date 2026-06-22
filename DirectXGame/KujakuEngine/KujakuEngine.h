@@ -35,20 +35,7 @@
 #include "3d/SpotLight.h"
 #include "3d/WorldTransform.h"
 
-#include "ai/navigation/Grid.h"
-#include "ai/navigation/NavigationUtil.h"
-
-#include "ai/navigation/pathfinding/AStar.h"
-#include "ai/navigation/pathfinding/ThetaStar.h"
-
-#include "ai/navigation/steer/AligmentBehavior.h"
-#include "ai/navigation/steer/ArriveBehavior.h"
-#include "ai/navigation/steer/AvoidanceBehavior.h"
-#include "ai/navigation/steer/CohesionBehavior.h"
-#include "ai/navigation/steer/ISteeringBehavior.h"
-#include "ai/navigation/steer/SeekBehavior.h"
-#include "ai/navigation/steer/SeparationBehavior.h"
-#include "ai/navigation/steer/WanderBehavior.h"
+#include "ai/AI.h"
 
 #include "math/Easing.h"
 #include "math/MathUtil.h"

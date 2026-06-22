@@ -29,6 +29,7 @@ private:
 	/// カメラの更新
 	/// </summary>
 	void UpdateCamera();
+	void UpdateFirstPersonCamera();
 
 	/// <summary>
 	/// すべての調整項目の適応
@@ -75,6 +76,7 @@ private:
 	KujakuEngine::Camera camera_;
 	KujakuEngine::DebugCamera debugCamera_;
 	bool isActiveDebugCamera_ = false;
+	bool isActiveFirstPersonCamera_ = false;
 
 	// --- プレイヤー ---
 	std::unique_ptr<Player> player_;

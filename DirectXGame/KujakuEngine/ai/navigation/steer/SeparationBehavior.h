@@ -12,7 +12,7 @@ namespace SteeringBehaviors {
 /// </summary>
 class SeparationBehavior : public ISteeringBehavior {
 public:
-	struct Context {
+	struct SeparationContext {
 		std::span<const Vector3> neighbors;
 		float separationRange = 1.0f;
 	};
@@ -35,7 +35,7 @@ public:
 	}
 
 private:
-	Context separationContext_;
+	SeparationContext separationContext_;
 };
 } // namespace SteeringBehaviors
 } // namespace KujakuEngine
