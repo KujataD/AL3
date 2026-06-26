@@ -1,5 +1,6 @@
 #pragma once
 #include "Enemy.h"
+#include "LockOn.h"
 #include "Player.h"
 #include "Terrain.h"
 #include "Skydome.h"
@@ -80,6 +81,7 @@ private:
 
 	// --- プレイヤー ---
 	std::unique_ptr<Player> player_;
+	std::unique_ptr<LockOn> lockOn_;
 
 	// モデル
 	std::unique_ptr<KujakuEngine::Model> modelPlayer_;

@@ -3,6 +3,8 @@
 #include <KujakuEngine.h>
 #include <list>
 
+class LockOn;
+
 class Player : public KujakuEngine::Collider {
 public:
 	struct ParamKey {
@@ -21,7 +23,7 @@ public:
 		static inline float bulletSpeed_ = 0.03f;
 	};
 
-	enum class ControlType{
+	enum class ControlType {
 		kControlTypeKeyboard,
 		kControlTypeGamepad,
 	};
@@ -58,11 +60,18 @@ public:
 
 	void SetParent(const KujakuEngine::WorldTransform* parent) { worldTransform_.parent_ = parent; }
 
+	/// <summary>
+	/// ロックオンをセット
+	///  </summary>
+	///  <param name="lockOn">></param>
+	void SetLockOn(LockOn* lockOn) { lockOn_ = lockOn; }
+
 	// --- get ---
 	const KujakuEngine::Vector3& GetWorldPosition() const override { return worldTransform_.GetWorldPosition(); }
 	KujakuEngine::Vector3 GetFirstPersonCameraPosition() const;
 	KujakuEngine::Vector3 GetFirstPersonCameraRotation() const;
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
+	KujakuEngine::Vector2 Get2DReticlePosition() const { return sprite2DReticle_->GetPosition(); }
 
 	// --- 外部API ---
 	static void RegisterGlobalVariables();
@@ -142,7 +151,10 @@ private:
 	// 2Dレティクル
 	std::unique_ptr<KujakuEngine::Sprite> sprite2DReticle_ = nullptr;
 
-	bool isAcitiveDraw3dReticle = false;
+	bool isActiveDraw3dReticle = false;
+
+	// ロックオン
+	LockOn* lockOn_ = nullptr;
 
 	// 操作
 	// ------------------------------------------

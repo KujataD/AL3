@@ -1,4 +1,6 @@
 #include "Player.h"
+#include "Enemy.h"
+#include "LockOn.h"
 #include <algorithm>
 #include <cmath>
 #include <numbers>
@@ -19,7 +21,7 @@ void Player::Initialize(KujakuEngine::Model* model, KujakuEngine::Model* modelBu
 	// 各ワールドトランスフォームの初期化・設定
 	// ---------------------------------------------
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = { 0.0f, 0.0f, 30.0f };
+	worldTransform_.translation_ = {0.0f, 0.0f, 30.0f};
 	worldTransform_.rotation_.y = std::numbers::pi_v<float>;
 	worldTransform_.UpdateMatrix(*camera_);
 
@@ -28,7 +30,7 @@ void Player::Initialize(KujakuEngine::Model* model, KujakuEngine::Model* modelBu
 	model3DReticle_.reset(Model::CreateSphere("Resources/white1x1.png"));
 
 	uint32_t textureIndex2DReticle = TextureManager::GetInstance()->LoadTexture("Resources/reticle.png");
-	sprite2DReticle_.reset(Sprite::Create(textureIndex2DReticle, { 0.0f, 0.0f }, 128.0f, 128.0f, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f }));
+	sprite2DReticle_.reset(Sprite::Create(textureIndex2DReticle, {0.0f, 0.0f}, 128.0f, 128.0f, {1.0f, 1.0f, 1.0f, 1.0f}, {0.5f, 0.5f}));
 
 	// 衝突設定
 	SetCollisionAttribute(kCollisionAttributePlayer);
@@ -72,7 +74,7 @@ void Player::Draw() {
 	}
 
 	// 3Dレティクル
-	if (isAcitiveDraw3dReticle) {
+	if (isActiveDraw3dReticle) {
 		model3DReticle_->Draw(worldTransform3DReticle_, *camera_, kFillModeWireframe);
 	}
 }
@@ -100,7 +102,7 @@ void Player::OnCollision() {}
 Vector3 Player::GetFirstPersonCameraPosition() const {
 	// The model faces local -Z. Place the camera just ahead of its nose.
 	constexpr float kNoseOffset = 2.0f;
-	const Vector3 forward = Normalize(TransformNormal({ 0.0f, 0.0f, -1.0f }, worldTransform_.matWorld_));
+	const Vector3 forward = Normalize(TransformNormal({0.0f, 0.0f, -1.0f}, worldTransform_.matWorld_));
 	return worldTransform_.GetWorldPosition() + forward * kNoseOffset;
 }
 
@@ -112,18 +114,16 @@ Vector3 Player::GetFirstPersonCameraRotation() const {
 }
 
 void Player::Move() { // 移動ベクトル
-	Vector3 move = { 0, 0, 0 };
+	Vector3 move = {0, 0, 0};
 
 	if (Input::GetKey(DIK_LEFT)) {
 		move.x -= 1.0f;
-	}
-	else if (Input::GetKey(DIK_RIGHT)) {
+	} else if (Input::GetKey(DIK_RIGHT)) {
 		move.x += 1.0f;
 	}
 	if (Input::GetKey(DIK_DOWN)) {
 		move.y -= 1.0f;
-	}
-	else if (Input::GetKey(DIK_UP)) {
+	} else if (Input::GetKey(DIK_UP)) {
 		move.y += 1.0f;
 	}
 
@@ -141,18 +141,17 @@ void Player::Move() { // 移動ベクトル
 void Player::Rotate() {
 	if (Input::GetKey(DIK_A)) {
 		worldTransform_.rotation_.y -= Param::rotateSpeed_;
-	}
-	else if (Input::GetKey(DIK_D)) {
+	} else if (Input::GetKey(DIK_D)) {
 		worldTransform_.rotation_.y += Param::rotateSpeed_;
 	}
 }
 
 void Player::ManageImGui() {
-	#ifdef USE_IMGUI
+#ifdef USE_IMGUI
 	ImGui::Begin("Player");
 	ImGui::DragFloat3("Translate", &worldTransform_.translation_.x, 0.01f);
 	ImGui::End();
-	#endif // USE_IMGUI
+#endif // USE_IMGUI
 }
 
 void Player::ClampInWindow() {
@@ -175,12 +174,20 @@ void Player::Fire() {
 	wasRightTriggerPressed_ = isRightTriggerPressed;
 
 	if (isFireTriggered) {
+
 		// 弾の速度
 		Vector3 velocity;
 
-		// 時期から照準オブジェクトへのベクトル
-		velocity = worldTransform3DReticle_.GetWorldPosition() - worldTransform_.GetWorldPosition();
-		velocity = Normalize(velocity) * Param::bulletSpeed_;
+		if (Enemy* target = lockOn_->GetTarget()) {
+			// 自機から敵機へのベクトル
+			velocity = target->GetWorldPosition() - worldTransform_.GetWorldPosition();
+			velocity = Normalize(velocity) * Param::bulletSpeed_;
+
+		} else {
+			// 自機から照準オブジェクトへのベクトル
+			velocity = worldTransform3DReticle_.GetWorldPosition() - worldTransform_.GetWorldPosition();
+			velocity = Normalize(velocity) * Param::bulletSpeed_;
+		}
 
 		// 弾を生成し、初期化
 		std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
@@ -208,21 +215,20 @@ void Player::UpdateBullets() {
 }
 
 void Player::Update3DReticle() {
-	//自機のワールド座標から3Dレティクルのワールド座標を計算
+	// 自機のワールド座標から3Dレティクルのワールド座標を計算
 	{
 		// 自機から3Dレティクルへの距離
 		const float kDistancePlayerTo3DReticle = 50.0f;
-		//自機から3Dレティクルへのオフセット(Z+向き)
+		// 自機から3Dレティクルへのオフセット(Z+向き)
 		Vector3 offset;
 		Vector2 rightStick = Input::GetRightStick();
 
 		if (Vector2::Length(rightStick) > 0.0f) {
-			offset = Normalize(Vector3{ rightStick.x, rightStick.y, 1.0f }) * kDistancePlayerTo3DReticle;
+			offset = Normalize(Vector3{rightStick.x, rightStick.y, 1.0f}) * kDistancePlayerTo3DReticle;
 			offset.x *= 0.2f;
 			offset.y *= 0.2f;
-		}
-		else {
-			offset = { 0, 0, 1.0f };
+		} else {
+			offset = {0, 0, 1.0f};
 			// 自機のワールド行列の回転を反映
 			offset = TransformNormal(offset, worldTransform_.matWorld_);
 			// ベクトルの長さを整える
@@ -259,13 +265,12 @@ void Player::UpdateCursorReticle() {
 	// マウスカーソルのスクリーン座標を取得して3dレティクル配置
 	{
 		if (controlType_ == ControlType::kControlTypeKeyboard) {
-			//マウス座標(クライアントエリア座標)を取得する
+			// マウス座標(クライアントエリア座標)を取得する
 			Vector2 mousePos = Input::GetMouseClientPos();
 
 			//	マウス座標を2Dレティクルのスプライトに代入する
 			sprite2DReticle_->SetPosition(mousePos);
-		}
-		else if (controlType_ == ControlType::kControlTypeGamepad) {
+		} else if (controlType_ == ControlType::kControlTypeGamepad) {
 			// 右スティックの入力を取得する
 			Vector2 rightStick = Input::GetRightStick();
 			rightStick.y *= -1.0f; // スクリーン座標なのでY軸を反転する
@@ -301,7 +306,6 @@ void Player::UpdateCursorReticle() {
 		worldTransform3DReticle_.translation_ = posNear + mouseDirection * kDistanceTestObject;
 		worldTransform3DReticle_.UpdateMatrix(*camera_);
 
-
 		ImGui::Begin("Player");
 		ImGui::Text("2DReticle: (%f,%f)", sprite2DReticle_->GetPosition().x, sprite2DReticle_->GetPosition().y);
 		ImGui::Text("Near: (%+.2f,%+.2f,%+.2f )", posNear.x, posNear.y, posNear.z);
@@ -323,7 +327,4 @@ void Player::UpdateControlType() {
 	}
 }
 
-void Player::DrawUI() {
-	sprite2DReticle_->Draw();
-}
-
+void Player::DrawUI() { sprite2DReticle_->Draw(); }

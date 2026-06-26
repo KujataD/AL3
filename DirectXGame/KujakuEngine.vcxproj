@@ -169,6 +169,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="KujakuEngine\vfx\ParticleEmitter.cpp" />
     <ClCompile Include="KujakuEngine\vfx\ParticleField.cpp" />
     <ClCompile Include="KujakuEngine\vfx\ParticleModel.cpp" />
+    <ClCompile Include="LockOn.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
@@ -243,6 +244,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="KujakuEngine\vfx\ParticleEmitter.h" />
     <ClInclude Include="KujakuEngine\vfx\ParticleField.h" />
     <ClInclude Include="KujakuEngine\vfx\ParticleModel.h" />
+    <ClInclude Include="LockOn.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="Skydome.h" />

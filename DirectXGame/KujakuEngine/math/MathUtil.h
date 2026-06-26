@@ -13,6 +13,10 @@
 namespace KujakuEngine {
 class Segment;
 
+// --- vector2 ---
+
+float Distance(const Vector2& v1, const Vector2& v2);
+
 // --- vector3 ---
 
 inline Vector3 operator+(Vector3 v, float f) { return {v.x + f, v.y + f, v.z + f}; }
@@ -35,7 +39,7 @@ Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t);
 Vector3 Bezier(const Vector3& p0, const Vector3& p1, const Vector3& p2, float t);
 Vector3 Reflect(const Vector3& input, const Vector3& normal);
 Vector3 Project(const Vector3& a, const Vector3& b);
-
+Vector3 Project(const Vector3& worldPosition, float viewportX, float viewportY, float viewportWidth, float viewportHeight, const Matrix4x4& matView, const Matrix4x4& matProjection);
 /// <summary>
 /// 最近接点
 /// </summary>

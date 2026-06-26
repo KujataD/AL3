@@ -24,6 +24,11 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get(), modelBullet_.get(), &camera_);
 
+	lockOn_ = std::make_unique<LockOn>();
+	lockOn_->Initialize();
+
+	player_->SetLockOn(lockOn_.get());
+
 	// 敵弾
 	// ------------------------------------------
 	modelEnemyBullet_ = std::unique_ptr<Model>(Model::CreateFromOBJ("enemy_bullet"));
@@ -72,6 +77,12 @@ void GameScene::Update() {
 	UpdateEnemies();
 	UpdateEnemyBullets();
 
+	std::list<Enemy*> enemies;
+	for (const std::unique_ptr<Enemy>& enemy : enemies_) {
+		enemies.push_back(enemy.get());
+	}
+	lockOn_->Update(player_.get(), enemies, camera_);
+
 	// --- 環境 ---
 	skydome_->Update();
 	terrain_->Update();
@@ -97,6 +108,7 @@ void GameScene::Draw() {
 
 	Sprite::PreDraw();
 	player_->DrawUI();
+	lockOn_->Draw();
 	Sprite::PostDraw();
 }
 

@@ -2,6 +2,12 @@
 #include <shapes/ShapeUtil.h>
 
 namespace KujakuEngine {
+float Distance(const Vector2& v1, const Vector2& v2) {
+	const float dx = v1.x - v2.x;
+	const float dy = v1.y - v2.y;
+	return std::sqrt(dx * dx + dy * dy);
+}
+
 float Dot(const Vector3& v1, const Vector3& v2) { return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z; }
 Vector3 Cross(const Vector3& a, const Vector3& b) { return {a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x}; }
 float Length(const Vector3& v) { return std::sqrt(Dot(v, v)); }
@@ -82,6 +88,18 @@ Vector3 Project(const Vector3& a, const Vector3& b) {
 	return result;
 }
 
+KujakuEngine::Vector3 Project(const Vector3& worldPosition, float viewportX, float viewportY, float viewportWidth, float viewportHeight, const Matrix4x4& matView, const Matrix4x4& matProjection)
+{
+    Matrix4x4 matViewport = MakeViewportMatrix(
+        viewportX, viewportY,
+        viewportWidth, viewportHeight,
+        0, 1);
+
+    Matrix4x4 matVPV = matView * matProjection * matViewport;
+
+    return Transform(worldPosition, matVPV);
+}
+
 Vector3 ClosestPoint(const Vector3& point, const Segment& segment) {
 	Vector3 a = point - segment.origin;
 	float t = Dot(a, segment.diff) / std::powf(Length(segment.diff), 2);
@@ -151,7 +169,6 @@ Vector3 Limit(Vector3 v, float max) {
 	}
 	return v;
 }
-
 
 Matrix4x4 MakeAffineMatrixOrientations(const Vector3 orientations[3], const Vector3& translate) {
 	return {
