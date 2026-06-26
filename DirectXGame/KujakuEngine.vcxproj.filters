@@ -55,18 +55,6 @@
     <Filter Include="ソース ファイル\Scenes">
       <UniqueIdentifier>{1c8f8e1b-377e-4519-beaf-2b09c68bc669}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\GameObject\Player\Weapon">
-      <UniqueIdentifier>{d3137f61-1255-46c6-b863-4596c96b96fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\GameObject\Enemy">
-      <UniqueIdentifier>{b72ae5be-88d7-47ae-a60d-71405a04f519}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\GameObject\Enemy\Weapon">
-      <UniqueIdentifier>{c1af630a-5db8-4534-9523-1253a76c2b6f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\GameObject\Enemy\Phase">
-      <UniqueIdentifier>{9a936e35-8e80-4b4a-a9f7-b949f9877042}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Utility">
       <UniqueIdentifier>{3bb95d3d-442f-463e-8cc0-c37ec830f66d}</UniqueIdentifier>
     </Filter>
@@ -192,24 +180,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル\GameObject\Player</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerBullet.cpp">
-      <Filter>ソース ファイル\GameObject\Player\Weapon</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>ソース ファイル\GameObject\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseEnemyState.cpp">
-      <Filter>ソース ファイル\GameObject\Enemy\Phase</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyStateApproach.cpp">
-      <Filter>ソース ファイル\GameObject\Enemy\Phase</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyStateLeave.cpp">
-      <Filter>ソース ファイル\GameObject\Enemy\Phase</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyBullet.cpp">
-      <Filter>ソース ファイル\GameObject\Enemy\Weapon</Filter>
-    </ClCompile>
     <ClCompile Include="TimedCall.cpp">
       <Filter>ソース ファイル\Utility</Filter>
     </ClCompile>
@@ -278,9 +248,6 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="LockOn.cpp">
-      <Filter>ソース ファイル\GameObject\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -407,24 +374,6 @@
     <ClInclude Include="Player.h">
       <Filter>ソース ファイル\GameObject\Player</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerBullet.h">
-      <Filter>ソース ファイル\GameObject\Player\Weapon</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>ソース ファイル\GameObject\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseEnemyState.h">
-      <Filter>ソース ファイル\GameObject\Enemy\Phase</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyStateApproach.h">
-      <Filter>ソース ファイル\GameObject\Enemy\Phase</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyStateLeave.h">
-      <Filter>ソース ファイル\GameObject\Enemy\Phase</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyBullet.h">
-      <Filter>ソース ファイル\GameObject\Enemy\Weapon</Filter>
-    </ClInclude>
     <ClInclude Include="TimedCall.h">
       <Filter>ソース ファイル\Utility</Filter>
     </ClInclude>
@@ -496,9 +445,6 @@
     </ClInclude>
     <ClInclude Include="KujakuEngine\base\Time.h">
       <Filter>KujakuEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="LockOn.h">
-      <Filter>ソース ファイル\GameObject\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

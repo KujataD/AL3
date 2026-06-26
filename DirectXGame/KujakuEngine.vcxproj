@@ -101,11 +101,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BaseEnemyState.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="EnemyBullet.cpp" />
-    <ClCompile Include="EnemyStateApproach.cpp" />
-    <ClCompile Include="EnemyStateLeave.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
     <ClCompile Include="externals\imgui\imgui_demo.cpp" />
     <ClCompile Include="externals\imgui\imgui_draw.cpp" />
@@ -169,20 +164,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="KujakuEngine\vfx\ParticleEmitter.cpp" />
     <ClCompile Include="KujakuEngine\vfx\ParticleField.cpp" />
     <ClCompile Include="KujakuEngine\vfx\ParticleModel.cpp" />
-    <ClCompile Include="LockOn.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TimedCall.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseEnemyState.h" />
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="EnemyBullet.h" />
-    <ClInclude Include="EnemyStateApproach.h" />
-    <ClInclude Include="EnemyStateLeave.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
     <ClInclude Include="externals\imgui\imgui.h" />
     <ClInclude Include="externals\imgui\imgui_impl_dx12.h" />
@@ -244,9 +232,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="KujakuEngine\vfx\ParticleEmitter.h" />
     <ClInclude Include="KujakuEngine\vfx\ParticleField.h" />
     <ClInclude Include="KujakuEngine\vfx\ParticleModel.h" />
-    <ClInclude Include="LockOn.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="Skydome.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TimedCall.h" />

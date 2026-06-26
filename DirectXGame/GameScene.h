@@ -1,11 +1,8 @@
 #pragma once
-#include "Enemy.h"
-#include "LockOn.h"
 #include "Player.h"
 #include "Terrain.h"
 #include "Skydome.h"
 #include <KujakuEngine.h>
-#include <sstream>
 
 class GameScene {
 public:
@@ -18,19 +15,11 @@ public:
 
 	void Draw();
 
-	// --- 外部API ---
-
-	/// <summary>
-	/// 敵弾を追加する
-	/// </summary>
-	void AddEnemyBullet(std::unique_ptr<EnemyBullet> enemyBullet);
-
 private:
 	/// <summary>
 	/// カメラの更新
 	/// </summary>
 	void UpdateCamera();
-	void UpdateFirstPersonCamera();
 
 	/// <summary>
 	/// すべての調整項目の適応
@@ -47,59 +36,19 @@ private:
 	/// </summary>
 	void CheckAllCollisions();
 
-	/// <summary>
-	/// 敵弾の更新
-	/// </summary>
-	void UpdateEnemyBullets();
-
-	/// <summary>
-	/// 敵ベクタの更新
-	/// </summary>
-	void UpdateEnemies();
-
-	/// <summary>
-	/// 敵ベクタの更新
-	/// </summary>
-	void SpawnEnemy(KujakuEngine::Vector3 spawnPos, Enemy::LeaveState leaveState);
-
-	/// <summary>
-	/// 敵弾を追加する
-	/// </summary>
-	void LoadEnemyPopData();
-
-	/// <summary>
-	/// 敵発生コマンドの更新
-	/// </summary>
-	void UpdateEnemyPopCommands();
-
 private:
 	// カメラ
 	KujakuEngine::Camera camera_;
 	KujakuEngine::DebugCamera debugCamera_;
 	bool isActiveDebugCamera_ = false;
-	bool isActiveFirstPersonCamera_ = false;
 
 	// --- プレイヤー ---
 	std::unique_ptr<Player> player_;
-	std::unique_ptr<LockOn> lockOn_;
 
 	// モデル
 	std::unique_ptr<KujakuEngine::Model> modelPlayer_;
-	std::unique_ptr<KujakuEngine::Model> modelBullet_;
 
-	// --- エネミー ---
-	std::list<std::unique_ptr<Enemy>>enemies_;
-	std::unique_ptr<KujakuEngine::Model> modelEnemy_;
-	std::stringstream enemyPopCommands_;
-	bool isEnemyWaitingForPop_ = false;
-	int32_t enemyWaitTimer_ = 0;
-
-
-	// --- 敵弾 ---
-	std::list<std::unique_ptr<EnemyBullet>> enemyBullets_;
-	std::unique_ptr<KujakuEngine::Model> modelEnemyBullet_;
-
-	// 当たり判定
+	// --- 当たり判定 ---
 	std::unique_ptr<KujakuEngine::CollisionManager> collisionManager_;
 
 	// --- スカイドーム ---
@@ -109,6 +58,4 @@ private:
 	// 地形
 	std::unique_ptr<Terrain> terrain_;
 	std::unique_ptr<KujakuEngine::Model> modelTerrain_;
-
-	float timer_ = 10.0f;
 };

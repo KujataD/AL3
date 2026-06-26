@@ -1,9 +1,5 @@
 #pragma once
-#include "PlayerBullet.h"
 #include <KujakuEngine.h>
-#include <list>
-
-class LockOn;
 
 class Player : public KujakuEngine::Collider {
 public:
@@ -11,16 +7,10 @@ public:
 		static inline const std::string kGroupKey = "Player";
 
 		static inline const std::string kSpeed = "Speed";
-		static inline const std::string kMoveLimitBlank = "MoveLimitBlank";
-		static inline const std::string kRotateSpeed = "RotateSpeed";
-		static inline const std::string kBulletSpeed = "BulletSpeed";
 	};
 
 	struct Param {
 		static inline float speed_ = 0.1f;
-		static inline float moveLimitBlank_ = 1.0f;
-		static inline float rotateSpeed_ = 0.01f;
-		static inline float bulletSpeed_ = 0.03f;
 	};
 
 	enum class ControlType {
@@ -34,7 +24,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize(KujakuEngine::Model* model, KujakuEngine::Model* modelBullet, KujakuEngine::Camera* camera);
+	void Initialize(KujakuEngine::Model* model, KujakuEngine::Camera* camera);
 
 	/// <summary>
 	/// 更新処理
@@ -46,11 +36,6 @@ public:
 	/// </summary>
 	void Draw();
 
-	/// <summary>
-	/// UI描画
-	/// </summary>
-	void DrawUI();
-
 	// --- set ---
 
 	void SetCamera(KujakuEngine::Camera* camera) {
@@ -60,18 +45,8 @@ public:
 
 	void SetParent(const KujakuEngine::WorldTransform* parent) { worldTransform_.parent_ = parent; }
 
-	/// <summary>
-	/// ロックオンをセット
-	///  </summary>
-	///  <param name="lockOn">></param>
-	void SetLockOn(LockOn* lockOn) { lockOn_ = lockOn; }
-
 	// --- get ---
-	const KujakuEngine::Vector3& GetWorldPosition() const override { return worldTransform_.GetWorldPosition(); }
-	KujakuEngine::Vector3 GetFirstPersonCameraPosition() const;
-	KujakuEngine::Vector3 GetFirstPersonCameraRotation() const;
-	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
-	KujakuEngine::Vector2 Get2DReticlePosition() const { return sprite2DReticle_->GetPosition(); }
+	KujakuEngine::Vector3 GetWorldPosition() const override { return worldTransform_.GetWorldPosition(); }
 
 	// --- 外部API ---
 	static void RegisterGlobalVariables();
@@ -85,44 +60,9 @@ private:
 	void Move();
 
 	/// <summary>
-	/// 回転
-	/// </summary>
-	void Rotate();
-
-	/// <summary>
 	/// IMGUIの管理
 	/// </summary>
 	void ManageImGui();
-
-	/// <summary>
-	/// 画面内に納めます
-	/// </summary>
-	void ClampInWindow();
-
-	/// <summary>
-	/// 攻撃処理
-	/// </summary>
-	void Fire();
-
-	/// <summary>
-	/// 弾の更新
-	/// </summary>
-	void UpdateBullets();
-
-	/// <summary>
-	///	レティクル更新
-	/// </summary>
-	void Update3DReticle();
-
-	/// <summary>
-	/// レティクルUI更新
-	/// </summary>
-	void Update2DReticle();
-
-	/// <summary>
-	/// レティクルUI更新
-	/// </summary>
-	void UpdateCursorReticle();
 
 	/// <summary>
 	/// コントローラー操作かキーボード操作かを判定して、レティクルの表示方法を切り替える
@@ -134,34 +74,12 @@ private:
 	// ------------------------------------------
 	KujakuEngine::Camera* camera_ = nullptr;
 	KujakuEngine::Model* model_ = nullptr;
-	KujakuEngine::Model* modelBullet_ = nullptr;
 
 	// 内部プロパティ
 	// ------------------------------------------
 	KujakuEngine::WorldTransform worldTransform_;
 
-	// 3Dレティクル
-	// ------------------------------------------
-	// ワールドトランスフォーム
-	KujakuEngine::WorldTransform worldTransform3DReticle_;
-
-	// モデル
-	std::unique_ptr<KujakuEngine::Model> model3DReticle_ = nullptr;
-
-	// 2Dレティクル
-	std::unique_ptr<KujakuEngine::Sprite> sprite2DReticle_ = nullptr;
-
-	bool isActiveDraw3dReticle = false;
-
-	// ロックオン
-	LockOn* lockOn_ = nullptr;
-
 	// 操作
 	// ------------------------------------------
 	ControlType controlType_ = ControlType::kControlTypeKeyboard;
-
-	// 弾
-	// ------------------------------------------
-	std::list<std::unique_ptr<PlayerBullet>> bullets_;
-	bool wasRightTriggerPressed_ = false;
 };

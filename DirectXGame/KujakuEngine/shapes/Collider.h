@@ -25,7 +25,7 @@ public:
 
 	// --- getter ---
 
-	virtual const Vector3& GetWorldPosition() const = 0;
+	virtual Vector3 GetWorldPosition() const = 0;
 	Sphere GetSphere() const { return Sphere{GetWorldPosition(), GetRadius()}; }
 	// 衝突マスク（相手）
 	uint32_t GetCollisionMask() { return collisionMask_; }
