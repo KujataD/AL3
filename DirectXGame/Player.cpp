@@ -40,9 +40,7 @@ void Player::Update() {
 	worldTransform_.UpdateMatrix(*camera_);
 }
 
-void Player::Draw() {
-	model_->Draw(worldTransform_, *camera_);
-}
+void Player::Draw() { model_->Draw(worldTransform_, *camera_); }
 
 void Player::RegisterGlobalVariables() {
 	GlobalVariables* gv = GlobalVariables::GetInstance();
@@ -58,7 +56,26 @@ void Player::ApplyGlobalVariables() {
 
 void Player::OnCollision() {}
 
-void Player::Move() { 
+void Player::Move() {
+	Vector3 move{};
+	if (controlType_ == ControlType::kControlTypeGamepad) {
+		move = {Input::GetLeftStick().x, 0.0f, Input::GetLeftStick().y};
+	} else {
+		if (Input::GetKey(DIK_W)) {
+			move.z += 1.0f;
+		}
+		if (Input::GetKey(DIK_S)) {
+			move.z -= 1.0f;
+		}
+		if (Input::GetKey(DIK_D)) {
+			move.x += 1.0f;
+		}
+		if (Input::GetKey(DIK_A)) {
+			move.x -= 1.0f;
+		}
+	}
+	move = Normalize(move) * Param::speed_;
+	worldTransform_.translation_ += move;
 }
 
 void Player::ManageImGui() {
