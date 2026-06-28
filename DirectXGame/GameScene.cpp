@@ -7,6 +7,10 @@ GameScene::~GameScene() {}
 
 void GameScene::Initialize() {
 
+	// 調整項目を登録
+	RegisterAllVariables();
+	ApplyAllVariables();
+
 	// テクスチャ
 	// ------------------------------------------
 	TextureManager::GetInstance()->LoadTexture("Resources/reticle.png");
@@ -21,9 +25,12 @@ void GameScene::Initialize() {
 
 	// プレイヤー
 	// ------------------------------------------
-	modelPlayer_ = std::unique_ptr<Model>(Model::CreateFromOBJ("player_body", ShaderModel::kHalfLambert));
+	modelFighterHead_ = std::unique_ptr<Model>(Model::CreateFromOBJ("player_head", ShaderModel::kHalfLambert));
+	modelFighterBody_ = std::unique_ptr<Model>(Model::CreateFromOBJ("player_body", ShaderModel::kHalfLambert));
+	modelFighterArm_L_ = std::unique_ptr<Model>(Model::CreateFromOBJ("player_arm", ShaderModel::kHalfLambert));
+	modelFighterArm_R_ = std::unique_ptr<Model>(Model::CreateFromOBJ("player_arm", ShaderModel::kHalfLambert));
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get(), &camera_);
+	player_->Initialize(modelFighterHead_.get(), modelFighterBody_.get(), modelFighterArm_L_.get(), modelFighterArm_R_.get(), &camera_);
 	followCamera_->SetTarget(player_->GetWorldTransform());
 	player_->SetViewProjection(&followCamera_->GetCamera());
 
@@ -41,8 +48,6 @@ void GameScene::Initialize() {
 	terrain_->Initialize(modelTerrain_.get(), &camera_);
 
 
-	// 調整項目を登録
-	RegisterAllVariables();
 }
 
 void GameScene::Update() {

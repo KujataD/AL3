@@ -46,8 +46,11 @@ private:
 	// --- プレイヤー ---
 	std::unique_ptr<Player> player_;
 
-	// モデル
-	std::unique_ptr<KujakuEngine::Model> modelPlayer_;
+	// 3Dモデル
+	std::unique_ptr<KujakuEngine::Model> modelFighterBody_ = nullptr;
+	std::unique_ptr<KujakuEngine::Model> modelFighterHead_ = nullptr;
+	std::unique_ptr<KujakuEngine::Model> modelFighterArm_L_ = nullptr;
+	std::unique_ptr<KujakuEngine::Model> modelFighterArm_R_ = nullptr;
 
 	// --- 当たり判定 ---
 	std::unique_ptr<KujakuEngine::CollisionManager> collisionManager_;
