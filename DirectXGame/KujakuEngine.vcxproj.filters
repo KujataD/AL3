@@ -249,6 +249,9 @@
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="KujakuEngine\3d\FollowCamera.cpp">
+      <Filter>KujakuEngine\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -445,6 +448,9 @@
     </ClInclude>
     <ClInclude Include="KujakuEngine\base\Time.h">
       <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\3d\FollowCamera.h">
+      <Filter>KujakuEngine\3d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

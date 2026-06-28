@@ -115,6 +115,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="KujakuEngine\3d\Camera.cpp" />
     <ClCompile Include="KujakuEngine\3d\DebugCamera.cpp" />
     <ClCompile Include="KujakuEngine\3d\DirectionalLight.cpp" />
+    <ClCompile Include="KujakuEngine\3d\FollowCamera.cpp" />
     <ClCompile Include="KujakuEngine\3d\GraphicsPipeline.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
@@ -186,6 +187,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="KujakuEngine\3d\Camera.h" />
     <ClInclude Include="KujakuEngine\3d\DebugCamera.h" />
     <ClInclude Include="KujakuEngine\3d\DirectionalLight.h" />
+    <ClInclude Include="KujakuEngine\3d\FollowCamera.h" />
     <ClInclude Include="KujakuEngine\3d\GraphicsPipeline.h" />
     <ClInclude Include="KujakuEngine\3d\Model.h" />
     <ClInclude Include="KujakuEngine\3d\PointLight.h" />

@@ -121,7 +121,7 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
 	return result;
 }
 
-Vector3 CalcRotationOfVelocity(const Vector3& velocity) {
+Vector3 LookAt(const Vector3& velocity) {
 	Vector3 rotation{};
 
 	// Y軸周り角度(θy) ...atan2(高さ, 底辺)
@@ -314,6 +314,10 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 	Matrix4x4 t = MakeTranslateMatrix(translate);
 	Matrix4x4 w = s * r * t;
 	return w;
+}
+
+Matrix4x4 MakeRotateMatrix(const Vector3& rotate) {
+	return MakeRotateXMatrix(rotate.x) * MakeRotateYMatrix(rotate.y) * MakeRotateZMatrix(rotate.z);
 }
 
 Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip) {

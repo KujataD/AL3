@@ -15,6 +15,11 @@ namespace KujakuEngine {
 
 class Input {
 public:
+	enum class InputDeviceType {
+		kKeyboardMouse,
+		kController,
+	};
+
 	static void Initialize();
 
 	static void Update();
@@ -28,6 +33,10 @@ public:
 	static bool GetPreClick(int num) { return preMouseState_.rgbButtons[num]; }
 	static bool GetClickTrigger(int num) { return mouseState_.rgbButtons[num] && !preMouseState_.rgbButtons[num]; }
 	static bool GetClickRelease(int num) { return !mouseState_.rgbButtons[num] && preMouseState_.rgbButtons[num]; }
+
+	static InputDeviceType GetCurrentInputDeviceType() { return currentInputDeviceType_; }
+	static bool IsKeyboardMouseInput() { return currentInputDeviceType_ == InputDeviceType::kKeyboardMouse; }
+	static bool IsControllerInput() { return currentInputDeviceType_ == InputDeviceType::kController; }
 
 	/// <summary>
 	/// クライアントエリア座標でのマウス座標を取得する
@@ -65,6 +74,9 @@ private:
 	/// </summary>
 	/// <returns></returns>
 	static Vector2 CalcMouseClientPos();
+	static void UpdateInputDeviceType();
+	static bool IsKeyboardMouseInputDetected();
+	static bool IsControllerInputDetected(int padNo);
 private:
 	static HWND hwnd_;
 
@@ -87,6 +99,7 @@ private:
 
 	static Vector2 mouseClientPos_;
 	static Vector2 mousePreClientPos_;
+	static InputDeviceType currentInputDeviceType_;
 };
 
 }; // namespace KujakuEngine

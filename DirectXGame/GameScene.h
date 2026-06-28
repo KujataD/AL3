@@ -41,6 +41,7 @@ private:
 	KujakuEngine::Camera camera_;
 	KujakuEngine::DebugCamera debugCamera_;
 	bool isActiveDebugCamera_ = false;
+	std::unique_ptr<KujakuEngine::FollowCamera> followCamera_ = nullptr;
 
 	// --- プレイヤー ---
 	std::unique_ptr<Player> player_;

@@ -21,6 +21,7 @@ HWND Input::hwnd_;
 
 Vector2 Input::mouseClientPos_ = {};
 Vector2 Input::mousePreClientPos_ = {};
+Input::InputDeviceType Input::currentInputDeviceType_ = Input::InputDeviceType::kKeyboardMouse;
 
 namespace {
 
@@ -29,14 +30,43 @@ bool IsValidControllerNo(int padNo) {
 	return 0 <= padNo && padNo < XUSER_MAX_COUNT;
 }
 
-// スティックの生値を-1.0f～1.0fの範囲に変換する。
-float NormalizeStickValue(SHORT value, SHORT deadZone) {
-	if (-deadZone < value && value < deadZone) {
-		return 0.0f;
+// スティック軸の生値を-1.0f～1.0fの範囲に変換する。
+float NormalizeStickAxisValue(SHORT value) {
+	if (value < 0) {
+		return static_cast<float>(value) / 32768.0f;
 	}
 
-	// XInputの負方向は-32768まで、正方向は32767までなので分母を分ける。
-	return value < 0 ? static_cast<float>(value) / 32768.0f : static_cast<float>(value) / 32767.0f;
+	return static_cast<float>(value) / 32767.0f;
+}
+
+// スティック入力を円形デッドゾーンで正規化する。
+Vector2 NormalizeStickVector(SHORT x, SHORT y, SHORT deadZone) {
+	Vector2 value = {
+		NormalizeStickAxisValue(x),
+		NormalizeStickAxisValue(y),
+	};
+
+	const float length = Vector2::Length(value);
+	const float deadZoneRatio = static_cast<float>(deadZone) / 32767.0f;
+
+	if (length <= deadZoneRatio) {
+		return Vector2{0.0f, 0.0f};
+	}
+
+	Vector2 direction = {
+		value.x / length,
+		value.y / length,
+	};
+
+	float normalizedLength = (length - deadZoneRatio) / (1.0f - deadZoneRatio);
+	if (normalizedLength > 1.0f) {
+		normalizedLength = 1.0f;
+	}
+
+	return Vector2{
+		direction.x * normalizedLength,
+		direction.y * normalizedLength,
+	};
 }
 
 /// トリガーの生値を0.0f～1.0fの範囲に変換する。
@@ -116,6 +146,82 @@ void Input::Update() {
 			controllerState_[i] = {};
 		}
 	}
+
+	UpdateInputDeviceType();
+}
+
+void Input::UpdateInputDeviceType() {
+	if (IsKeyboardMouseInputDetected()) {
+		currentInputDeviceType_ = InputDeviceType::kKeyboardMouse;
+	}
+
+	for (int i = 0; i < XUSER_MAX_COUNT; ++i) {
+		if (IsControllerInputDetected(i)) {
+			currentInputDeviceType_ = InputDeviceType::kController;
+			break;
+		}
+	}
+}
+
+bool Input::IsKeyboardMouseInputDetected() {
+	for (int i = 0; i < 256; ++i) {
+		if (key_[i] != 0 && preKey_[i] == 0) {
+			return true;
+		}
+	}
+
+	if (mouseState_.lX != 0 || mouseState_.lY != 0 || mouseState_.lZ != 0) {
+		return true;
+	}
+
+	const int kMouseButtonCount = sizeof(mouseState_.rgbButtons) / sizeof(mouseState_.rgbButtons[0]);
+	for (int i = 0; i < kMouseButtonCount; ++i) {
+		if (mouseState_.rgbButtons[i] != 0 && preMouseState_.rgbButtons[i] == 0) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Input::IsControllerInputDetected(int padNo) {
+	if (!IsControllerConnected(padNo)) {
+		return false;
+	}
+
+	const XINPUT_GAMEPAD& gamepad = controllerState_[padNo].Gamepad;
+	const XINPUT_GAMEPAD& preGamepad = preControllerState_[padNo].Gamepad;
+
+	const WORD pressedButtons = static_cast<WORD>(gamepad.wButtons & ~preGamepad.wButtons);
+	if (pressedButtons != 0) {
+		return true;
+	}
+
+	const Vector2 leftStick = NormalizeStickVector(gamepad.sThumbLX, gamepad.sThumbLY, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
+	const Vector2 preLeftStick = NormalizeStickVector(preGamepad.sThumbLX, preGamepad.sThumbLY, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
+	if (Vector2::Length(leftStick) > 0.0f && Vector2::Length(preLeftStick) == 0.0f) {
+		return true;
+	}
+
+	const Vector2 rightStick = NormalizeStickVector(gamepad.sThumbRX, gamepad.sThumbRY, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
+	const Vector2 preRightStick = NormalizeStickVector(preGamepad.sThumbRX, preGamepad.sThumbRY, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
+	if (Vector2::Length(rightStick) > 0.0f && Vector2::Length(preRightStick) == 0.0f) {
+		return true;
+	}
+
+	const float leftTrigger = NormalizeTriggerValue(gamepad.bLeftTrigger);
+	const float preLeftTrigger = NormalizeTriggerValue(preGamepad.bLeftTrigger);
+	if (leftTrigger > 0.0f && preLeftTrigger == 0.0f) {
+		return true;
+	}
+
+	const float rightTrigger = NormalizeTriggerValue(gamepad.bRightTrigger);
+	const float preRightTrigger = NormalizeTriggerValue(preGamepad.bRightTrigger);
+	if (rightTrigger > 0.0f && preRightTrigger == 0.0f) {
+		return true;
+	}
+
+	return false;
 }
 
 Vector2 Input::GetMouseClientPos() {
@@ -164,9 +270,7 @@ Vector2 Input::GetLeftStick(int padNo) {
 	}
 
 	const XINPUT_GAMEPAD& gamepad = controllerState_[padNo].Gamepad;
-	return Vector2{
-		NormalizeStickValue(gamepad.sThumbLX, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE),
-		NormalizeStickValue(gamepad.sThumbLY, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)};
+	return NormalizeStickVector(gamepad.sThumbLX, gamepad.sThumbLY, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
 }
 
 Vector2 Input::GetRightStick(int padNo) {
@@ -175,9 +279,7 @@ Vector2 Input::GetRightStick(int padNo) {
 	}
 
 	const XINPUT_GAMEPAD& gamepad = controllerState_[padNo].Gamepad;
-	return Vector2{
-		NormalizeStickValue(gamepad.sThumbRX, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE),
-		NormalizeStickValue(gamepad.sThumbRY, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)};
+	return NormalizeStickVector(gamepad.sThumbRX, gamepad.sThumbRY, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
 }
 
 float Input::GetLeftTrigger(int padNo) {

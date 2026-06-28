@@ -16,12 +16,16 @@ void GameScene::Initialize() {
 	camera_.Initialize();
 	camera_.translation_ = { 0.0f, 5.0f, -20.0f };
 	debugCamera_.Initialize(camera_.rotation_, camera_.translation_);
+	followCamera_ = std::make_unique<FollowCamera>();
+	followCamera_->Initialize();
 
 	// プレイヤー
 	// ------------------------------------------
 	modelPlayer_ = std::unique_ptr<Model>(Model::CreateFromOBJ("player_body", ShaderModel::kHalfLambert));
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get(), &camera_);
+	followCamera_->SetTarget(player_->GetWorldTransform());
+	player_->SetViewProjection(&followCamera_->GetCamera());
 
 	// 当たり判定
 	collisionManager_ = std::make_unique<CollisionManager>();
@@ -42,21 +46,24 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
-	// カメラ更新
-	UpdateCamera();
-	
 	// 調整項目を適応
 	ApplyAllVariables();
-
-	// 当たり判定更新
-	CheckAllCollisions();
 
 	// --- プレイヤー ---
 	player_->Update();
 
+	// カメラ更新
+	UpdateCamera();
+
 	// --- 環境 ---
 	skydome_->Update();
 	terrain_->Update();
+
+	// カメラ確定後の行列でプレイヤーのWVPを更新
+	player_->SetCamera(&camera_);
+
+	// 当たり判定更新
+	CheckAllCollisions();
 }
 
 void GameScene::Draw() {
@@ -86,11 +93,17 @@ void GameScene::UpdateCamera() {
 	if (isActiveDebugCamera_) {
 		debugCamera_.Update();
 		debugCamera_.UpdateViewMatrix();
+		camera_.rotation_ = debugCamera_.rotation_;
+		camera_.translation_ = debugCamera_.translation_;
 		camera_.matView = debugCamera_.GetViewMatrix();
 		camera_.UpdateProjectionMatrix();
 		camera_.TransferConstBuffer();
 
 	} else {
+		followCamera_->Update();
+		const Camera& followCamera = followCamera_->GetCamera();
+		camera_.rotation_ = followCamera.rotation_;
+		camera_.translation_ = followCamera.translation_;
 		camera_.UpdateMatrix();
 	}
 }

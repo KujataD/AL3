@@ -415,15 +415,13 @@ void DirectXCommon::PostDraw() {
 	// GPUがここまでたどり着いたら、Fenceの値を指定した値に代入するようにSignalを送る
 	commandQueue_->Signal(fence_.Get(), fenceValue_);
 
-	//// Fenceの値が指定したsignal値にたどり着いているか確認する
-	//// GetCompletedValueの初期値はFence作成時に渡した初期値
-	//if (fence_->GetCompletedValue() < fenceValue_) {
-	//	// 指定したSignalにたどりついていないので、たどり着くまで待つようにイベントを設定する
-	//	fence_->SetEventOnCompletion(fenceValue_, fenceEvent_);
-	//	// イベント待つ
-	//	WaitForSingleObject(fenceEvent_, INFINITE);
-	//}
-		// 次のフレーム用のバックバッファを取得
+	// 1つの定数バッファを毎フレーム上書きしているため、GPUの読み取り完了を待ってから次フレームへ進む
+	if (fence_->GetCompletedValue() < fenceValue_) {
+		fence_->SetEventOnCompletion(fenceValue_, fenceEvent_);
+		WaitForSingleObject(fenceEvent_, INFINITE);
+	}
+
+	// 次のフレーム用のバックバッファを取得
 	backBufferIndex_ = swapChain_->GetCurrentBackBufferIndex();
 
 	// 次に使うバックバッファ用の処理がGPUで終わっていなければ待機

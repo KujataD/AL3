@@ -25,6 +25,7 @@
 #include "2d/Sprite.h"
 
 #include "3d/Camera.h"
+#include "3d/FollowCamera.h"
 #include "3d/AxisIndicator.h"
 #include "3d/DIrectionalLight.h"
 #include "3d/DebugCamera.h"

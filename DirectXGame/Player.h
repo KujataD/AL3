@@ -42,11 +42,12 @@ public:
 		camera_ = camera;
 		worldTransform_.UpdateMatrix(*camera_);
 	}
-
+	void SetViewProjection(const KujakuEngine::Camera* viewProjection) { viewProjection_ = viewProjection; }
 	void SetParent(const KujakuEngine::WorldTransform* parent) { worldTransform_.parent_ = parent; }
 
 	// --- get ---
 	KujakuEngine::Vector3 GetWorldPosition() const override { return worldTransform_.GetWorldPosition(); }
+	KujakuEngine::WorldTransform* GetWorldTransform() { return &worldTransform_; }
 
 	// --- 外部API ---
 	static void RegisterGlobalVariables();
@@ -74,6 +75,7 @@ private:
 	// ------------------------------------------
 	KujakuEngine::Camera* camera_ = nullptr;
 	KujakuEngine::Model* model_ = nullptr;
+	const KujakuEngine::Camera* viewProjection_ = nullptr;
 
 	// 内部プロパティ
 	// ------------------------------------------
@@ -82,4 +84,5 @@ private:
 	// 操作
 	// ------------------------------------------
 	ControlType controlType_ = ControlType::kControlTypeKeyboard;
+
 };

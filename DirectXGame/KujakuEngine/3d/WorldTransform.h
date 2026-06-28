@@ -47,7 +47,7 @@ public:
 	/// <param name="camera">カメラ（ビュー・プロジェクション行列を取得）</param>
 	void UpdateMatrix(const class Camera& camera, bool isBillboard = false);
 
-	void TransferMatrix(const Camera& camera);
+	void TransferMatrix(const Camera& camera) const;
 
 	TransformationMatrix GetMatrixData(const Camera& camera) const;
 	TransformationMatrix GetBillboardMatrixData(const Camera& camera) const;
@@ -76,7 +76,7 @@ private:
 	// 定数バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixResource_;
 	// マッピング済みアドレス
-	TransformationMatrix* constMap_ = nullptr;
+	mutable TransformationMatrix* constMap_ = nullptr;
 
 	// コピー禁止
 	WorldTransform(const WorldTransform&) = delete;

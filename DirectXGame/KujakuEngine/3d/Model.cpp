@@ -323,6 +323,9 @@ void Model::PostDraw() {
 void Model::Draw(const WorldTransform& worldTransform, const Camera& camera, FillMode fillMode) {
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 
+	// 描画直前のカメラでWVPを作り直す
+	worldTransform.TransferMatrix(camera);
+
 	// RootSignature と PSO をセット
 	if (fillMode == kFillModeSolid) {
 		GraphicsPipeline::GetInstance()->SetCommandList(PipelineType::kObject3d, blendMode_);

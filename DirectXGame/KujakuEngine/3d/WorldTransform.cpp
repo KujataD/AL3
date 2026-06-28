@@ -40,7 +40,7 @@ void WorldTransform::UpdateMatrix(const Camera& camera, bool isBillboard) {
 	TransferMatrix(camera);
 }
 
-void WorldTransform::TransferMatrix(const Camera& camera) { // WVP行列の生成
+void WorldTransform::TransferMatrix(const Camera& camera) const { // WVP行列の生成
 	Matrix4x4 matWVP = matWorld_ * camera.matView * camera.matProjection;
 
 	// 定数バッファへ転送

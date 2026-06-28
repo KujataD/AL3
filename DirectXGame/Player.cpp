@@ -59,8 +59,12 @@ void Player::OnCollision() {}
 void Player::Move() {
 	Vector3 move{};
 	if (controlType_ == ControlType::kControlTypeGamepad) {
-		move = {Input::GetLeftStick().x, 0.0f, Input::GetLeftStick().y};
+		// コントローラー操作
+		Vector2 leftStick = Input::GetLeftStick();
+		move = {leftStick.x, 0.0f, leftStick.y};
 	} else {
+		// キーボード操作
+		
 		if (Input::GetKey(DIK_W)) {
 			move.z += 1.0f;
 		}
@@ -73,9 +77,28 @@ void Player::Move() {
 		if (Input::GetKey(DIK_A)) {
 			move.x -= 1.0f;
 		}
+
+		if (Length(move) > 0.0f) {
+			move = Normalize(move);
+		}
 	}
-	move = Normalize(move) * Param::speed_;
+
+	if (Length(move) == 0.0f) {
+		return;
+	}
+
+	// 移動ベクトルをカメラの角度だけ回転する
+	Matrix4x4 matRotate = MakeIdentity();
+	if (viewProjection_) {
+		matRotate = MakeRotateYMatrix(viewProjection_->rotation_.y);
+	}
+	move = TransformNormal(move, matRotate);
+	move *= Param::speed_;
+
 	worldTransform_.translation_ += move;
+	if (Length(move) > 0.001f) {
+		worldTransform_.rotation_.y = LookAt(move).y;
+	}
 }
 
 void Player::ManageImGui() {
@@ -87,13 +110,10 @@ void Player::ManageImGui() {
 }
 
 void Player::UpdateControlType() {
-	// マウス座標が異なる場合はキーボード操作とみなす
-	if (Input::GetMouseClientPos() != Input::GetMousePreClientPos()) {
-		controlType_ = ControlType::kControlTypeKeyboard;
+	if (Input::IsControllerInput()) {
+		controlType_ = ControlType::kControlTypeGamepad;
+		return;
 	}
 
-	// 右スティックの入力がある場合はゲームパッド操作とみなす
-	if (Vector2::Length(Input::GetRightStick()) > 0.0f) {
-		controlType_ = ControlType::kControlTypeGamepad;
-	}
+	controlType_ = ControlType::kControlTypeKeyboard;
 }
