@@ -53,6 +53,7 @@ private:
 	std::unique_ptr<KujakuEngine::Model> modelFighterHead_ = nullptr;
 	std::unique_ptr<KujakuEngine::Model> modelFighterArm_L_ = nullptr;
 	std::unique_ptr<KujakuEngine::Model> modelFighterArm_R_ = nullptr;
+	std::unique_ptr<KujakuEngine::Model> modelFighterWeapon_ = nullptr;
 	std::unique_ptr<KujakuEngine::Model> modelEnemyBody_ = nullptr;
 	std::unique_ptr<KujakuEngine::Model> modelEnemyArm_L_ = nullptr;
 	std::unique_ptr<KujakuEngine::Model> modelEnemyArm_R_ = nullptr;

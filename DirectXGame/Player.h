@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseCharacter.h"
 #include <KujakuEngine.h>
+#include <optional>
 
 class Player : public BaseCharacter, public KujakuEngine::Collider {
 public:
@@ -9,6 +10,7 @@ public:
 		kModelIndexHead,
 		kModelIndexArm_L,
 		kModelIndexArm_R,
+		kModelIndexWeapon,
 		kModelIndexCount,
 	};
 
@@ -30,7 +32,7 @@ public:
 	struct Param {
 		static inline float speed_ = 0.1f;
 		static inline float floatingAmplitude_ = 1.0f;
-		static inline float floatingArmRotationAmplitude_ = std::numbers::pi_v<float> * 0.25f;
+		static inline float floatingArmRotationAmplitude_ = std::numbers::pi_v<float> *0.25f;
 		static inline int floatingCycle_ = 60;
 		static inline KujakuEngine::Vector3 offsetTranslateBody_{};
 		static inline KujakuEngine::Vector3 offsetTranslateHead_{};
@@ -43,6 +45,11 @@ public:
 	enum class ControlType {
 		kControlTypeKeyboard,
 		kControlTypeGamepad,
+	};
+
+	enum class Behavior {
+		kRoot,		// <! 通常
+		kAttack,	// <! 攻撃中
 	};
 
 public:
@@ -106,12 +113,27 @@ private:
 
 	// 富裕ギミック更新
 	void UpdateFloatingGimmick();
+
+	// 通常行動更新
+	void BehaviorRootUpdate();
+
+	void BehaviorAttackUpdate();
+
+	/// <summary>
+	/// すべての行列の更新
+	/// </summary>
+	void UpdateWorldTransforms();
+
+
+	// 通常行動初期化
+	void BehaviorRootInitialize();
+	// 攻擊行動初期化
+	void BehaviorAttackInitialize();
+
 private:
 	// 外部受け取り
 	// ------------------------------------------
 	const KujakuEngine::Camera* viewProjection_ = nullptr;
-
-	// モデル
 
 	// 内部プロパティ
 	// ------------------------------------------
@@ -119,6 +141,8 @@ private:
 	KujakuEngine::WorldTransform worldTransformHead_;
 	KujakuEngine::WorldTransform worldTransformArm_L_;
 	KujakuEngine::WorldTransform worldTransformArm_R_;
+	KujakuEngine::WorldTransform worldTransformWeapon_;
+	KujakuEngine::WorldTransform worldTransformShoulder_;
 
 	// 浮遊
 	float floatingParameter_ = 0.0f;
@@ -126,4 +150,8 @@ private:
 	// ------------------------------------------
 	ControlType controlType_ = ControlType::kControlTypeKeyboard;
 
+	// B
+	// ------------------------------------------
+	Behavior behavior_ = Behavior::kRoot;
+	std::optional<Behavior> behaviorRequest_ = std::nullopt;
 };

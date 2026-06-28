@@ -28,19 +28,28 @@ void Player::Initialize(const std::vector<Model*>& models, const Camera* camera)
 	worldTransformBody_.parent_ = &worldTransform_;
 	worldTransformBody_.translation_ = Param::offsetTranslateBody_;
 
+	worldTransformShoulder_.Initialize();
+	worldTransformShoulder_.parent_ = &worldTransformBody_;
+	worldTransformShoulder_.translation_.y = Param::offsetTranslateArm_L_.y;
+
 	worldTransformHead_.Initialize();
 	worldTransformHead_.parent_ = &worldTransformBody_;
 	worldTransformHead_.translation_ = Param::offsetTranslateHead_;
 
 	worldTransformArm_L_.Initialize();
-	worldTransformArm_L_.parent_ = &worldTransformBody_;
+	worldTransformArm_L_.parent_ = &worldTransformShoulder_;
 	worldTransformArm_L_.translation_ = Param::offsetTranslateArm_L_;
+	worldTransformArm_L_.translation_.y = 0.0f;
 	worldTransformArm_L_.rotation_ = Param::offsetRotateArm_L_;
 
 	worldTransformArm_R_.Initialize();
-	worldTransformArm_R_.parent_ = &worldTransformBody_;
+	worldTransformArm_R_.parent_ = &worldTransformShoulder_;
 	worldTransformArm_R_.translation_ = Param::offsetTranslateArm_R_;
+	worldTransformArm_R_.translation_.y = 0.0f;
 	worldTransformArm_R_.rotation_ = Param::offsetRotateArm_R_;
+
+	worldTransformWeapon_.Initialize();
+	worldTransformWeapon_.parent_ = &worldTransformShoulder_;
 
 	// 衝突設定
 	SetCollisionAttribute(kCollisionAttributePlayer);
@@ -49,31 +58,32 @@ void Player::Initialize(const std::vector<Model*>& models, const Camera* camera)
 }
 
 void Player::Update() {
-	UpdateControlType();
+	if (behaviorRequest_) {
+		// 振舞を変更する
+		behavior_ = behaviorRequest_.value();
 
+		switch (behavior_) {
+		case Player::Behavior::kRoot:
+			BehaviorRootInitialize();
+			break;
+		case Player::Behavior::kAttack:
+			break;
+			BehaviorAttackInitialize();
+		default:
+			break;
+		}
+
+		// 振舞リクエストをリセット
+		behaviorRequest_ = std::nullopt;
+	}
+	
 	// IMGUI
 	ManageImGui();
 
-	// 移動処理
-	Move();
+	UpdateControlType();
 
-	worldTransformBody_.translation_ = Param::offsetTranslateBody_;
-	worldTransformHead_.translation_ = Param::offsetTranslateHead_;
-	worldTransformArm_L_.translation_ = Param::offsetTranslateArm_L_;
-	worldTransformArm_R_.translation_ = Param::offsetTranslateArm_R_;
-	worldTransformArm_L_.rotation_ = Param::offsetRotateArm_L_;
-	worldTransformArm_R_.rotation_ = Param::offsetRotateArm_R_;
+	BehaviorRootUpdate();
 
-
-	// 浮遊ギミック更新
-	UpdateFloatingGimmick();
-
-	// トランスフォーム更新
-	BaseCharacter::Update();
-	worldTransformBody_.UpdateMatrix(*camera_);
-	worldTransformHead_.UpdateMatrix(*camera_);
-	worldTransformArm_L_.UpdateMatrix(*camera_);
-	worldTransformArm_R_.UpdateMatrix(*camera_);
 }
 
 void Player::Draw() {
@@ -82,6 +92,7 @@ void Player::Draw() {
 	models_[kModelIndexHead]->Draw(worldTransformHead_, *camera_);
 	models_[kModelIndexArm_L]->Draw(worldTransformArm_L_, *camera_);
 	models_[kModelIndexArm_R]->Draw(worldTransformArm_R_, *camera_);
+	models_[kModelIndexWeapon]->Draw(worldTransformWeapon_, *camera_);
 }
 
 void Player::RegisterGlobalVariables() {
@@ -206,4 +217,34 @@ void Player::UpdateFloatingGimmick() {
 	const float floatingArmRotationX = std::sin(floatingParameter_) * armRotationAmplitude;
 	worldTransformArm_L_.rotation_.x = floatingArmRotationX;
 	worldTransformArm_R_.rotation_.x = -floatingArmRotationX;
+}
+
+void Player::BehaviorRootUpdate() {
+
+	// 移動処理
+	Move();
+	
+	// 浮遊ギミック更新
+	UpdateFloatingGimmick();
+
+	// トランスフォーム更新
+	UpdateWorldTransforms();
+}
+
+void Player::BehaviorAttackUpdate() {
+
+}
+
+void Player::UpdateWorldTransforms() {
+	BaseCharacter::Update();
+	worldTransformBody_.UpdateMatrix(*camera_);
+	worldTransformHead_.UpdateMatrix(*camera_);
+	worldTransformArm_L_.UpdateMatrix(*camera_);
+	worldTransformArm_R_.UpdateMatrix(*camera_);
+}
+
+void Player::BehaviorRootInitialize() {
+}
+
+void Player::BehaviorAttackInitialize() {
 }

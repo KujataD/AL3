@@ -258,6 +258,36 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\charactor\utility\UtilityAI.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\charactor\behaviorTree\Composite\SelectorNode.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\charactor\behaviorTree\Composite\SequenceNode.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\charactor\behaviorTree\Leaf\LeafNode.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\charactor\behaviorTree\Leaf\ActionNode.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\charactor\behaviorTree\BehaviorTree.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\charactor\Core\Blackboard.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\charactor\behaviorTree\BTNode.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\charactor\behaviorTree\Composite\CompositeNode.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="KujakuEngine\ai\charactor\behaviorTree\Decorator\Decorator.cpp">
+      <Filter>KujakuEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -463,6 +493,51 @@
     </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>ソース ファイル\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\charactor\utility\UtilityAI.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\charactor\behaviorTree\Leaf\ActionNode.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\AI.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\charactor\Core\AIContext.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\charactor\behaviorTree\BehaviorTree.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\charactor\Core\Blackboard.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\charactor\behaviorTree\BTNode.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\charactor\behaviorTree\BTStatus.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\charactor\behaviorTree\Composite\CompositeNode.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\charactor\behaviorTree\Decorator\Decorator.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\charactor\fsm\IState.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\charactor\behaviorTree\Leaf\LeafNode.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\charactor\behaviorTree\Composite\SelectorNode.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\charactor\behaviorTree\Composite\SequenceNode.h">
+      <Filter>KujakuEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="KujakuEngine\ai\charactor\fsm\StateMachine.h">
+      <Filter>KujakuEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
