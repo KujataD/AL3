@@ -1,8 +1,17 @@
 #pragma once
+#include "BaseCharacter.h"
 #include <KujakuEngine.h>
 
-class Player : public KujakuEngine::Collider {
+class Player : public BaseCharacter, public KujakuEngine::Collider {
 public:
+	enum ModelIndex {
+		kModelIndexBody,
+		kModelIndexHead,
+		kModelIndexArm_L,
+		kModelIndexArm_R,
+		kModelIndexCount,
+	};
+
 	struct ParamKey {
 		static inline const std::string kGroupKey = "Player";
 
@@ -37,35 +46,39 @@ public:
 	};
 
 public:
-	~Player();
+	~Player() override;
 
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize(KujakuEngine::Model* modelHead, KujakuEngine::Model* modelBody, KujakuEngine::Model* modelArm_L, KujakuEngine::Model* modelArm_R, KujakuEngine::Camera* camera);
+	void Initialize(const std::vector<KujakuEngine::Model*>& models, const KujakuEngine::Camera* camera) override;
 
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update();
+	void Update() override;
 
 	/// <summary>
 	/// 描画関数
 	/// </summary>
-	void Draw();
+	void Draw() override;
 
 	// --- set ---
 
-	void SetCamera(KujakuEngine::Camera* camera) {
+	void SetCamera(const KujakuEngine::Camera* camera) {
 		camera_ = camera;
-		worldTransformBase_.UpdateMatrix(*camera_);
+		BaseCharacter::Update();
+		worldTransformBody_.UpdateMatrix(*camera_);
+		worldTransformHead_.UpdateMatrix(*camera_);
+		worldTransformArm_L_.UpdateMatrix(*camera_);
+		worldTransformArm_R_.UpdateMatrix(*camera_);
 	}
 	void SetViewProjection(const KujakuEngine::Camera* viewProjection) { viewProjection_ = viewProjection; }
-	void SetParent(const KujakuEngine::WorldTransform* parent) { worldTransformBase_.parent_ = parent; }
+	void SetParent(const KujakuEngine::WorldTransform* parent) { worldTransform_.parent_ = parent; }
 
 	// --- get ---
-	KujakuEngine::Vector3 GetWorldPosition() const override { return worldTransformBase_.GetWorldPosition(); }
-	KujakuEngine::WorldTransform* GetWorldTransform() { return &worldTransformBase_; }
+	KujakuEngine::Vector3 GetWorldPosition() const override { return worldTransform_.GetWorldPosition(); }
+	KujakuEngine::WorldTransform* GetWorldTransform() { return &worldTransform_; }
 
 	// --- 外部API ---
 	static void RegisterGlobalVariables();
@@ -96,18 +109,12 @@ private:
 private:
 	// 外部受け取り
 	// ------------------------------------------
-	KujakuEngine::Camera* camera_ = nullptr;
 	const KujakuEngine::Camera* viewProjection_ = nullptr;
 
 	// モデル
-	KujakuEngine::Model* modelBody_ = nullptr;
-	KujakuEngine::Model* modelHead_ = nullptr;
-	KujakuEngine::Model* modelArm_L_ = nullptr;
-	KujakuEngine::Model* modelArm_R_ = nullptr;
 
 	// 内部プロパティ
 	// ------------------------------------------
-	KujakuEngine::WorldTransform worldTransformBase_;
 	KujakuEngine::WorldTransform worldTransformBody_;
 	KujakuEngine::WorldTransform worldTransformHead_;
 	KujakuEngine::WorldTransform worldTransformArm_L_;

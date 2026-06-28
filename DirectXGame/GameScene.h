@@ -1,4 +1,5 @@
 #pragma once
+#include "Enemy.h"
 #include "Player.h"
 #include "Terrain.h"
 #include "Skydome.h"
@@ -45,12 +46,16 @@ private:
 
 	// --- プレイヤー ---
 	std::unique_ptr<Player> player_;
+	std::unique_ptr<Enemy> enemy_;
 
 	// 3Dモデル
 	std::unique_ptr<KujakuEngine::Model> modelFighterBody_ = nullptr;
 	std::unique_ptr<KujakuEngine::Model> modelFighterHead_ = nullptr;
 	std::unique_ptr<KujakuEngine::Model> modelFighterArm_L_ = nullptr;
 	std::unique_ptr<KujakuEngine::Model> modelFighterArm_R_ = nullptr;
+	std::unique_ptr<KujakuEngine::Model> modelEnemyBody_ = nullptr;
+	std::unique_ptr<KujakuEngine::Model> modelEnemyArm_L_ = nullptr;
+	std::unique_ptr<KujakuEngine::Model> modelEnemyArm_R_ = nullptr;
 
 	// --- 当たり判定 ---
 	std::unique_ptr<KujakuEngine::CollisionManager> collisionManager_;

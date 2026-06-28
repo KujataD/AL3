@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include <vector>
 
 using namespace KujakuEngine;
 using namespace ShapeUtil;
@@ -30,9 +31,26 @@ void GameScene::Initialize() {
 	modelFighterArm_L_ = std::unique_ptr<Model>(Model::CreateFromOBJ("player_arm", ShaderModel::kHalfLambert));
 	modelFighterArm_R_ = std::unique_ptr<Model>(Model::CreateFromOBJ("player_arm", ShaderModel::kHalfLambert));
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelFighterHead_.get(), modelFighterBody_.get(), modelFighterArm_L_.get(), modelFighterArm_R_.get(), &camera_);
+	std::vector<Model*> playerModels = {
+		modelFighterBody_.get(),
+		modelFighterHead_.get(),
+		modelFighterArm_L_.get(),
+		modelFighterArm_R_.get(),
+	};
+	player_->Initialize(playerModels, &camera_);
 	followCamera_->SetTarget(player_->GetWorldTransform());
 	player_->SetViewProjection(&followCamera_->GetCamera());
+
+	modelEnemyBody_ = std::unique_ptr<Model>(Model::CreateFromOBJ("enemy_body", ShaderModel::kHalfLambert));
+	modelEnemyArm_L_ = std::unique_ptr<Model>(Model::CreateFromOBJ("enemy_arm_L", ShaderModel::kHalfLambert));
+	modelEnemyArm_R_ = std::unique_ptr<Model>(Model::CreateFromOBJ("enemy_arm_R", ShaderModel::kHalfLambert));
+	enemy_ = std::make_unique<Enemy>();
+	std::vector<Model*> enemyModels = {
+		modelEnemyBody_.get(),
+		modelEnemyArm_L_.get(),
+		modelEnemyArm_R_.get(),
+	};
+	enemy_->Initialize(enemyModels, &camera_);
 
 	// 当たり判定
 	collisionManager_ = std::make_unique<CollisionManager>();
@@ -56,6 +74,7 @@ void GameScene::Update() {
 
 	// --- プレイヤー ---
 	player_->Update();
+	enemy_->Update();
 
 	// カメラ更新
 	UpdateCamera();
@@ -66,6 +85,7 @@ void GameScene::Update() {
 
 	// カメラ確定後の行列でプレイヤーのWVPを更新
 	player_->SetCamera(&camera_);
+	enemy_->SetCamera(&camera_);
 
 	// 当たり判定更新
 	CheckAllCollisions();
@@ -74,6 +94,7 @@ void GameScene::Update() {
 void GameScene::Draw() {
 	Model::PreDraw();
 	player_->Draw();
+	enemy_->Draw();
 
 	skydome_->Draw();
 	terrain_->Draw();
@@ -115,10 +136,12 @@ void GameScene::UpdateCamera() {
 
 void GameScene::ApplyAllVariables() {
 	Player::ApplyGlobalVariables();
+	Enemy::ApplyGlobalVariables();
 }
 
 void GameScene::RegisterAllVariables() {
 	Player::RegisterGlobalVariables();
+	Enemy::RegisterGlobalVariables();
 }
 
 void GameScene::CheckAllCollisions() {

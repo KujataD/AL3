@@ -7,29 +7,25 @@ using namespace KujakuEngine;
 
 Player::~Player() {}
 
-void Player::Initialize(KujakuEngine::Model* modelHead, KujakuEngine::Model* modelBody, KujakuEngine::Model* modelArm_L, KujakuEngine::Model* modelArm_R, KujakuEngine::Camera* camera) {
-	assert(modelHead);
-	assert(modelBody);
-	assert(modelArm_L);
-	assert(modelArm_R);
+void Player::Initialize(const std::vector<Model*>& models, const Camera* camera) {
+	assert(models.size() == kModelIndexCount);
+	for (Model* model : models) {
+		assert(model);
+	}
 	assert(camera);
 
 	// 各要素のセット
-	camera_ = camera;
-	modelBody_ = modelBody;
-	modelHead_ = modelHead;
-	modelArm_L_ = modelArm_L;
-	modelArm_R_ = modelArm_R;
+	BaseCharacter::Initialize(models, camera);
+	assert(models_.size() == kModelIndexCount);
 
 	// 各ワールドトランスフォームの初期化・設定
 	// ---------------------------------------------
-	worldTransformBase_.Initialize();
-	worldTransformBase_.translation_ = { 0.0f, 0.0f, 0.0f };
-	worldTransformBase_.rotation_.y = std::numbers::pi_v<float>;
-	worldTransformBase_.UpdateMatrix(*camera_);
+	worldTransform_.translation_ = { 0.0f, 0.0f, 0.0f };
+	worldTransform_.rotation_.y = std::numbers::pi_v<float>;
+	BaseCharacter::Update();
 
 	worldTransformBody_.Initialize();
-	worldTransformBody_.parent_ = &worldTransformBase_;
+	worldTransformBody_.parent_ = &worldTransform_;
 	worldTransformBody_.translation_ = Param::offsetTranslateBody_;
 
 	worldTransformHead_.Initialize();
@@ -61,12 +57,19 @@ void Player::Update() {
 	// 移動処理
 	Move();
 
+	worldTransformBody_.translation_ = Param::offsetTranslateBody_;
+	worldTransformHead_.translation_ = Param::offsetTranslateHead_;
+	worldTransformArm_L_.translation_ = Param::offsetTranslateArm_L_;
+	worldTransformArm_R_.translation_ = Param::offsetTranslateArm_R_;
+	worldTransformArm_L_.rotation_ = Param::offsetRotateArm_L_;
+	worldTransformArm_R_.rotation_ = Param::offsetRotateArm_R_;
+
 
 	// 浮遊ギミック更新
 	UpdateFloatingGimmick();
 
 	// トランスフォーム更新
-	worldTransformBase_.UpdateMatrix(*camera_);
+	BaseCharacter::Update();
 	worldTransformBody_.UpdateMatrix(*camera_);
 	worldTransformHead_.UpdateMatrix(*camera_);
 	worldTransformArm_L_.UpdateMatrix(*camera_);
@@ -74,10 +77,11 @@ void Player::Update() {
 }
 
 void Player::Draw() {
-	modelBody_->Draw(worldTransformBody_, *camera_);
-	modelHead_->Draw(worldTransformHead_, *camera_);
-	modelArm_L_->Draw(worldTransformArm_L_, *camera_);
-	modelArm_R_->Draw(worldTransformArm_R_, *camera_);
+	assert(models_.size() == kModelIndexCount);
+	models_[kModelIndexBody]->Draw(worldTransformBody_, *camera_);
+	models_[kModelIndexHead]->Draw(worldTransformHead_, *camera_);
+	models_[kModelIndexArm_L]->Draw(worldTransformArm_L_, *camera_);
+	models_[kModelIndexArm_R]->Draw(worldTransformArm_R_, *camera_);
 }
 
 void Player::RegisterGlobalVariables() {
@@ -152,16 +156,16 @@ void Player::Move() {
 	move = TransformNormal(move, matRotate);
 	move *= Param::speed_;
 
-	worldTransformBase_.translation_ += move;
+	worldTransform_.translation_ += move;
 	if (Length(move) > 0.001f) {
-		worldTransformBase_.rotation_.y = LookAt(move).y;
+		worldTransform_.rotation_.y = LookAt(move).y;
 	}
 }
 
 void Player::ManageImGui() {
 	#ifdef USE_IMGUI
 	ImGui::Begin("Player");
-	ImGui::DragFloat3("Translate", &worldTransformBase_.translation_.x, 0.01f);
+	ImGui::DragFloat3("Translate", &worldTransform_.translation_.x, 0.01f);
 	ImGui::End();
 	#endif // USE_IMGUI
 }
