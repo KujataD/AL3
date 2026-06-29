@@ -5,6 +5,17 @@
 
 using namespace KujakuEngine;
 
+namespace {
+float CalculateFrameProgress(float currentFrame, int durationFrame) {
+	if (durationFrame <= 0) {
+		return 1.0f;
+	}
+
+	const float progress = currentFrame / static_cast<float>(durationFrame);
+	return std::clamp(progress, 0.0f, 1.0f);
+}
+} // namespace
+
 Player::~Player() {}
 
 void Player::Initialize(const std::vector<Model*>& models, const Camera* camera) {
@@ -67,8 +78,8 @@ void Player::Update() {
 			BehaviorRootInitialize();
 			break;
 		case Player::Behavior::kAttack:
-			break;
 			BehaviorAttackInitialize();
+			break;
 		default:
 			break;
 		}
@@ -77,13 +88,24 @@ void Player::Update() {
 		behaviorRequest_ = std::nullopt;
 	}
 	
+	switch (behavior_) {
+	case Player::Behavior::kRoot:
+		BehaviorRootUpdate();
+		break;
+	case Player::Behavior::kAttack:
+		BehaviorAttackUpdate();
+		break;
+	default:
+		break;
+	}
+
 	// IMGUI
 	ManageImGui();
 
 	UpdateControlType();
 
-	BehaviorRootUpdate();
-
+	// トランスフォーム更新
+	UpdateWorldTransforms();
 }
 
 void Player::Draw() {
@@ -92,7 +114,9 @@ void Player::Draw() {
 	models_[kModelIndexHead]->Draw(worldTransformHead_, *camera_);
 	models_[kModelIndexArm_L]->Draw(worldTransformArm_L_, *camera_);
 	models_[kModelIndexArm_R]->Draw(worldTransformArm_R_, *camera_);
-	models_[kModelIndexWeapon]->Draw(worldTransformWeapon_, *camera_);
+	if (behavior_ == Behavior::kAttack) {
+		models_[kModelIndexWeapon]->Draw(worldTransformWeapon_, *camera_);
+	}
 }
 
 void Player::RegisterGlobalVariables() {
@@ -102,6 +126,12 @@ void Player::RegisterGlobalVariables() {
 	gv->AddItem(ParamKey::kGroupKey, ParamKey::kFloatingAmplitude, Param::floatingAmplitude_);
 	gv->AddItem(ParamKey::kGroupKey, ParamKey::kFloatingArmRotationAmplitude, Param::floatingArmRotationAmplitude_);
 	gv->AddItem(ParamKey::kGroupKey, ParamKey::kFloatingCycle, Param::floatingCycle_);
+	gv->AddItem(ParamKey::kGroupKey, ParamKey::kAttackStartShoulderRotationX, Param::attackStartShoulderRotationX_);
+	gv->AddItem(ParamKey::kGroupKey, ParamKey::kAttackWindUpShoulderRotationX, Param::attackWindUpShoulderRotationX_);
+	gv->AddItem(ParamKey::kGroupKey, ParamKey::kAttackArmRotationX, Param::attackArmRotationX_);
+	gv->AddItem(ParamKey::kGroupKey, ParamKey::kAttackWindUpFrame, Param::attackWindUpFrame_);
+	gv->AddItem(ParamKey::kGroupKey, ParamKey::kAttackSwingDownFrame, Param::attackSwingDownFrame_);
+	gv->AddItem(ParamKey::kGroupKey, ParamKey::kAttackEndlagFrame, Param::attackEndlagFrame_);
 	gv->AddItem(ParamKey::kGroupKey, ParamKey::kOffsetTranslateBody, Param::offsetTranslateBody_);
 	gv->AddItem(ParamKey::kGroupKey, ParamKey::kOffsetTranslateHead, Param::offsetTranslateHead_);
 	gv->AddItem(ParamKey::kGroupKey, ParamKey::kOffsetTranslateArm_L, Param::offsetTranslateArm_L_);
@@ -117,6 +147,12 @@ void Player::ApplyGlobalVariables() {
 	Param::floatingAmplitude_ = gv->GetValue<float>(ParamKey::kGroupKey, ParamKey::kFloatingAmplitude);
 	Param::floatingArmRotationAmplitude_ = gv->GetValue<float>(ParamKey::kGroupKey, ParamKey::kFloatingArmRotationAmplitude);
 	Param::floatingCycle_ = gv->GetValue<int32_t>(ParamKey::kGroupKey, ParamKey::kFloatingCycle);
+	Param::attackStartShoulderRotationX_ = gv->GetValue<float>(ParamKey::kGroupKey, ParamKey::kAttackStartShoulderRotationX);
+	Param::attackWindUpShoulderRotationX_ = gv->GetValue<float>(ParamKey::kGroupKey, ParamKey::kAttackWindUpShoulderRotationX);
+	Param::attackArmRotationX_ = gv->GetValue<float>(ParamKey::kGroupKey, ParamKey::kAttackArmRotationX);
+	Param::attackWindUpFrame_ = gv->GetValue<int32_t>(ParamKey::kGroupKey, ParamKey::kAttackWindUpFrame);
+	Param::attackSwingDownFrame_ = gv->GetValue<int32_t>(ParamKey::kGroupKey, ParamKey::kAttackSwingDownFrame);
+	Param::attackEndlagFrame_ = gv->GetValue<int32_t>(ParamKey::kGroupKey, ParamKey::kAttackEndlagFrame);
 	Param::offsetTranslateBody_ = gv->GetValue<Vector3>(ParamKey::kGroupKey, ParamKey::kOffsetTranslateBody);
 	Param::offsetTranslateHead_ = gv->GetValue<Vector3>(ParamKey::kGroupKey, ParamKey::kOffsetTranslateHead);
 	Param::offsetTranslateArm_L_ = gv->GetValue<Vector3>(ParamKey::kGroupKey, ParamKey::kOffsetTranslateArm_L);
@@ -191,7 +227,11 @@ void Player::UpdateControlType() {
 }
 
 void Player::InitializeFloatingGimmick() {
-	floatingParameter_ = 0.0f;
+	//floatingParameter_ = 0.0f;
+}
+
+void Player::InitializeAttackFrame() {
+	attackingParameter_ = 0.0f;
 }
 
 void Player::UpdateFloatingGimmick() {
@@ -205,46 +245,118 @@ void Player::UpdateFloatingGimmick() {
 	// 1フレームでのパラメータ加算値
 	const float step = 2.0f * std::numbers::pi_v<float> / cycle;
 	floatingParameter_ += step;
+}
 
+void Player::UpdateFloatingTranslationY() {
 	// 浮遊の振幅<m>
 	const float amplitude = Param::floatingAmplitude_;
 
 	// 浮遊を座標に反映
 	const float floatingTranslationY = std::sin(floatingParameter_) * amplitude;
 	worldTransformBody_.translation_.y += floatingTranslationY;
+}
 
+void Player::UpdateFloatingShoulderRotation() {
 	const float armRotationAmplitude = Param::floatingArmRotationAmplitude_;
 	const float floatingArmRotationX = std::sin(floatingParameter_) * armRotationAmplitude;
-	worldTransformArm_L_.rotation_.x = floatingArmRotationX;
-	worldTransformArm_R_.rotation_.x = -floatingArmRotationX;
+	worldTransformShoulder_.rotation_.x = floatingArmRotationX;
 }
 
 void Player::BehaviorRootUpdate() {
+	// 攻撃に移行
+	if (Input::GetControllerButton(XINPUT_GAMEPAD_B)) {
+		behaviorRequest_ = Behavior::kAttack;
+	}
 
 	// 移動処理
 	Move();
 	
 	// 浮遊ギミック更新
 	UpdateFloatingGimmick();
-
-	// トランスフォーム更新
-	UpdateWorldTransforms();
+	UpdateFloatingTranslationY();
+	UpdateFloatingShoulderRotation();
+	
 }
 
 void Player::BehaviorAttackUpdate() {
-
+	Attack();
 }
 
 void Player::UpdateWorldTransforms() {
 	BaseCharacter::Update();
 	worldTransformBody_.UpdateMatrix(*camera_);
 	worldTransformHead_.UpdateMatrix(*camera_);
+	worldTransformShoulder_.UpdateMatrix(*camera_);
 	worldTransformArm_L_.UpdateMatrix(*camera_);
 	worldTransformArm_R_.UpdateMatrix(*camera_);
+	worldTransformWeapon_.UpdateMatrix(*camera_);
 }
 
 void Player::BehaviorRootInitialize() {
+	InitializeFloatingGimmick();
+	worldTransformArm_L_.rotation_ = Param::offsetRotateArm_L_;
+	worldTransformArm_R_.rotation_ = Param::offsetRotateArm_R_;
 }
 
 void Player::BehaviorAttackInitialize() {
+	InitializeAttackFrame();
+	attackPhase_ = AttackPhase::kWindUp;
+
+	worldTransformArm_R_.rotation_.x = Param::attackArmRotationX_;
+	worldTransformArm_L_.rotation_.x = Param::attackArmRotationX_;
+	worldTransformShoulder_.rotation_.x = Param::attackStartShoulderRotationX_;
+	attackBaseShoulderRotationX_ = worldTransformShoulder_.rotation_.x;
+}
+
+void Player::Attack() {
+	switch (attackPhase_) {
+	case AttackPhase::kWindUp:
+		AttackWindUp();
+		break;
+	case AttackPhase::kSwingDown:
+		AttackSwingDown();
+		break;
+	case AttackPhase::kEndlag:
+		AttackEndlag();
+		break;
+	default:
+		break;
+	}
+}
+
+void Player::AttackWindUp() {
+	attackingParameter_ += 1.0f;
+
+	const float progress = CalculateFrameProgress(attackingParameter_, Param::attackWindUpFrame_);
+	worldTransformShoulder_.rotation_.x = Lerp(attackBaseShoulderRotationX_, Param::attackWindUpShoulderRotationX_, progress);
+
+	if (progress >= 1.0f) {
+		attackPhase_ = AttackPhase::kSwingDown;
+		InitializeAttackFrame();
+	}
+}
+
+void Player::AttackSwingDown() {
+	attackingParameter_ += 1.0f;
+
+	const float progress = CalculateFrameProgress(attackingParameter_, Param::attackSwingDownFrame_);
+	worldTransformShoulder_.rotation_.x = Lerp(Param::attackWindUpShoulderRotationX_, attackBaseShoulderRotationX_, progress);
+
+	if (progress >= 1.0f) {
+		attackPhase_ = AttackPhase::kEndlag;
+		InitializeAttackFrame();
+	}
+}
+
+void Player::AttackEndlag() {
+	attackingParameter_ += 1.0f;
+
+	if (Param::attackEndlagFrame_ <= 0) {
+		behaviorRequest_ = Behavior::kRoot;
+		return;
+	}
+
+	if (attackingParameter_ >= static_cast<float>(Param::attackEndlagFrame_)) {
+		behaviorRequest_ = Behavior::kRoot;
+	}
 }

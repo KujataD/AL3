@@ -30,12 +30,14 @@ void GameScene::Initialize() {
 	modelFighterBody_ = std::unique_ptr<Model>(Model::CreateFromOBJ("player_body", ShaderModel::kHalfLambert));
 	modelFighterArm_L_ = std::unique_ptr<Model>(Model::CreateFromOBJ("player_arm", ShaderModel::kHalfLambert));
 	modelFighterArm_R_ = std::unique_ptr<Model>(Model::CreateFromOBJ("player_arm", ShaderModel::kHalfLambert));
+	modelFighterWeapon_ = std::unique_ptr<Model>(Model::CreateFromOBJ("player_weapon", ShaderModel::kHalfLambert));
 	player_ = std::make_unique<Player>();
 	std::vector<Model*> playerModels = {
 		modelFighterBody_.get(),
 		modelFighterHead_.get(),
 		modelFighterArm_L_.get(),
 		modelFighterArm_R_.get(),
+		modelFighterWeapon_.get(),
 	};
 	player_->Initialize(playerModels, &camera_);
 	followCamera_->SetTarget(player_->GetWorldTransform());

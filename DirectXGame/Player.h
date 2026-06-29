@@ -21,6 +21,12 @@ public:
 		static inline const std::string kFloatingAmplitude = "FloatingAmplitude";
 		static inline const std::string kFloatingArmRotationAmplitude = "FloatingArmRotationAmplitude";
 		static inline const std::string kFloatingCycle = "FloatingCycle";
+		static inline const std::string kAttackStartShoulderRotationX = "AttackStartShoulderRotationX";
+		static inline const std::string kAttackWindUpShoulderRotationX = "AttackWindUpShoulderRotationX";
+		static inline const std::string kAttackArmRotationX = "AttackArmRotationX";
+		static inline const std::string kAttackWindUpFrame = "AttackWindUpFrame";
+		static inline const std::string kAttackSwingDownFrame = "AttackSwingDownFrame";
+		static inline const std::string kAttackEndlagFrame = "AttackEndlagFrame";
 		static inline const std::string kOffsetTranslateBody = "OffsetTransformBody";
 		static inline const std::string kOffsetTranslateHead = "OffsetTransformHead";
 		static inline const std::string kOffsetTranslateArm_L = "OffsetTransformArm_L";
@@ -34,6 +40,12 @@ public:
 		static inline float floatingAmplitude_ = 1.0f;
 		static inline float floatingArmRotationAmplitude_ = std::numbers::pi_v<float> *0.25f;
 		static inline int floatingCycle_ = 60;
+		static inline float attackStartShoulderRotationX_ = std::numbers::pi_v<float> * -0.5f;
+		static inline float attackWindUpShoulderRotationX_ = std::numbers::pi_v<float> * -0.9f;
+		static inline float attackArmRotationX_ = std::numbers::pi_v<float>;
+		static inline int attackWindUpFrame_ = 12;
+		static inline int attackSwingDownFrame_ = 8;
+		static inline int attackEndlagFrame_ = 15;
 		static inline KujakuEngine::Vector3 offsetTranslateBody_{};
 		static inline KujakuEngine::Vector3 offsetTranslateHead_{};
 		static inline KujakuEngine::Vector3 offsetTranslateArm_L_{};
@@ -50,6 +62,12 @@ public:
 	enum class Behavior {
 		kRoot,		// <! 通常
 		kAttack,	// <! 攻撃中
+	};
+
+	enum class AttackPhase {
+		kWindUp,
+		kSwingDown,
+		kEndlag,
 	};
 
 public:
@@ -77,8 +95,10 @@ public:
 		BaseCharacter::Update();
 		worldTransformBody_.UpdateMatrix(*camera_);
 		worldTransformHead_.UpdateMatrix(*camera_);
+		worldTransformShoulder_.UpdateMatrix(*camera_);
 		worldTransformArm_L_.UpdateMatrix(*camera_);
 		worldTransformArm_R_.UpdateMatrix(*camera_);
+		worldTransformWeapon_.UpdateMatrix(*camera_);
 	}
 	void SetViewProjection(const KujakuEngine::Camera* viewProjection) { viewProjection_ = viewProjection; }
 	void SetParent(const KujakuEngine::WorldTransform* parent) { worldTransform_.parent_ = parent; }
@@ -110,9 +130,12 @@ private:
 
 	// 浮遊ギミック更新
 	void InitializeFloatingGimmick();
+	void InitializeAttackFrame();
 
-	// 富裕ギミック更新
+	// 浮遊ギミック更新
 	void UpdateFloatingGimmick();
+	void UpdateFloatingTranslationY();
+	void UpdateFloatingShoulderRotation();
 
 	// 通常行動更新
 	void BehaviorRootUpdate();
@@ -130,6 +153,23 @@ private:
 	// 攻擊行動初期化
 	void BehaviorAttackInitialize();
 
+	void Attack();
+
+	/// <summary>
+	/// ふりかぶり
+	/// </summary>
+	void AttackWindUp();
+
+	/// <summary>
+	/// 振りおろし
+	/// </summary>
+	void AttackSwingDown();
+
+	/// <summary>
+	/// 後隙
+	/// </summary>
+	void AttackEndlag();
+
 private:
 	// 外部受け取り
 	// ------------------------------------------
@@ -144,8 +184,13 @@ private:
 	KujakuEngine::WorldTransform worldTransformWeapon_;
 	KujakuEngine::WorldTransform worldTransformShoulder_;
 
-	// 浮遊
+	// 浮遊中のフレーム管理
 	float floatingParameter_ = 0.0f;
+	
+	// 攻撃中のフレーム管理
+	float attackingParameter_ = 0.0f;
+	float attackBaseShoulderRotationX_ = 0.0f;
+
 	// 操作
 	// ------------------------------------------
 	ControlType controlType_ = ControlType::kControlTypeKeyboard;
@@ -153,5 +198,6 @@ private:
 	// B
 	// ------------------------------------------
 	Behavior behavior_ = Behavior::kRoot;
+	AttackPhase attackPhase_ = AttackPhase::kWindUp;
 	std::optional<Behavior> behaviorRequest_ = std::nullopt;
 };
